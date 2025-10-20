@@ -54,7 +54,8 @@ nav ul li a:hover {
     margin: auto;
 }
 .logo {
-    max-height: 150px;
+    height: 150px;
+    width: auto;
 }
 .site-header {
     background: #fff;
@@ -187,7 +188,8 @@ h1, h2 {
 }
 
 .logo {
-    max-height: 80px;
+    height: 150px;
+    width: auto;
 }
 
 .site-header {
