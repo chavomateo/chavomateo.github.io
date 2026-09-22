@@ -18,6 +18,19 @@
   <link href="fonts/roboto.css" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="styles-v2.css">
+
+  <!-- Lockup de marca: anillo (isotipo) + wordmark tipografico (asegura que SIEMPRE se lean las letras) -->
+  <style id="brand-lockup">
+    .brand{display:inline-flex;align-items:center;gap:.6rem;text-decoration:none;white-space:nowrap}
+    .brand-ring{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;border:2.5px solid currentColor;flex:0 0 auto;font-weight:800;font-size:.72rem;letter-spacing:.01em;line-height:1}
+    .brand-word{font-weight:800;font-size:1.02rem;letter-spacing:.13em;text-transform:uppercase;line-height:1}
+    #nav .brand{color:#0b1b4b}
+    #nav.on-dark .brand{color:#fff}
+    .footer .brand{color:#fff}
+    .footer .brand-ring{width:38px;height:38px;border-width:3px;font-size:.8rem}
+    .footer .brand-word{font-size:1.15rem}
+    @media (max-width:420px){.brand-word{font-size:.9rem;letter-spacing:.1em}.brand-ring{width:30px;height:30px;border-width:2px}}
+  </style>
 </head>
 <body>
 
@@ -38,8 +51,8 @@
   <!-- NAV -->
   <header class="nav" id="nav">
     <a class="brand" href="#inicio" aria-label="AI Alliance — Alianza Iberoamericana para la Inteligencia Artificial">
-      <img class="brand-logo brand-logo--ondark" src="img/logo-horizontal-white.png" alt="AI Alliance — Alianza Iberoamericana para la Inteligencia Artificial">
-      <img class="brand-logo brand-logo--onlight" src="img/logo-horizontal-dark.png" alt="" aria-hidden="true">
+      <span class="brand-ring" aria-hidden="true">AI</span>
+      <span class="brand-word">Alliance</span>
     </a>
     <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span><span></span></button>
     <nav class="nav-links" id="nav-links">
@@ -96,15 +109,15 @@
       </div>
       <div class="chain" data-reveal>
         <span class="chain-item">Brecha digital</span>
-        <span class="chain-arrow" aria-hidden="true">↓</span>
+        <span class="chain-arrow" aria-hidden="true">→</span>
         <span class="chain-item">Fragmentación regulatoria</span>
-        <span class="chain-arrow" aria-hidden="true">↓</span>
+        <span class="chain-arrow" aria-hidden="true">→</span>
         <span class="chain-item">Fuga de talento</span>
-        <span class="chain-arrow" aria-hidden="true">↓</span>
+        <span class="chain-arrow" aria-hidden="true">→</span>
         <span class="chain-item">Acceso desigual a la IA</span>
-        <span class="chain-arrow" aria-hidden="true">↓</span>
+        <span class="chain-arrow" aria-hidden="true">→</span>
         <span class="chain-item">Desconexión público-privada</span>
-        <span class="chain-arrow" aria-hidden="true">↓</span>
+        <span class="chain-arrow" aria-hidden="true">→</span>
         <span class="chain-item">Riesgos éticos</span>
       </div>
       <p class="refrain" data-reveal>Para eso nace la Alianza.</p>
@@ -112,7 +125,7 @@
   </section>
 
   <!-- ═══ ACTO 3 · MANIFIESTO ═══ -->
-  <section class="section manifesto" id="quienes">
+  <section class="section manifiesto" id="quienes">
     <div class="mesh" aria-hidden="true"></div>
     <div class="wrap">
       <span class="kicker light" data-reveal style="display:block;text-align:center;margin-bottom:clamp(30px,5vw,50px)">Quiénes somos · Manifiesto</span>
@@ -250,7 +263,10 @@
     <div class="wrap footer-grid">
       <div class="footer-col footer-brand-col">
         <div class="footer-brand">
-          <img class="footer-logo" src="img/logo-horizontal-white.png" alt="AI Alliance — Alianza Iberoamericana para la Inteligencia Artificial">
+          <span class="brand" aria-label="AI Alliance — Alianza Iberoamericana para la Inteligencia Artificial">
+            <span class="brand-ring" aria-hidden="true">AI</span>
+            <span class="brand-word">Alliance</span>
+          </span>
         </div>
         <p class="footer-tag">Una IA ética, inclusiva y competitiva para Iberoamérica.</p>
         <a href="#unete" class="btn btn-primary">Únete a la Alianza</a>
