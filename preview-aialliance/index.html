@@ -21,14 +21,15 @@
 
   <!-- Lockup de marca: anillo (isotipo) + wordmark tipografico (asegura que SIEMPRE se lean las letras) -->
   <style id="brand-lockup">
-    .brand{display:inline-flex;align-items:center;text-decoration:none}
-    .brand-img{height:30px;width:auto;display:block}
-    #nav .brand-img--white{display:none}
-    #nav .brand-img--dark{display:block}
-    #nav.on-dark .brand-img--white{display:block}
-    #nav.on-dark .brand-img--dark{display:none}
-    .footer .brand-img{height:40px;width:auto;display:block}
-    @media (max-width:420px){.brand-img{height:26px}.footer .brand-img{height:34px}}
+    .brand{display:inline-flex;align-items:center;gap:.55rem;text-decoration:none;white-space:nowrap}
+    .brand-word{font-weight:800;font-size:1.05rem;letter-spacing:.12em;text-transform:uppercase;line-height:1}
+    .brand-ring{position:relative;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;flex:0 0 auto;background:url(img/isotipo-oficial.png) center/contain no-repeat;font-weight:800;font-size:.72rem;letter-spacing:.03em;line-height:1}
+    #nav .brand{color:#0b1b4b}
+    #nav.on-dark .brand{color:#fff}
+    .footer .brand{color:#fff}
+    .footer .brand-word{font-size:1.2rem}
+    .footer .brand-ring{width:44px;height:44px;font-size:.85rem}
+    @media (max-width:420px){.brand-word{font-size:.92rem;letter-spacing:.09em}.brand-ring{width:32px;height:32px;font-size:.62rem}}
   </style>
 </head>
 <body>
@@ -50,8 +51,8 @@
   <!-- NAV -->
   <header class="nav" id="nav">
     <a class="brand" href="#inicio" aria-label="Alianza IA — Alianza Iberoamericana para la Inteligencia Artificial">
-      <img class="brand-img brand-img--dark" src="img/logo-alianza-ia-horizontal-dark.png" alt="Alianza IA" width="783" height="300">
-      <img class="brand-img brand-img--white" src="img/logo-alianza-ia-horizontal-white.png" alt="Alianza IA" width="783" height="300">
+      <span class="brand-word">Alianza</span>
+      <span class="brand-ring" aria-hidden="true">IA</span>
     </a>
     <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span><span></span></button>
     <nav class="nav-links" id="nav-links">
@@ -263,7 +264,8 @@
       <div class="footer-col footer-brand-col">
         <div class="footer-brand">
           <span class="brand" aria-label="Alianza IA — Alianza Iberoamericana para la Inteligencia Artificial">
-            <img class="brand-img" src="img/logo-alianza-ia-horizontal-white.png" alt="Alianza IA" width="783" height="300">
+            <span class="brand-word">Alianza</span>
+            <span class="brand-ring" aria-hidden="true">IA</span>
           </span>
         </div>
         <p class="footer-tag">Una IA ética, inclusiva y competitiva para Iberoamérica.</p>
