@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="es" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Alianza Iberoamericana para la Inteligencia Artificial | AI Alliance</title>
+  <meta name="description" content="La Alianza Iberoamericana para la Inteligencia Artificial (AI Alliance) impulsa la adopción de la IA en Iberoamérica conectando al sector público, a los líderes globales de IA y a los ecosistemas locales.">
+  <meta property="og:title" content="Alianza Iberoamericana para la Inteligencia Artificial | AI Alliance">
+  <meta property="og:description" content="Impulsamos una IA ética, inclusiva y competitiva para Iberoamérica.">
+  <meta property="og:image" content="img/earth-hero.jpg">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" as="image" href="img/earth-hero.jpg">
+
+  <link href="fonts/roboto.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles-v2.css">
+</head>
+<body>
+
+  <!-- Triángulos decorativos reutilizables (motivo gráfico) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="g-blue" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#2a4bff"/><stop offset="1" stop-color="#0026e9"/>
+      </linearGradient>
+      <linearGradient id="g-cyan" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#5cffe6"/><stop offset="1" stop-color="#19e3c8"/>
+      </linearGradient>
+      <symbol id="tri-blue" viewBox="0 0 100 88"><path d="M50 4 L4 84 L96 84 Z" fill="url(#g-blue)"/></symbol>
+      <symbol id="tri-cyan" viewBox="0 0 100 88"><path d="M50 4 L4 84 L96 84 Z" fill="url(#g-cyan)"/></symbol>
+    </defs>
+  </svg>
+
+  <!-- NAV -->
+  <header class="nav" id="nav">
+    <a class="brand" href="#inicio" aria-label="Alianza Iberoamericana para la Inteligencia Artificial">
+      <img class="brand-logo" src="img/globe-iso.svg" alt="Alianza Iberoamericana para la Inteligencia Artificial">
+      <span class="brand-name">Alianza Iberoamericana&nbsp;IA</span>
+    </a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="#inicio">Inicio</a>
+      <a href="#quienes">Quiénes somos</a>
+      <a href="#que-hacemos">Qué hacemos</a>
+      <a href="#sistema">El modelo</a>
+      <a href="#proyectos">Proyectos</a>
+      <a href="#unete" class="nav-cta">Únete a la Alianza</a>
+      <a href="mailto:info@alianzaia.org" class="nav-login">Contacto</a>
+    </nav>
+  </header>
+
+  <!-- ═══ ACTO 1 · HERO ═══ -->
+  <section class="hero" id="inicio">
+    <img class="hero-bg kenburns" src="img/earth-hero.jpg" alt="La Tierra: colaboración global en Inteligencia Artificial" fetchpriority="high">
+    <div class="hero-vig" aria-hidden="true"></div>
+    <div class="hero-tris" aria-hidden="true">
+      <svg class="t1" viewBox="0 0 100 88"><use href="#tri-cyan"/></svg>
+      <svg class="t2" viewBox="0 0 100 88"><use href="#tri-blue"/></svg>
+      <svg class="t3" viewBox="0 0 100 88"><use href="#tri-cyan"/></svg>
+    </div>
+    <div class="hero-inner">
+      <h1 class="hero-title" data-split>Impulsamos la adopción de la Inteligencia Artificial en Iberoamérica.</h1>
+      <p class="hero-sub">Conectamos al sector público, a los líderes globales de la IA y a los ecosistemas locales para que Iberoamérica lidere una inteligencia artificial ética, inclusiva y competitiva.</p>
+      <div class="hero-actions">
+        <a href="#unete" class="btn btn-primary">Únete a la Alianza</a>
+        <a href="#proyectos" class="btn btn-ghost-light">Conoce los proyectos</a>
+      </div>
+      <p class="hero-tertiary" style="margin-top:16px"><a href="#modelo" style="color:rgba(255,255,255,.85);font-weight:600;font-size:.95rem;text-decoration:underline;text-underline-offset:3px">Descubre el modelo de la Alianza →</a></p>
+    </div>
+    <div class="scroll-cue" aria-hidden="true"><span></span></div>
+  </section>
+
+  <!-- Barra de PILARES -->
+  <section class="section stats-band">
+    <div class="wrap">
+      <!-- NOTA: métricas provisionales — Carlos/CMO a validar KPIs reales de adopción -->
+      <div class="stats-grid" style="grid-template-columns:repeat(4,1fr)">
+        <div class="stat" data-reveal><span class="stat-num" data-count="22">0</span><span class="stat-cap">países iberoamericanos</span></div>
+        <div class="stat" data-reveal><span class="stat-num" data-count="3">0</span><span class="stat-cap">pilares de colaboración</span></div>
+        <div class="stat" data-reveal><span class="stat-num" data-count="600" data-prefix="+">0</span><span class="stat-cap">millones de personas</span></div>
+        <div class="stat" data-reveal><span class="stat-num" data-count="1" data-prefix="">0</span><span class="stat-cap">objetivo: liderar la IA</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ ACTO 2 · EL RETO ═══ -->
+  <section class="section" id="reto">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <span class="kicker">El reto</span>
+        <h2 class="display" data-split>Iberoamérica tiene talento. Pero adoptar la IA sigue siendo demasiado desigual.</h2>
+      </div>
+      <div class="chain" data-reveal>
+        <span class="chain-item">Brecha digital</span>
+        <span class="chain-arrow" aria-hidden="true">↓</span>
+        <span class="chain-item">Fragmentación regulatoria</span>
+        <span class="chain-arrow" aria-hidden="true">↓</span>
+        <span class="chain-item">Falta de talento</span>
+        <span class="chain-arrow" aria-hidden="true">↓</span>
+        <span class="chain-item">Acceso desigual a la IA</span>
+        <span class="chain-arrow" aria-hidden="true">↓</span>
+        <span class="chain-item">Desconexión público-privada</span>
+        <span class="chain-arrow" aria-hidden="true">↓</span>
+        <span class="chain-item">Riesgos éticos</span>
+      </div>
+      <p class="refrain" data-reveal>Para eso nace la Alianza.</p>
+    </div>
+  </section>
+
+  <!-- ═══ ACTO 3 · MANIFIESTO ═══ -->
+  <section class="section manifesto" id="quienes">
+    <div class="mesh" aria-hidden="true"></div>
+    <div class="wrap">
+      <span class="kicker light" data-reveal style="display:block;text-align:center;margin-bottom:clamp(30px,5vw,50px)">Quiénes somos · Manifiesto</span>
+      <div class="mani-lines">
+        <p class="mani-line" data-reveal>Creemos que la inteligencia artificial debe estar al <b>servicio de las personas</b> y del desarrollo sostenible.</p>
+        <p class="mani-line" data-reveal>Creemos que la innovación necesita <b>colaboración transnacional</b>.</p>
+        <p class="mani-line" data-reveal>Creemos que <b>ninguna región debe quedarse atrás</b> en la revolución de la IA.</p>
+        <p class="mani-line" data-reveal>Creemos que Iberoamérica puede <b>liderar una IA ética, inclusiva y competitiva</b>.</p>
+      </div>
+      <p class="refrain" data-reveal>Por eso existe la Alianza.</p>
+    </div>
+  </section>
+
+  <!-- ═══ ACTO 4 · EL MODELO / QUÉ HACEMOS ═══ -->
+  <section class="section" id="sistema">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <span class="kicker">El modelo de la Alianza</span>
+        <h2 class="display" data-split>Una plataforma que conecta tres mundos.</h2>
+      </div>
+
+      <div class="sys-row" id="que-hacemos">
+        <div class="col-text" data-reveal>
+          <span class="sys-num">01 — SECTOR PÚBLICO</span>
+          <h3>Gobiernos e instituciones que impulsan la IA.</h3>
+          <p>Trabajamos con administraciones para diseñar políticas equilibradas que protejan derechos sin frenar la innovación.</p>
+          <a href="#unete" class="btn btn-line">Colabora con nosotros</a>
+        </div>
+        <div class="sys-visual" data-reveal>
+          <img class="sv-photo" src="img/fotos/institucional-pedro-sanchez.jpg" alt="Colaboración institucional en políticas de IA" loading="lazy">
+          <div class="sv-shade" aria-hidden="true"></div>
+          <span class="sv-idx" aria-hidden="true">01</span>
+        </div>
+      </div>
+
+      <div class="sys-row reverse">
+        <div class="col-text" data-reveal>
+          <span class="sys-num">02 — GLOBAL AI LEADERS</span>
+          <h3>Los líderes mundiales de la IA, comprometidos con la región.</h3>
+          <p>Las grandes tecnológicas y referentes globales aportan tecnología, conocimiento y recursos para acelerar la adopción responsable.</p>
+          <a href="#unete" class="btn btn-line">Sé Global AI Leader</a>
+        </div>
+        <div class="sys-visual" data-reveal>
+          <img class="sv-photo" src="img/fotos/cluster-ia-madrid.jpg" alt="Ecosistema y clúster de Inteligencia Artificial" loading="lazy">
+          <div class="sv-shade" aria-hidden="true"></div>
+          <span class="sv-idx" aria-hidden="true">02</span>
+        </div>
+      </div>
+
+      <div class="sys-row">
+        <div class="col-text" data-reveal>
+          <span class="sys-num">03 — ECOSISTEMAS LOCALES</span>
+          <h3>Startups, universidades y sociedad civil de cada país.</h3>
+          <p>Facilitamos que el talento local acceda a financiación, mercados y formación para que la IA llegue a todos.</p>
+          <a href="#unete" class="btn btn-line">Súmate al ecosistema</a>
+        </div>
+        <div class="sys-visual" data-reveal>
+          <img class="sv-photo" src="img/fotos/comunidad-networking.jpg" alt="Ecosistemas locales de innovación en Iberoamérica" loading="lazy">
+          <div class="sv-shade" aria-hidden="true"></div>
+          <span class="sv-idx" aria-hidden="true">03</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ ACTO 5 · PROYECTOS ═══ -->
+  <section class="section alt" id="proyectos">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <span class="kicker">Proyectos</span>
+        <h2 class="display" data-split>Del diálogo a la adopción real.</h2>
+      </div>
+      <ul class="auth-list">
+        <li data-reveal><a href="#unete"><span class="auth-year">Turismo</span><h3>Colaboración con ONU Turismo<span>Impulso de la adopción de IA en el sector turístico iberoamericano.</span></h3><span class="auth-more">Saber más →</span></a></li>
+        <li data-reveal><a href="#unete"><span class="auth-year">España</span><h3>Trabajo con el Gobierno de España<span>Puentes público-privados para una IA competitiva y responsable.</span></h3><span class="auth-more">Saber más →</span></a></li>
+        <li data-reveal><a href="#unete"><span class="auth-year">Partners</span><h3>Global AI Leaders &amp; Founding Partners<span>Grandes tecnológicas comprometidas con la región.</span></h3><span class="auth-more">Saber más →</span></a></li>
+        <li data-reveal><a href="#unete"><span class="auth-year">Región</span><h3>Programas por ecosistemas locales<span>Iniciativas de adopción diseñadas país a país.</span></h3><span class="auth-more">Saber más →</span></a></li>
+      </ul>
+      <div style="text-align:center;margin-top:clamp(30px,4vw,44px)" data-reveal><a href="#unete" class="btn btn-primary">Quiero participar en un proyecto</a></div>
+    </div>
+  </section>
+
+  <!-- ═══ ACTO 6 · ENCUENTRA TU LUGAR ═══ -->
+  <section class="section" id="tu-lugar">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <span class="kicker">Tú también puedes formar parte</span>
+        <h2 class="display" data-split>Encuentra el lugar que ocupa tu organización.</h2>
+      </div>
+      <ul class="place-list">
+        <li data-reveal><a href="#unete"><span><span class="place-who">Gobiernos e instituciones</span><span class="place-what">Lidera la política de IA de tu país.</span></span><span class="place-arrow" aria-hidden="true">→</span></a></li>
+        <li data-reveal><a href="#unete"><span><span class="place-who">Global AI Leaders</span><span class="place-what">Lleva tu tecnología a toda la región.</span></span><span class="place-arrow" aria-hidden="true">→</span></a></li>
+        <li data-reveal><a href="#unete"><span><span class="place-who">Startups y pymes</span><span class="place-what">Accede a mercados, talento y financiación.</span></span><span class="place-arrow" aria-hidden="true">→</span></a></li>
+        <li data-reveal><a href="#unete"><span><span class="place-who">Universidades</span><span class="place-what">Forma el talento de la nueva IA.</span></span><span class="place-arrow" aria-hidden="true">→</span></a></li>
+        <li data-reveal><a href="#unete"><span><span class="place-who">Inversores</span><span class="place-what">Impulsa la IA iberoamericana.</span></span><span class="place-arrow" aria-hidden="true">→</span></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ═══ ACTO 7 · CÓMO CAMBIA UNA REGIÓN ═══ -->
+  <section class="section pais" id="como-cambia">
+    <div class="wrap">
+      <span class="kicker light" data-reveal>Cómo cambia una región</span>
+      <div class="pais-steps">
+        <p class="pais-step" data-reveal><span>Las ideas necesitan <b>talento</b>.</span></p>
+        <p class="pais-step" data-reveal><span>El talento necesita <b>tecnología</b>.</span></p>
+        <p class="pais-step" data-reveal><span>La tecnología necesita <b>acceso</b>.</span></p>
+        <p class="pais-step" data-reveal><span>El acceso necesita <b>colaboración</b>.</span></p>
+        <p class="pais-step" data-reveal><span>La colaboración necesita <b>confianza</b>.</span></p>
+        <p class="pais-step" data-reveal><span>La confianza necesita <b>diálogo</b>.</span></p>
+      </div>
+      <p class="refrain" data-reveal>Para eso existe la Alianza.</p>
+    </div>
+  </section>
+
+  <!-- ═══ CIERRE · CTA NARRATIVO ═══ -->
+  <section class="section section-cta cta-narrative" id="unete">
+    <div class="wrap cta-wrap">
+      <p class="cta-kicker" data-reveal>No solo hablamos de IA.</p>
+      <h2 class="cta-title" data-split>Construimos la Iberoamérica que lidera la Inteligencia Artificial.</h2>
+      <p class="cta-sub" data-reveal>Súmate a los gobiernos, empresas y ecosistemas que ya están construyendo el futuro.</p>
+      <div class="cta-actions" data-reveal>
+        <a href="mailto:info@alianzaia.org?subject=Quiero%20unirme%20a%20la%20Alianza" class="btn btn-primary btn-lg">Únete a la Alianza</a>
+        <a href="mailto:info@alianzaia.org" class="btn btn-line btn-lg">Habla con nosotros</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FLOTANTE -->
+  <a class="float-cta" href="#unete" id="float-cta">Únete a la Alianza</a>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="wrap footer-grid">
+      <div class="footer-col footer-brand-col">
+        <div class="footer-brand">
+          <img class="brand-logo" src="img/globe-iso.svg" alt="Alianza Iberoamericana para la Inteligencia Artificial">
+          <span class="brand-name">Alianza Iberoamericana&nbsp;IA</span>
+        </div>
+        <p class="footer-tag">Una IA ética, inclusiva y competitiva para Iberoamérica.</p>
+        <a href="#unete" class="btn btn-primary">Únete a la Alianza</a>
+      </div>
+      <div class="footer-col">
+        <h4>La Alianza</h4>
+        <a href="#quienes">Quiénes somos</a>
+        <a href="#que-hacemos">Qué hacemos</a>
+        <a href="#sistema">El modelo</a>
+        <a href="#proyectos">Proyectos</a>
+      </div>
+      <div class="footer-col">
+        <h4>Participa</h4>
+        <a href="#unete">Únete a la Alianza</a>
+        <a href="#tu-lugar">Formas de colaborar</a>
+        <a href="mailto:info@alianzaia.org">Global AI Leaders</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <a href="mailto:info@alianzaia.org">info@alianzaia.org</a>
+        <a href="#inicio">Corporación XV</a>
+      </div>
+    </div>
+    <div class="wrap footer-bottom">
+      <nav class="footer-legal-links">
+        <a href="privacidad.html">Privacidad</a>
+        <a href="cookies.html">Cookies</a>
+        <a href="condiciones.html">Condiciones</a>
+      </nav>
+      <p class="footer-copy">© 2026 Alianza Iberoamericana para la Inteligencia Artificial (AI Alliance) · Corporación XV. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="vendor/gsap.min.js"></script>
+  <script src="vendor/ScrollTrigger.min.js"></script>
+  <script src="vendor/lenis.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
