@@ -248,9 +248,13 @@
       <p class="cta-kicker" data-reveal>No solo hablamos de IA.</p>
       <h2 class="cta-title" data-split>Construimos la Iberoamérica que lidera la Inteligencia Artificial.</h2>
       <p class="cta-sub" data-reveal>Súmate a los gobiernos, empresas y ecosistemas que ya están construyendo el futuro.</p>
-      <div class="cta-actions" data-reveal>
-        <a href="mailto:info@alianzaia.org?subject=Quiero%20unirme%20a%20la%20Alianza" class="btn btn-primary btn-lg">Únete a la Alianza</a>
-        <a href="mailto:info@alianzaia.org" class="btn btn-line btn-lg">Habla con nosotros</a>
+      <div class="unete-wizard" id="unete-wizard" data-reveal>
+        <div class="wz-progress" id="wz-progress" hidden>
+          <div class="wz-progress-bar"><span id="wz-progress-fill"></span></div>
+          <span class="wz-progress-label" id="wz-progress-label"></span>
+        </div>
+        <div class="wz-body" id="wz-body"></div>
+        <p class="wz-foot">¿Prefieres hablar directamente? Escríbenos a <a href="mailto:info@alianzaia.org">info@alianzaia.org</a></p>
       </div>
     </div>
   </section>
@@ -304,5 +308,6 @@
   <script src="vendor/ScrollTrigger.min.js"></script>
   <script src="vendor/lenis.min.js"></script>
   <script src="app.js"></script>
+  <script src="unete.js"></script>
 </body>
 </html>

@@ -183,3 +183,62 @@
 .nav.scrolled .brand-logo--onlight { display: inline-block; }
 .footer-brand .footer-logo { height: 34px; width: auto; display: block; }
 @media (max-width: 1040px) { .nav .brand-logo { height: 26px; } }
+
+/* ============ WIZARD "ÚNETE" ============ */
+.unete-wizard{max-width:720px;margin:clamp(24px,4vw,40px) auto 0;text-align:left;background:#fff;color:#0b1b4b;border-radius:20px;padding:clamp(20px,3.5vw,36px);box-shadow:0 30px 80px rgba(4,10,40,.28);border:1px solid rgba(11,27,75,.08)}
+.wz-progress{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.wz-progress-bar{flex:1;height:7px;border-radius:99px;background:#e8ecf6;overflow:hidden}
+.wz-progress-bar>span{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#031FFF,#1CDFDD);transition:width .4s ease}
+.wz-progress-label{font-size:.8rem;font-weight:700;color:#5b6478;white-space:nowrap}
+.wz-h{font-size:clamp(1.25rem,2.6vw,1.6rem);font-weight:800;line-height:1.15;margin:0 0 6px;color:#0b1b4b}
+.wz-p{color:#5b6478;font-size:.95rem;margin:0 0 18px}
+.wz-valor{background:linear-gradient(135deg,rgba(3,31,255,.06),rgba(28,223,221,.10));border:1px solid rgba(3,31,255,.12);border-radius:14px;padding:16px 18px;margin-bottom:20px}
+.wz-valor strong{display:block;color:#0b1b4b;font-size:1.02rem;margin-bottom:4px}
+.wz-valor span{color:#43506b;font-size:.9rem;line-height:1.5}
+/* cards */
+.wz-cards{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:560px){.wz-cards{grid-template-columns:1fr 1fr 1fr}}
+.wz-card{display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:left;padding:18px;border-radius:14px;border:2px solid #e3e8f4;background:#fbfcfe;cursor:pointer;transition:.18s;font:inherit}
+.wz-card:hover{border-color:#9fb0ff;transform:translateY(-2px)}
+.wz-card.active{border-color:#031FFF;background:#f2f5ff;box-shadow:0 8px 24px rgba(3,31,255,.14)}
+.wz-card-ic{font-size:1.6rem}
+.wz-card-t{font-weight:800;font-size:.98rem;color:#0b1b4b}
+.wz-card-s{font-size:.82rem;color:#5b6478;line-height:1.35}
+.wz-sub{margin-top:18px}
+.wz-sub-t{font-weight:700;font-size:.9rem;margin:0 0 10px;color:#0b1b4b}
+.wz-subgrid{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:560px){.wz-subgrid{grid-template-columns:1fr 1fr}}
+.wz-chip{text-align:left;padding:12px 14px;border-radius:11px;border:2px solid #e3e8f4;background:#fbfcfe;cursor:pointer;font:inherit;font-size:.9rem;font-weight:600;color:#0b1b4b;transition:.18s}
+.wz-chip:hover{border-color:#9fb0ff}
+.wz-chip.active{border-color:#031FFF;background:#f2f5ff}
+/* fields */
+.wz-fields{display:flex;flex-direction:column;gap:16px}
+.wz-field{display:flex;flex-direction:column;gap:6px}
+.wz-label{font-weight:700;font-size:.9rem;color:#0b1b4b}
+.wz-req{color:#e5484d}
+.wz-help{font-size:.8rem;color:#7a8294;margin-top:-2px}
+.wz-input{width:100%;padding:12px 14px;border-radius:11px;border:1.5px solid #d7deee;background:#fff;font:inherit;font-size:.95rem;color:#0b1b4b;transition:.15s}
+.wz-input:focus{outline:none;border-color:#031FFF;box-shadow:0 0 0 3px rgba(3,31,255,.12)}
+textarea.wz-input{resize:vertical;min-height:76px}
+.wz-opts{display:flex;flex-direction:column;gap:8px}
+.wz-opts-grid{display:grid;grid-template-columns:1fr}
+@media(min-width:560px){.wz-opts-grid{grid-template-columns:1fr 1fr}}
+.wz-opt{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;border-radius:10px;border:1.5px solid #e3e8f4;background:#fbfcfe;cursor:pointer;font-size:.9rem;color:#2c3654;line-height:1.4}
+.wz-opt:hover{border-color:#b9c5f6}
+.wz-opt input{margin-top:2px;accent-color:#031FFF;flex:0 0 auto}
+.wz-consent{background:#f7f9fd}
+.wz-consent a{color:#031FFF;font-weight:600}
+.wz-invalid .wz-input,.wz-field.wz-invalid{border-color:#e5484d}
+.wz-invalid.wz-field .wz-opts,.wz-field.wz-invalid{box-shadow:none}
+.wz-field.wz-invalid{border-radius:10px}
+/* nav */
+.wz-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:26px;flex-wrap:wrap}
+.wz-nav .wz-next{margin-left:auto}
+.wz-next[disabled]{opacity:.45;cursor:not-allowed}
+/* gracias */
+.wz-gracias{text-align:center;padding:14px 4px}
+.wz-check{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#031FFF,#1CDFDD);color:#fff;font-size:2rem;display:flex;align-items:center;justify-content:center;margin:0 auto 18px}
+.wz-gracias .wz-nav{justify-content:center}
+.wz-gracias .wz-nav .wz-next{margin-left:0}
+.wz-foot{text-align:center;font-size:.85rem;color:rgba(255,255,255,.75);margin:16px 0 0}
+.wz-foot a{color:#fff;text-decoration:underline}
