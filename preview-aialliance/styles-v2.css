@@ -175,3 +175,11 @@
   .wizard-nav .wz-next { order: 1; width: 100%; }
   .wizard-nav .wz-msg { order: 3; width: 100%; }
 }
+
+/* ── Logo oficial con letras (AI ALLIANCE) — nav + footer ── */
+.nav .brand-logo { width: auto; height: 30px; object-fit: contain; }
+.brand-logo--onlight { display: none; }
+.nav.scrolled .brand-logo--ondark { display: none; }
+.nav.scrolled .brand-logo--onlight { display: inline-block; }
+.footer-brand .footer-logo { height: 34px; width: auto; display: block; }
+@media (max-width: 1040px) { .nav .brand-logo { height: 26px; } }
