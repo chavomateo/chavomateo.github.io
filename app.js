@@ -26,7 +26,7 @@
     }
     function countUp(el) {
       var target = parseFloat(el.getAttribute('data-count')) || 0;
-      if (reduceMotion) { paint(el, target); return; }
+      if (reduceMotion || target < 10) { paint(el, target); return; }
       var t0 = performance.now();
       (function step(now) {
         var p = Math.min(1, (now - t0) / 1200), e = 1 - Math.pow(1 - p, 3);
@@ -37,7 +37,7 @@
     if ('IntersectionObserver' in window) {
       var cio = new IntersectionObserver(function (ents) {
         ents.forEach(function (en) { if (en.isIntersecting) { countUp(en.target); cio.unobserve(en.target); } });
-      }, { threshold: 0.4 });
+      }, { threshold: 0.1, rootMargin: "60px" });
       counters.forEach(function (c) { cio.observe(c); });
     } else {
       counters.forEach(function (c) { paint(c, parseFloat(c.getAttribute('data-count')) || 0); });

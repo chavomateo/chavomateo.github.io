@@ -37,7 +37,7 @@
     if ('IntersectionObserver' in window) {
       var cio = new IntersectionObserver(function (ents) {
         ents.forEach(function (en) { if (en.isIntersecting) { countUp(en.target); cio.unobserve(en.target); } });
-      }, { threshold: 0.4 });
+      }, { threshold: 0.1, rootMargin: "60px" });
       counters.forEach(function (c) { cio.observe(c); });
     } else {
       counters.forEach(function (c) { paint(c, parseFloat(c.getAttribute('data-count')) || 0); });
