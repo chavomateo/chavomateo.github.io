@@ -26,7 +26,7 @@
     }
     function countUp(el) {
       var target = parseFloat(el.getAttribute('data-count')) || 0;
-      if (reduceMotion) { paint(el, target); return; }
+      if (reduceMotion || target < 10) { paint(el, target); return; }
       var t0 = performance.now();
       (function step(now) {
         var p = Math.min(1, (now - t0) / 1200), e = 1 - Math.pow(1 - p, 3);
