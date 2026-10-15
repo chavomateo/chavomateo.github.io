@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="es" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>AlianzaIA · Plataforma de adopción de IA para el ecosistema emprendedor</title>
+  <link rel="canonical" href="https://www.alianzaia.org/proyecto-alianzaia/">
+  <meta name="description" content="AlianzaIA: proyecto de la Alianza Iberoamericana de IA para acelerar la adopción de la Inteligencia Artificial en startups y pymes con una plataforma común, casos de uso replicables, formación y consultoría.">
+  <meta property="og:title" content="AlianzaIA · De la IA que se promete a la IA que se usa.">
+  <meta property="og:description" content="AlianzaIA: proyecto de la Alianza Iberoamericana de IA para acelerar la adopción de la Inteligencia Artificial en startups y pymes con una plataforma común, casos de uso replicables, formación y consultoría.">
+  <meta property="og:image" content="https://www.alianzaia.org/img/hero-globo-iberoamerica.jpg">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" as="image" href="../img/hero-globo-iberoamerica.jpg">
+
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+
+  <link href="../fonts/roboto.css" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../styles-v2.css">
+
+  <!-- Lockup de marca: anillo (isotipo) + wordmark tipografico (asegura que SIEMPRE se lean las letras) -->
+  <style id="brand-lockup">
+    .brand{display:inline-flex;align-items:center;gap:.55rem;text-decoration:none;white-space:nowrap}
+    .brand-word{font-weight:800;font-size:1.05rem;letter-spacing:.12em;text-transform:uppercase;line-height:1}
+    .brand-ring{position:relative;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;flex:0 0 auto;background:url(../img/isotipo-oficial.png) center/contain no-repeat;font-weight:800;font-size:.72rem;letter-spacing:.03em;line-height:1}
+    #nav .brand{color:#0b1b4b}
+    #nav.on-dark .brand{color:#fff}
+    .footer .brand{color:#fff}
+    .footer .brand-word{font-size:1.2rem}
+    .footer .brand-ring{width:44px;height:44px;font-size:.85rem}
+    @media (max-width:420px){.brand-word{font-size:.92rem;letter-spacing:.09em}.brand-ring{width:32px;height:32px;font-size:.62rem}}
+  </style>
+
+  <!-- Estilos autocontenidos del preview Iberoamérica+Europa (no tocan styles.css compartido) -->
+  <style id="preview-ibe">
+    .hero-eyebrow{display:block;font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:.74rem;color:#5cffe6;margin-bottom:14px}
+    .nav-lang{display:inline-flex;align-items:center;gap:6px;font-weight:700;letter-spacing:.06em;font-size:.82rem}
+    .nav-lang .sep{opacity:.4}
+    .nav-lang a{text-decoration:none;opacity:.7}
+    .nav-lang a[aria-current="true"]{opacity:1;text-decoration:underline;text-underline-offset:3px}
+    .reto-body{max-width:62ch;margin:14px auto 0;text-align:center;color:#4a5568;font-size:1.08rem;line-height:1.75}
+    .gaps{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:38px auto 6px;max-width:900px}
+    .gap{background:rgba(255,255,255,.55);border:1px solid rgba(10,27,75,.12);border-radius:16px;padding:26px}
+    .gap .gap-num{font-weight:800;letter-spacing:.06em;font-size:.8rem;color:#0026e9}
+    .gap h3{margin:.35rem 0 .55rem;font-size:1.18rem;line-height:1.25}
+    .gap p{margin:0;color:#4a5568;line-height:1.65}
+    @media (max-width:720px){.gaps{grid-template-columns:1fr}}
+    .proj-sub{text-align:center;color:#4a5568;margin:-4px auto 30px;max-width:54ch;line-height:1.6}
+    .proj-tag{display:inline-block;font-size:.66rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#0026e9;border:1px solid rgba(0,38,233,.3);border-radius:999px;padding:2px 9px;margin-left:10px;vertical-align:middle}
+  </style>
+
+  <style id="preview-responsive-fix">
+    /* Responsive móvil Hero + Nav (Arte QA 390px) */
+    .hero-tris { display: none !important; }
+    .hero-eyebrow {
+      display: block;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-size: .74rem;
+      color: #5cffe6;
+      margin-bottom: 14px;
+      white-space: normal !important;
+      overflow-wrap: break-word !important;
+      word-break: break-word !important;
+      max-width: 100% !important;
+    }
+    @media (max-width: 768px) {
+      .hero-inner {
+        padding-left: 18px !important;
+        padding-right: 18px !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+        text-align: left !important;
+      }
+      .hero-eyebrow {
+        font-size: 0.68rem !important;
+        letter-spacing: 0.08em !important;
+        line-height: 1.35 !important;
+        margin-bottom: 12px !important;
+      }
+      .hero-title {
+        font-size: clamp(1.85rem, 7.5vw, 2.4rem) !important;
+        max-width: 100% !important;
+        overflow-wrap: break-word !important;
+        word-break: break-word !important;
+        margin-bottom: 16px !important;
+      }
+      .hero-sub {
+        font-size: 0.98rem !important;
+        max-width: 100% !important;
+        overflow-wrap: break-word !important;
+        word-break: break-word !important;
+        line-height: 1.5 !important;
+        margin-bottom: 24px !important;
+      }
+      .hero-actions {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        width: 100% !important;
+      }
+      .hero-actions .btn {
+        width: 100% !important;
+        text-align: center !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+      }
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 16px !important;
+      }
+    }
+    @media (max-width: 1150px) {
+      .nav-toggle {
+        display: flex !important;
+        color: #fff !important;
+        z-index: 70 !important;
+        position: relative !important;
+      }
+      .nav.scrolled:not(.menu-open) .nav-toggle {
+        color: #0b1b4b !important;
+      }
+      .nav.menu-open .nav-toggle {
+        color: #fff !important;
+      }
+    }
+  </style>
+
+
+  <style id="proyecto-alianzaia">
+    .pa-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:clamp(18px,2.4vw,28px);margin-top:clamp(30px,4vw,50px)}
+    .pa-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:clamp(22px,2.6vw,32px)}
+    .section.alt .pa-card{background:#fff}
+    .pa-card .pa-num{display:block;font-weight:700;letter-spacing:.14em;font-size:.78rem;color:var(--blue);margin-bottom:12px}
+    .pa-card h3{font-family:"Roboto",system-ui,sans-serif;font-weight:600;font-size:clamp(1.2rem,1.9vw,1.45rem);line-height:1.15;margin-bottom:10px;color:var(--ink)}
+    .pa-card p{color:var(--text);font-size:1rem;line-height:1.55}
+    .pa-lead{max-width:62ch;font-size:clamp(1.05rem,1.5vw,1.22rem);color:var(--text);line-height:1.6;margin-top:16px}
+    .pa-note{max-width:70ch;margin:clamp(26px,3vw,40px) auto 0;text-align:center;color:var(--muted);font-size:.98rem}
+  </style>
+</head>
+<body>
+
+  <!-- Triángulos decorativos reutilizables (motivo gráfico) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="g-blue" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#2a4bff"/><stop offset="1" stop-color="#0026e9"/>
+      </linearGradient>
+      <linearGradient id="g-cyan" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#5cffe6"/><stop offset="1" stop-color="#19e3c8"/>
+      </linearGradient>
+      <symbol id="tri-blue" viewBox="0 0 100 88"><path d="M50 4 L4 84 L96 84 Z" fill="url(#g-blue)"/></symbol>
+      <symbol id="tri-cyan" viewBox="0 0 100 88"><path d="M50 4 L4 84 L96 84 Z" fill="url(#g-cyan)"/></symbol>
+    </defs>
+  </svg>
+
+  <!-- NAV -->
+  <header class="nav on-dark" id="nav">
+    <a class="brand" href="../" aria-label="Alianza IA — Alianza Iberoamericana de IA">
+      <span class="brand-word">Alianza</span>
+      <span class="brand-ring" aria-hidden="true">IA</span>
+    </a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../">La Alianza</a>
+      <a href="#proyecto">El proyecto</a>
+      <a href="#lineas">Líneas de actuación</a>
+      <a href="#para-quien">Para quién</a>
+      <a href="#participa" class="nav-cta">Quiero participar</a>
+    </nav>
+  </header>
+
+  <!-- ═══ HERO · PROYECTO ALIANZAIA ═══ -->
+  <section class="hero" id="inicio">
+    <img class="hero-bg kenburns" src="../img/hero-globo-iberoamerica.jpg" alt="AlianzaIA, plataforma de adopción de Inteligencia Artificial" fetchpriority="high">
+    <div class="hero-vig" aria-hidden="true"></div>
+    <div class="hero-tris" aria-hidden="true">
+      <svg class="t1" viewBox="0 0 100 88"><use href="#tri-cyan"/></svg>
+      <svg class="t2" viewBox="0 0 100 88"><use href="#tri-blue"/></svg>
+      <svg class="t3" viewBox="0 0 100 88"><use href="#tri-cyan"/></svg>
+    </div>
+    <div class="hero-inner">
+      <span class="hero-eyebrow">Proyecto AlianzaIA · Candidatura en preparación</span>
+      <h1 class="hero-title" data-split>AlianzaIA: de la IA que se promete a la IA que se usa.</h1>
+      <p class="hero-sub">Una plataforma común para que startups y pymes adopten la Inteligencia Artificial de forma real, medible y replicable, con casos de uso, formación y consultoría. Un proyecto de la Alianza Iberoamericana de IA para un programa de adopción de IA con fondos europeos.</p>
+      <div class="hero-actions">
+        <a href="#lineas" class="btn btn-primary">Conoce las líneas de actuación →</a>
+        <a href="#participa" class="btn btn-ghost-light">Quiero participar</a>
+      </div>
+    </div>
+    <div class="scroll-cue" aria-hidden="true"><span></span></div>
+  </section>
+
+  <!-- ═══ EL PROYECTO ═══ -->
+  <section class="section" id="proyecto">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <span class="kicker">El proyecto</span>
+        <h2 class="display" data-split>La IA ya está disponible. Lo que falta es adoptarla.</h2>
+        <p class="pa-lead">La mayoría de las startups y pymes saben que la Inteligencia Artificial puede cambiar su negocio, pero les faltan herramientas, conocimiento y acompañamiento para pasar de la prueba al uso diario. AlianzaIA nace para cerrar esa brecha: una plataforma compartida, casos de uso que se pueden replicar de una empresa a otra, y formación y consultoría para que cada organización encuentre su camino.</p>
+      </div>
+      <div class="chain" data-reveal>
+        <span class="chain-item">Diagnóstico</span>
+        <span class="chain-arrow" aria-hidden="true">→</span>
+        <span class="chain-item">Formación</span>
+        <span class="chain-arrow" aria-hidden="true">→</span>
+        <span class="chain-item">Caso de uso</span>
+        <span class="chain-arrow" aria-hidden="true">→</span>
+        <span class="chain-item">Adopción en la plataforma</span>
+        <span class="chain-arrow" aria-hidden="true">→</span>
+        <span class="chain-item">Réplica en otras empresas</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ LÍNEAS DE ACTUACIÓN ═══ -->
+  <section class="section alt" id="lineas">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <span class="kicker">Líneas de actuación</span>
+        <h2 class="display" data-split>Cinco líneas, un mismo objetivo: adopción real.</h2>
+      </div>
+      <div class="pa-grid">
+        <div class="pa-card" data-reveal><span class="pa-num">01 · PLATAFORMA</span><h3>Plataforma de IA en la nube</h3><p>Un entorno común en modalidad SaaS, con capacidad de cómputo y herramientas de IA listas para usar, para que ninguna empresa tenga que empezar de cero.</p></div>
+        <div class="pa-card" data-reveal><span class="pa-num">02 · CASOS DE USO</span><h3>Casos de uso replicables</h3><p>Desarrollo y puesta en marcha de casos de uso con impacto medible, diseñados para replicarse en otras empresas y sectores.</p></div>
+        <div class="pa-card" data-reveal><span class="pa-num">03 · FORMACIÓN</span><h3>Formación en IA</h3><p>Itinerarios de capacitación para equipos directivos, técnicos y de negocio: de los fundamentos de la IA a su aplicación práctica y responsable.</p></div>
+        <div class="pa-card" data-reveal><span class="pa-num">04 · CONSULTORÍA</span><h3>Consultoría de adopción</h3><p>Diagnóstico de madurez, hoja de ruta y acompañamiento experto para identificar dónde aporta valor la IA en cada organización y cómo implantarla.</p></div>
+        <div class="pa-card" data-reveal><span class="pa-num">05 · COMUNIDAD</span><h3>Difusión y comunidad</h3><p>Una red que comparte resultados y buenas prácticas para que lo que funciona en una empresa llegue a muchas más.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ PARA QUIÉN ═══ -->
+  <section class="section" id="para-quien">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <span class="kicker">Para quién</span>
+        <h2 class="display" data-split>Un proyecto para todo el ecosistema.</h2>
+      </div>
+      <div class="pa-grid">
+        <div class="pa-card" data-reveal><h3>Startups y pymes</h3><p>Que quieren incorporar la IA a sus productos, servicios y procesos con acompañamiento y sin partir de cero.</p></div>
+        <div class="pa-card" data-reveal><h3>Empresas tecnológicas</h3><p>Que aportan tecnología, conocimiento y capacidad de integración para acelerar la adopción.</p></div>
+        <div class="pa-card" data-reveal><h3>Universidades y centros de conocimiento</h3><p>Que impulsan el talento, la formación y la transferencia de conocimiento a las empresas.</p></div>
+        <div class="pa-card" data-reveal><h3>Instituciones</h3><p>Que buscan resultados medibles de adopción de la IA en el tejido productivo.</p></div>
+      </div>
+      <p class="pa-note" data-reveal>AlianzaIA se ejecuta en España y se proyecta al espacio iberoamericano y europeo: los casos de uso que funcionan aquí pueden viajar de una orilla a la otra.</p>
+    </div>
+  </section>
+
+  <!-- ═══ PARTICIPA ═══ -->
+  <section class="section section-cta cta-narrative" id="participa">
+    <div class="wrap cta-wrap">
+      <p class="cta-kicker" data-reveal>La agrupación se está formando.</p>
+      <h2 class="cta-title" data-split>Súmate a AlianzaIA.</h2>
+      <p class="cta-sub" data-reveal>Estamos configurando la agrupación de socios tecnológicos, empresas y entidades que harán posible el proyecto. Anunciaremos su composición próximamente. Si tu organización quiere formar parte, escríbenos.</p>
+      <div class="hero-actions" style="justify-content:center" data-reveal>
+        <a href="mailto:info@alianzaia.org?subject=Quiero%20participar%20en%20AlianzaIA" class="btn btn-primary">Quiero participar →</a>
+        <a href="../#unete" class="btn btn-ghost-light">Únete a la Alianza</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="wrap footer-grid">
+      <div class="footer-col footer-brand-col">
+        <div class="footer-brand">
+          <span class="brand" aria-label="Alianza IA — Alianza Iberoamericana de IA">
+            <span class="brand-word">Alianza</span>
+            <span class="brand-ring" aria-hidden="true">IA</span>
+          </span>
+        </div>
+        <p class="footer-tag">Una IA ética, soberana y competitiva para Iberoamérica y Europa.</p>
+        <a href="../#unete" class="btn btn-primary">Únete a la Alianza</a>
+      </div>
+      <div class="footer-col">
+        <h4>La Alianza</h4>
+        <a href="../#quienes">Quiénes somos</a>
+        <a href="../#reto">El reto</a>
+        <a href="../#modelo">El modelo</a>
+        <a href="../#proyectos">Proyectos</a>
+      </div>
+      <div class="footer-col">
+        <h4>Participa</h4>
+        <a href="../#unete">Únete a la Alianza</a>
+        <a href="../#tu-lugar">Formas de colaborar</a>
+        <a href="mailto:info@alianzaia.org">Global AI Leaders</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <a href="mailto:info@alianzaia.org">info@alianzaia.org</a>
+        <a href="../">Corporación XV</a>
+      </div>
+    </div>
+    <div class="wrap footer-bottom">
+      <nav class="footer-legal-links">
+        <a href="../privacidad.html">Privacidad</a>
+        <a href="../cookies.html">Cookies</a>
+        <a href="../condiciones.html">Condiciones</a>
+      </nav>
+      <p class="footer-copy">© 2026 Alianza Iberoamericana de IA (AI Alliance) · Corporación XV. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="../vendor/gsap.min.js"></script>
+  <script src="../vendor/ScrollTrigger.min.js"></script>
+  <script src="../vendor/lenis.min.js"></script>
+  <script src="../app.js"></script>
+</body>
+</html>
