@@ -1,0 +1,23 @@
+# Render Blueprint · plataforma AlianzaIA (titular: AES). Preview en plan Free, región Fráncfort (UE).
+services:
+  - type: web
+    name: alianzaia-plataforma
+    runtime: node
+    plan: free
+    region: frankfurt
+    branch: main
+    buildCommand: node plataforma/tools/build.mjs
+    startCommand: node plataforma/tools/serve.mjs
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: PF_HOST
+        value: plataforma.asociacionstartups.es
+      - key: PF_BASE
+        value: /
+      - key: WEB_ORIGIN
+        value: https://www.alianzaia.org
+      - key: PF_NOINDEX
+        value: "1"
+      - key: NODE_VERSION
+        value: "22"
