@@ -3,6 +3,7 @@
 -- Titularidad: Asociación Española de Startups (AES), coordinadora.
 -- Versión 0.2 · 19-oct-2026 · BORRADOR (no aplicado en ningún entorno)
 --   0.2: campos de las fichas v1 de alianza-ceo (listas cerradas, flujo de estados, casos_internos)
+--   0.3: registro de aceptaciones (versión, hora, IP) y minimis en cada asignación (Legal)
 --
 -- Módulos: a) casos · b) diagnóstico · c) hub de créditos · d) formación
 --          e) área de empresa · transversal (roles, auditoría, ledger)
@@ -34,7 +35,7 @@ create table empresas (
   minimis_declarado   boolean not null default false,
   minimis_fecha       timestamptz,
   minimis_importe_3a  numeric(12,2),           -- ayudas de minimis recibidas en 3 ejercicios
-  consentimiento_rgpd timestamptz not null,
+  consentimiento_rgpd timestamptz,              -- obsoleto: ver tabla aceptaciones
   estado          text not null default 'pendiente'
                   check (estado in ('pendiente', 'validada', 'baja')),
   creado_en       timestamptz not null default now()
@@ -60,6 +61,68 @@ create or replace function mi_empresa() returns uuid
 
 create or replace function es_staff() returns boolean
   language sql stable as $$ select mi_rol() in ('gestor', 'auditor') $$;
+
+-- Tablas que solo admiten INSERT (aceptaciones, declaraciones, correcciones)
+create or replace function solo_insercion() returns trigger language plpgsql as $$
+begin
+  raise exception '% es solo de inserción: se conserva tal cual (10 años en minimis)', tg_table_name;
+end $$;
+
+-- ---------------------------------------------------------------------
+-- Textos legales y registro de aceptaciones (textos de Legal, apdo. 5)
+-- ---------------------------------------------------------------------
+create table textos_legales (
+  documento     text not null check (documento in
+                  ('condiciones', 'privacidad', 'aviso_legal', 'cookies', 'comercial', 'minimis', 'lectura_facturacion')),
+  version       text not null,                   -- p. ej. 1.0
+  texto         text not null,                   -- texto exacto que se muestra
+  sha256        text generated always as (encode(digest(texto, 'sha256'), 'hex')) stored,
+  vigente_desde timestamptz not null default now(),
+  primary key (documento, version)
+);
+
+-- Cada aceptación (o rechazo de la casilla opcional) con fecha, hora,
+-- versión del texto, usuario e IP. Nunca se modifica ni se borra.
+create table aceptaciones (
+  id          uuid primary key default gen_random_uuid(),
+  perfil_id   uuid not null references perfiles(id),
+  empresa_id  uuid references empresas(id),
+  documento   text not null,
+  version     text not null,
+  aceptado    boolean not null,
+  ip          inet,
+  user_agent  text,
+  creado_en   timestamptz not null default now(),
+  foreign key (documento, version) references textos_legales(documento, version)
+);
+create trigger aceptaciones_inmutable before update or delete on aceptaciones
+  for each row execute function solo_insercion();
+
+-- La IP la pone el servidor (cabeceras de PostgREST), no el navegador.
+create or replace function ip_peticion() returns inet
+  language plpgsql stable as $$
+declare h json; v text;
+begin
+  h := nullif(current_setting('request.headers', true), '')::json;
+  v := coalesce(nullif(split_part(h->>'x-forwarded-for', ',', 1), ''), h->>'x-real-ip');
+  return nullif(trim(v), '')::inet;
+exception when others then return null;
+end $$;
+
+create or replace function registrar_aceptacion(p_documento text, p_version text, p_aceptado boolean)
+  returns uuid language plpgsql security definer set search_path = public as $$
+declare v_id uuid; h json;
+begin
+  if auth.uid() is null then raise exception 'hay que iniciar sesión'; end if;
+  if p_documento in ('condiciones', 'privacidad', 'minimis') and not p_aceptado then
+    raise exception 'la aceptación de % es obligatoria', p_documento;
+  end if;
+  h := nullif(current_setting('request.headers', true), '')::json;
+  insert into aceptaciones (perfil_id, empresa_id, documento, version, aceptado, ip, user_agent)
+  values (auth.uid(), mi_empresa(), p_documento, p_version, p_aceptado, ip_peticion(), h->>'user-agent')
+  returning id into v_id;
+  return v_id;
+end $$;
 
 -- ---------------------------------------------------------------------
 -- a) Catálogo de casos de uso replicables
@@ -279,6 +342,71 @@ create table solicitudes_credito (
   creado_en         timestamptz not null default now()
 );
 
+-- Minimis (Reg. UE 2023/2831): la ayuda nace al ASIGNAR, por el importe
+-- asignado a tarifa pública. Límite: 300.000 € por empresa única en
+-- cualquier periodo de 3 años, sumando créditos y servicios valorados.
+-- Declaración en el alta y en CADA asignación. Conservación: 10 años.
+create or replace function clave_minimis() returns text
+  language plpgsql stable security definer set search_path = public as $$
+declare k text;
+begin
+  if to_regclass('vault.decrypted_secrets') is not null then
+    execute $q$select decrypted_secret from vault.decrypted_secrets where name = 'minimis_clave'$q$
+      into k;
+  end if;
+  k := coalesce(k, nullif(current_setting('app.minimis_clave', true), ''));
+  if k is null then raise exception 'falta la clave de cifrado de minimis (Vault: minimis_clave)'; end if;
+  return k;
+end $$;
+
+create table declaraciones_minimis (
+  id                uuid primary key default gen_random_uuid(),
+  empresa_id        uuid not null references empresas(id),
+  solicitud_id      uuid,                         -- null = declaración del alta
+  ayudas_otras_eur  numeric(12,2) not null check (ayudas_otras_eur >= 0), -- minimis de otras fuentes, 3 años, empresa única
+  sector_excluido   boolean not null,             -- art. 1 (pesca, producción agrícola primaria…)
+  detalle_cifrado   bytea not null,               -- empresa única y ayudas, cifrado por columna (EUDPO)
+  aceptacion_id     uuid not null references aceptaciones(id),
+  declarado_por     uuid not null references perfiles(id),
+  creado_en         timestamptz not null default now()
+);
+create trigger declaraciones_inmutable before update or delete on declaraciones_minimis
+  for each row execute function solo_insercion();
+
+create or replace function declarar_minimis(p_solicitud uuid, p_ayudas_otras numeric,
+  p_sector_excluido boolean, p_detalle jsonb, p_version text)
+  returns uuid language plpgsql security definer set search_path = public as $$
+declare v_acept uuid; v_id uuid;
+begin
+  if mi_empresa() is null then raise exception 'el usuario no tiene empresa'; end if;
+  if p_solicitud is not null and not exists (select 1 from solicitudes_credito
+       where id = p_solicitud and empresa_id = mi_empresa()) then
+    raise exception 'la solicitud no es de tu empresa';
+  end if;
+  v_acept := registrar_aceptacion('minimis', p_version, true);
+  insert into declaraciones_minimis (empresa_id, solicitud_id, ayudas_otras_eur, sector_excluido,
+    detalle_cifrado, aceptacion_id, declarado_por)
+  values (mi_empresa(), p_solicitud, p_ayudas_otras, p_sector_excluido,
+    pgp_sym_encrypt(p_detalle::text, clave_minimis()), v_acept, auth.uid())
+  returning id into v_id;
+  return v_id;
+end $$;
+
+-- Servicios gratuitos valorados (formación, mentoría, PoC, diagnóstico
+-- asistido): también son minimis y consumen el mismo límite.
+create table servicios_valorados (
+  id            uuid primary key default gen_random_uuid(),
+  empresa_id    uuid not null references empresas(id),
+  tipo          text not null check (tipo in ('formacion', 'mentoria', 'prueba_concepto', 'diagnostico', 'otro')),
+  concepto      text not null,
+  importe_eur   numeric(12,2) not null check (importe_eur > 0),  -- coste documentado por empresa
+  fecha         date not null default current_date,
+  declaracion_minimis_id uuid not null references declaraciones_minimis(id),
+  comunicado_en timestamptz,                      -- comunicación escrita a la empresa
+  registrado_por uuid references perfiles(id),
+  creado_en     timestamptz not null default now()
+);
+
 create table asignaciones (
   id            uuid primary key default gen_random_uuid(),
   solicitud_id  uuid not null unique references solicitudes_credito(id),
@@ -289,8 +417,68 @@ create table asignaciones (
   activada_en   timestamptz,
   caduca_en     date,
   asignado_por  uuid not null references perfiles(id),
+  declaracion_minimis_id uuid not null references declaraciones_minimis(id),
+  comunicado_en timestamptz,                      -- comunicación escrita: importe y carácter de minimis
   creado_en     timestamptz not null default now()
 );
+
+-- Si el crédito caduca o se devuelve sin usar, se minora la ayuda
+-- (y hay que reflejarlo también en el registro de minimis).
+create table correcciones_minimis (
+  id            uuid primary key default gen_random_uuid(),
+  asignacion_id uuid not null references asignaciones(id),
+  importe_eur   numeric(12,2) not null check (importe_eur < 0),
+  motivo        text not null check (motivo in ('caducidad', 'devolucion', 'revocacion', 'error')),
+  registrado_por uuid references perfiles(id),
+  creado_en     timestamptz not null default now()
+);
+create trigger correcciones_inmutable before update or delete on correcciones_minimis
+  for each row execute function solo_insercion();
+
+-- Ayudas de minimis concedidas por la plataforma a cada empresa
+create view ayudas_minimis as
+  select empresa_id, creado_en::date as fecha, importe_eur, 'asignacion'::text as origen, id as ref
+    from asignaciones
+  union all
+  select a.empresa_id, c.creado_en::date, c.importe_eur, 'correccion', c.id
+    from correcciones_minimis c join asignaciones a on a.id = c.asignacion_id
+  union all
+  select empresa_id, fecha, importe_eur, 'servicio', id from servicios_valorados;
+
+-- Bloqueo: declaración vigente de la misma empresa y tope de 300.000 €
+create or replace function minimis_comprobar() returns trigger
+  language plpgsql as $$
+declare d declaraciones_minimis; v_total numeric; v_fecha date := current_date;
+begin
+  select * into d from declaraciones_minimis where id = new.declaracion_minimis_id;
+  if d.empresa_id is distinct from new.empresa_id then
+    raise exception 'la declaración de minimis no es de esta empresa';
+  end if;
+  if tg_table_name = 'asignaciones' then
+    if d.solicitud_id is distinct from (to_jsonb(new)->>'solicitud_id')::uuid then
+      raise exception 'cada asignación necesita su propia declaración de minimis (la de esta solicitud)';
+    end if;
+  else
+    v_fecha := (to_jsonb(new)->>'fecha')::date;
+  end if;
+  if d.creado_en < now() - interval '30 days' then
+    raise exception 'la declaración de minimis tiene más de 30 días: hay que renovarla';
+  end if;
+  if d.sector_excluido then
+    raise exception 'la empresa declara operar en un sector excluido del Reg. 2023/2831';
+  end if;
+  select coalesce(sum(importe_eur), 0) into v_total from ayudas_minimis
+   where empresa_id = new.empresa_id and fecha > v_fecha - interval '3 years';
+  if d.ayudas_otras_eur + v_total + new.importe_eur > 300000 then
+    raise exception 'supera el límite de minimis: % € declarados + % € de la plataforma + % € nuevos > 300.000 €',
+      d.ayudas_otras_eur, v_total, new.importe_eur;
+  end if;
+  return new;
+end $$;
+create trigger asignaciones_minimis before insert on asignaciones
+  for each row execute function minimis_comprobar();
+create trigger servicios_minimis before insert on servicios_valorados
+  for each row execute function minimis_comprobar();
 
 create table consumos (
   id            uuid primary key default gen_random_uuid(),
@@ -450,7 +638,7 @@ end $$;
 do $$
 declare t text;
 begin
-  foreach t in array array['empresas','perfiles','casos','casos_internos','solicitudes_caso','diagnosticos',
+  foreach t in array array['empresas','perfiles','casos','casos_internos','solicitudes_caso','diagnosticos','servicios_valorados',
     'proveedores','programas_credito','lotes_credito','solicitudes_credito','asignaciones',
     'consumos','evidencias','mentorias','kpis_empresa']
   loop
@@ -465,7 +653,8 @@ end $$;
 do $$
 declare t text;
 begin
-  foreach t in array array['empresas','perfiles','casos','casos_internos','casos_recursos','solicitudes_caso',
+  foreach t in array array['empresas','perfiles','textos_legales','aceptaciones','declaraciones_minimis','servicios_valorados',
+    'correcciones_minimis','casos','casos_internos','casos_recursos','solicitudes_caso',
     'preguntas','diagnosticos','respuestas','recomendaciones','proveedores','programas_credito',
     'lotes_credito','solicitudes_credito','asignaciones','consumos','evidencias','ledger',
     'recursos','itinerarios','progreso','mentorias','kpis_empresa','audit_log']
@@ -481,6 +670,13 @@ create policy casos_publico on casos for select using (publicado);
 create policy casos_rec_publico on casos_recursos for select
   using (exists (select 1 from casos c where c.id = caso_id and c.publicado));
 create policy preguntas_publico on preguntas for select using (true);
+create policy textos_publico on textos_legales for select using (true);
+create policy acept_propia on aceptaciones for select using (perfil_id = auth.uid());
+create policy decl_propia on declaraciones_minimis for select using (empresa_id = mi_empresa());
+create policy serv_propios on servicios_valorados for select using (empresa_id = mi_empresa());
+create policy gestor_servicios on servicios_valorados for insert with check (mi_rol() = 'gestor');
+create policy gestor_correcciones on correcciones_minimis for insert with check (mi_rol() = 'gestor');
+create policy gestor_textos on textos_legales for insert with check (mi_rol() = 'gestor');
 create policy recursos_publico on recursos for select using (publicado);
 create policy itinerarios_publico on itinerarios for select using (true);
 create policy programas_publico on programas_credito for select using (auth.uid() is not null);
