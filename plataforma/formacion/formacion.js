@@ -20,7 +20,7 @@
     const recs = it.recursos.map(recurso).filter(Boolean);
     const total = recs.reduce((a, r) => a + r.duracion_min, 0);
     const hechosIt = recs.filter((r) => hechos.has(r.id));
-    const min = hechosIt.reduce((a, r) => a + r.duracion_min, 0);
+    const min = hechosIt.reduce((a, r) => a + (hechos.get(r.id) ?? r.duracion_min), 0);
     return { recs, total, min, n: hechosIt.length, pct: recs.length ? Math.round((hechosIt.length / recs.length) * 100) : 0 };
   }
 
@@ -64,7 +64,7 @@
 
   // ---------- Aula ----------
   async function pintarAula(recomendados) {
-    const hechos = new Set((await Datos.progreso(ses.perfil.id)).map((p) => p.recurso_id));
+    const hechos = new Map((await Datos.progreso(ses.perfil.id)).map((p) => [p.recurso_id, p.minutos]));
     $('fm-itinerarios').innerHTML = C.itinerarios.map((it) => {
       const e = estadoIt(it, hechos);
       return `<article class="pf-fm-it" id="it-${esc(it.id)}">
@@ -93,7 +93,7 @@
 
   // ---------- Mi progreso ----------
   async function pintarProgreso() {
-    const prog = await Datos.progreso(ses.perfil.id), hechos = new Set(prog.map((p) => p.recurso_id));
+    const prog = await Datos.progreso(ses.perfil.id), hechos = new Map(prog.map((p) => [p.recurso_id, p.minutos]));
     const min = prog.reduce((a, p) => a + (p.minutos || 0), 0);
     const ms = (await Datos.mentorias()).filter((m) => m.perfil_id === ses.perfil.id && m.asistencia);
     const hMen = ms.reduce((a, m) => a + (m.horas || 0), 0);
@@ -111,7 +111,7 @@
         <caption class="pf-oculto">Progreso por itinerario</caption>
         <thead><tr><th scope="col">Itinerario</th><th scope="col">Avance</th><th scope="col">Horas</th><th scope="col">Certificado</th></tr></thead>
         <tbody>${filas.map(({ it, e }) => `<tr><th scope="row">${esc(it.titulo)}</th><td>${e.pct} %</td><td>${esc(horas(e.min))} de ${esc(horas(e.total))}</td>
-          <td>${e.pct === 100 ? `<a href="/plataforma/formacion/certificado.html?it=${encodeURIComponent(it.id)}&p=${encodeURIComponent(ses.perfil.id)}">Ver e imprimir</a>` : 'Al completar el itinerario'}</td></tr>`).join('')}</tbody>
+          <td>${e.pct === 100 ? `<a href="/plataforma/formacion/certificado.html?it=${encodeURIComponent(it.id)}&p=${encodeURIComponent(ses.perfil.id)}">Ver e imprimir</a>` : 'Pendiente'}</td></tr>`).join('')}</tbody>
       </table></div>`;
   }
 
@@ -141,20 +141,20 @@
     $('fm-solicitud').hidden = rol !== 'empresa';
     const acciones = (m) => {
       if (rol === 'gestor' && m.estado === 'solicitada') return `
-        <form class="pf-fm-accion" data-accion="asignar" data-id="${esc(m.id)}">
+        <form class="pf-fm-accion" novalidate data-accion="asignar" data-id="${esc(m.id)}">
           <label class="pf-campo">Mentor<select name="mentor_id" required><option value="">Elige…</option>${mentores.map((x) => `<option value="${esc(x.id)}">${esc(x.nombre)} · ${esc(x.especialidad)}</option>`).join('')}</select></label>
           <label class="pf-campo">Fecha y hora<input name="fecha" type="datetime-local" required></label>
           <button class="pf-btn" type="submit">Asignar</button><button class="pf-btn pf-sec" type="button" data-cancelar="${esc(m.id)}">Cancelar</button>
         </form>`;
       if (rol === 'mentor' && m.estado === 'asignada') return `
-        <form class="pf-fm-accion" data-accion="realizar" data-id="${esc(m.id)}">
+        <form class="pf-fm-accion" novalidate data-accion="realizar" data-id="${esc(m.id)}">
           <fieldset class="pf-campo pf-fm-radio"><legend>¿Asistió la empresa?</legend>
             <label><input type="radio" name="asistencia" value="si" required> Sí</label><label><input type="radio" name="asistencia" value="no"> No</label></fieldset>
           <label class="pf-campo">Horas<input name="horas" type="number" min="0.5" max="24" step="0.5" value="1"></label>
           <button class="pf-btn" type="submit">Registrar sesión</button>
         </form>`;
       if (rol === 'empresa' && m.estado === 'realizada' && m.asistencia) return `
-        <form class="pf-fm-accion" data-accion="valorar" data-id="${esc(m.id)}">
+        <form class="pf-fm-accion" novalidate data-accion="valorar" data-id="${esc(m.id)}">
           <fieldset class="pf-campo pf-fm-radio pf-fm-estrellas"><legend>Valoración (1 = mala, 5 = excelente)</legend>
             ${[1, 2, 3, 4, 5].map((v) => `<label><input type="radio" name="valoracion" value="${v}" required> ${v}</label>`).join('')}</fieldset>
           <label class="pf-campo">Comentario (opcional)<input name="comentario" type="text" maxlength="300"></label>

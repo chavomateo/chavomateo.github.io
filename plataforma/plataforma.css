@@ -219,6 +219,7 @@ fieldset.pf-falta::after{content:"Falta responder esta pregunta";display:block;m
 #fm-mentorias>h3{color:var(--a-navy);margin:8px 0 12px}
 .pf-fm-men{border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:#fff;margin-bottom:14px}
 .pf-fm-men-cab{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.pf-fm-men>p{margin:8px 0 0;font-size:.95rem;line-height:1.5}
 .pf-fm-men h4{margin:0;color:var(--a-navy);font-size:1.05rem}
 .pf-fm-e-asignada,.pf-fm-e-realizada{background:rgba(53,180,240,.18);color:var(--a-navy)}
 .pf-fm-e-valorada{background:rgba(80,224,224,.3);color:var(--a-navy)}
@@ -243,9 +244,12 @@ fieldset.pf-falta::after{content:"Falta responder esta pregunta";display:block;m
   .pf-fm-it,.pf-fm-men{padding:16px}
   .pf-fm-pasos{font-size:.72rem}
   .pf-fm-acc .pf-btn{width:100%}
+  .pf-fm-tabla th,.pf-fm-tabla td{padding:8px 6px;font-size:.85rem}
+  .pf-fm-tabla thead th{font-size:.7rem;letter-spacing:.02em}
 }
 /* Certificado imprimible */
 .pf-cert-body{background:var(--a-pista)}
+.pf-cert,.pf-cert-barra{position:relative;z-index:1}
 .pf-cert-barra{max-width:900px;margin:24px auto 0;padding:0 16px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .pf-cert{max-width:900px;margin:20px auto 40px;background:#fff;border:2px solid var(--a-navy);box-shadow:0 0 0 6px #fff,0 0 0 9px var(--a-blue);border-radius:4px;padding:48px 56px;text-align:center;color:var(--a-navy);box-sizing:border-box}
 .pf-cert h1{font-size:2.2rem;margin:6px 0;color:var(--a-navy)}
@@ -264,6 +268,7 @@ fieldset.pf-falta::after{content:"Falta responder esta pregunta";display:block;m
 @media print{
   @page{size:A4 landscape;margin:12mm}
   .pf-cert-body{background:#fff}
+  .pf-cert-body::before{display:none}
   .pf-cert-barra{display:none}
   .pf-cert{margin:0 auto;box-shadow:none;max-width:none;padding:28px 40px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
