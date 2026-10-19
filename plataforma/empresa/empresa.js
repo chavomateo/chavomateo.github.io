@@ -603,7 +603,7 @@
     const dm = s.declaraciones_minimis[s.declaraciones_minimis.length - 1];
     const nivel = (n) => (Q && Q.niveles ? (Q.niveles.find((x) => x.nivel === n) || {}).nombre : '') || '';
     const nombreDim = (id) => (Q ? (Q.dimensiones.find((d) => d.id.toLowerCase() === id) || {}).nombre : '') || id.toUpperCase();
-    const delta = (a, b) => { if (a == null || b == null) return '—'; const v = Math.round((b - a) * 10) / 10; return `<span class="${v > 0 ? 'pf-e-sube' : ''}">${v > 0 ? '+' : ''}${num(v)}</span>`; };
+    const delta = (a, b, enEur) => { if (a == null || b == null) return '—'; const v = Math.round((b - a) * 10) / 10; return `<span class="${v > 0 ? 'pf-e-sube' : ''}">${v > 0 ? '+' : ''}${enEur ? eur(v) : num(v)}</span>`; };
     const kpis = [];
     if (ult) {
       kpis.push({ ind: 'Madurez en IA (global, 0-100)', clave: 'madurez_global', base: base.global, act: ult.global });
@@ -628,7 +628,7 @@
         <div><span class="pf-etq">Último autodiagnóstico</span><strong>${ult ? `${ult.global}/100` : 'Sin hacer'}</strong><small>${ult ? `Nivel ${esc(ult.nivel_global)}${nivel(ult.nivel_global) ? ' · ' + esc(nivel(ult.nivel_global)) : ''} · ${fecha(ult.fecha)}` : '<a href="/plataforma/diagnostico/">Hacer el autodiagnóstico</a>'}</small></div>
       </div>
       <h3>Indicadores: línea base y situación actual</h3>
-      ${kpis.length ? tabla(['Indicador', 'Línea base', 'Actual', 'Variación'], kpis.map((k) => `<tr><td>${esc(k.ind)}</td><td>${fmt(k, k.base)}</td><td>${fmt(k, k.act)}</td><td>${delta(k.base, k.act)}</td></tr>`), 'pf-e-num')
+      ${kpis.length ? tabla(['Indicador', 'Línea base', 'Actual', 'Variación'], kpis.map((k) => `<tr><td>${esc(k.ind)}</td><td>${fmt(k, k.base)}</td><td>${fmt(k, k.act)}</td><td>${delta(k.base, k.act, k.eur)}</td></tr>`), 'pf-e-num')
         : '<p class="pf-vacio">Todavía no hay indicadores: haced el <a href="/plataforma/diagnostico/">autodiagnóstico</a> para fijar la línea base.</p>'}
       <p class="pf-nota-pie">La línea base de madurez es vuestro primer autodiagnóstico${base ? ` (${fecha(base.fecha)})` : ''}. La de créditos y formación es 0 al entrar en el programa.${cr ? '' : ' Créditos: sin datos todavía.'}${fo ? '' : ' Formación: sin datos todavía.'}</p>
       ${dg.length ? `<h3>Evolución de la madurez</h3>${grafico(dg)}` : ''}
@@ -680,7 +680,7 @@
         ${tabla(['Tipo de apoyo', 'Empresas'], noFin.map(([k, n]) => `<tr><td>${esc(tipos[k])}</td><td>${n}</td></tr>`).concat(`<tr><th scope="row">Con algún apoyo no financiero</th><td><strong>${apoyadas.length}</strong></td></tr>`), 'pf-e-num')}
       </section>
       <section class="pf-e-sec"><h2>Empresas</h2>
-        ${tabla(['NIF', 'Razón social', 'Tipo', 'Tamaño', 'Comunidad', 'Estado', 'Apoyos'], emp.map((e) => `<tr><td>${esc(e.nif)}</td><td>${esc(e.razon_social)}${e.ejemplo ? '' : ' <span class="pf-tag">Esta demo</span>'}</td><td>${esc(TIPOS[e.tipo] || e.tipo)}</td><td>${esc(TAMANOS[e.tamano] || '—')}</td><td>${esc(e.ccaa)}</td><td>${etiquetaEstado(e.estado)}</td><td>${(e.apoyos || []).map((a) => esc(tipos[a] || a)).join(', ') || '—'}</td></tr>`))}
+        ${tabla(['NIF', 'Razón social', 'Tipo', 'Tamaño', 'Comunidad', 'Estado', 'Apoyos'], emp.map((e) => `<tr><td>${esc(e.nif)}</td><td>${esc(e.razon_social)}${e.ejemplo ? '' : ' <span class="pf-tag">Esta demo</span>'}</td><td>${esc(TIPOS[e.tipo] || e.tipo)}</td><td>${esc(TAMANOS[e.tamano] || '—')}</td><td>${esc(e.ccaa)}</td><td>${etiquetaEstado(e.estado)}</td><td>${(e.apoyos || []).map((a) => esc(tipos[a] || a)).join(', ') || '—'}</td></tr>`), 'pf-e-ancha')}
       </section>
       <section class="pf-e-sec"><h2>Registro de auditoría</h2>
         <form class="pf-filtros pf-e-filtros" id="f-audit" role="search" aria-label="Filtrar el registro de auditoría">
@@ -717,7 +717,7 @@
     const l = await logFiltrado();
     $('fa-cuenta').textContent = `${l.length} ${l.length === 1 ? 'entrada' : 'entradas'}`;
     $('fa-tabla-res').innerHTML = l.length ? tabla(['N.º', 'Fecha y hora', 'Actor', 'Empresa', 'Tabla', 'Acción', 'Detalle'],
-      l.map((x) => `<tr><td>${esc(x.n)}</td><td>${fechaHora(x.ts)}</td><td>${esc(x.actor)}</td><td>${esc(nomEmp[x.empresa_id] || x.empresa_id || '—')}</td><td>${esc(x.tabla)}</td><td>${esc(x.accion)}</td><td>${esc(x.detalle)}</td></tr>`), 'pf-e-log')
+      l.map((x) => `<tr><td>${esc(x.n)}</td><td>${fechaHora(x.ts)}</td><td>${x.actor && x.actor.length > 20 ? `<span title="${esc(x.actor)}">${esc(x.actor.slice(0, 8))}…</span>` : esc(x.actor)}</td><td>${esc(nomEmp[x.empresa_id] || x.empresa_id || '—')}</td><td>${esc(x.tabla)}</td><td>${esc(x.accion)}</td><td>${esc(x.detalle)}</td></tr>`), 'pf-e-log')
       : '<p class="pf-vacio">No hay entradas con esos filtros.</p>';
   }
   async function exportarCsv(nomEmp) {

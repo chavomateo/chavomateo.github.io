@@ -244,3 +244,5 @@ fieldset.pf-falta::after{content:"Falta responder esta pregunta";display:block;m
   .pf-e-fechas input[type=date]{flex:1 1 140px}
   .pf-e-tabla th,.pf-e-tabla td{padding:9px 10px}
 }
+.pf-e-form .pf-perfil+.pf-preg,.pf-e-form .pf-perfil+p{margin-top:20px}
+@media (max-width:640px){.pf-e-log{min-width:760px}.pf-e-ancha{min-width:720px}.pf-e-log td:nth-child(7),.pf-e-ancha td:nth-child(2){min-width:180px}}
