@@ -1,12 +1,12 @@
 -- =====================================================================
 -- Plataforma AlianzaIA · Esquema de datos MVP (PostgreSQL / Supabase UE)
 -- Titularidad: Asociación Española de Startups (AES), coordinadora.
--- Versión 0.4 · 19-oct-2026 · BORRADOR (no aplicado en ningún entorno)
+-- Versión 0.5 · 19-oct-2026 · BORRADOR (no aplicado en ningún entorno)
 --   0.2: campos de las fichas v1 de alianza-ceo (listas cerradas, flujo de estados, casos_internos)
 --   0.3: registro de aceptaciones (versión, hora, IP) y minimis en cada asignación (Legal)
---   0.4: firma electrónica simple (art. 25 eIDAS) en cada asignación: declaración de
---        representación, huella del documento aceptado y copia PDF enviada; firma
---        externa (Dropbox Sign) de la declaración del alta, sin ella no hay asignaciones
+--   0.4: firma electrónica simple (art. 25 eIDAS) en cada asignación
+--   0.5: firmas_externas adaptada a registro manual por el gestor (Dropbox Sign sin API),
+--        soporte para administradores mancomunados (doble firmante) y custodia de audit trail
 --
 -- Módulos: a) casos · b) diagnóstico · c) hub de créditos · d) formación
 --          e) área de empresa · transversal (roles, auditoría, ledger)
@@ -156,30 +156,57 @@ create table copias_enviadas (
 create trigger copias_inmutable before update or delete on copias_enviadas
   for each row execute function solo_insercion();
 
--- Firmas hechas fuera de la plataforma. La declaración de minimis del alta la
--- firma el representante en Dropbox Sign junto con la manifestación de interés.
+-- Firmas hechas fuera de la plataforma (Dropbox Sign vía web, registro manual por gestor).
+-- Soporta administradores únicos, solidarios y mancomunados (2 firmantes requeridos).
 create table firmas_externas (
-  id              uuid primary key default gen_random_uuid(),
-  empresa_id      uuid not null references empresas(id),
-  tipo            text not null check (tipo in ('declaracion_alta', 'revocacion')),
-  proveedor       text not null default 'dropbox_sign',
-  ref_firma       text not null,                 -- signature_request_id de Dropbox Sign
-  documento_sha256 text,                         -- huella del PDF firmado
-  firmante_nombre text not null,
-  firmante_cargo  text,
-  firmado_en      timestamptz not null,
-  registrado_por  uuid references perfiles(id),
-  creado_en       timestamptz not null default now(),
-  unique (proveedor, ref_firma, tipo)
+  id                   uuid primary key default gen_random_uuid(),
+  empresa_id           uuid not null references empresas(id),
+  tipo                 text not null check (tipo in ('declaracion_alta', 'revocacion')),
+  proveedor            text not null default 'dropbox_sign',
+  ref_firma            text not null,                 -- signature_request_id de Dropbox Sign
+  regimen_administracion text not null default 'unico'
+                       check (regimen_administracion in ('unico', 'solidario', 'mancomunado')),
+  -- Documento firmado y certificado de auditoría
+  documento_sha256     text not null,                 -- huella SHA-256 del PDF firmado
+  documento_ruta       text,                          -- ruta en bucket privado de almacenamiento
+  audit_trail_sha256   text,                          -- huella SHA-256 del log de auditoría
+  audit_trail_ruta     text,
+  -- Firmante principal (o primer administrador)
+  firmante_nombre      text not null,
+  firmante_email       text not null,
+  firmante_cargo       text not null,
+  firmado_en           timestamptz not null,
+  -- Segundo firmante (obligatorio en régimen mancomunado)
+  firmante2_nombre     text,
+  firmante2_email      text,
+  firmante2_cargo      text,
+  firmado2_en          timestamptz,
+  -- Auditoría del registro manual por el gestor de la plataforma
+  registrado_por       uuid not null references perfiles(id),
+  notas_verificacion   text,
+  creado_en            timestamptz not null default now(),
+  unique (proveedor, ref_firma, tipo),
+  constraint firmas_mancomunadas_completas check (
+    regimen_administracion <> 'mancomunado' or
+    (firmante2_nombre is not null and firmante2_email is not null and firmado2_en is not null)
+  )
 );
 create trigger firmas_inmutable before update or delete on firmas_externas
   for each row execute function solo_insercion();
 
--- Firma del alta vigente: la última anotación de la empresa es una declaración, no una revocación
+-- Firma del alta vigente: la última anotación es una declaración de alta válida, no una revocación.
+-- En régimen mancomunado verifica que conste la firma de ambos administradores.
 create or replace function firma_alta_vigente(p_empresa uuid) returns boolean
   language sql stable security definer set search_path = public as $$
-  select coalesce((select tipo = 'declaracion_alta' from firmas_externas
-                    where empresa_id = p_empresa order by firmado_en desc, creado_en desc limit 1), false) $$;
+  select coalesce((
+    select (tipo = 'declaracion_alta' and (
+      regimen_administracion <> 'mancomunado' or (firmante2_nombre is not null and firmado2_en is not null)
+    ))
+    from firmas_externas
+    where empresa_id = p_empresa
+    order by firmado_en desc, creado_en desc
+    limit 1
+  ), false) $$;
 
 -- ---------------------------------------------------------------------
 -- a) Catálogo de casos de uso replicables
