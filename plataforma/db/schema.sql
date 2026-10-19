@@ -1,7 +1,7 @@
 -- =====================================================================
 -- Plataforma AlianzaIA · Esquema de datos MVP (PostgreSQL / Supabase UE)
 -- Titularidad: Asociación Española de Startups (AES), coordinadora.
--- Versión 0.7 · 19-oct-2026 · BORRADOR (no aplicado en ningún entorno)
+-- Versión 0.8 · 19-oct-2026 · BORRADOR (no aplicado en ningún entorno)
 --   0.2: campos de las fichas v1 de alianza-ceo (listas cerradas, flujo de estados, casos_internos)
 --   0.3: registro de aceptaciones (versión, hora, IP) y minimis en cada asignación (Legal)
 --   0.4: firma electrónica simple (art. 25 eIDAS) en cada asignación
@@ -16,6 +16,9 @@
 --        administración comprobado con escritura o nota simple (si no, mancomunado y dos firmas)
 --        y almacén privado «firmas» con acceso solo del gestor; firmas_externas solo la lee el
 --        gestor (RLS) y la empresa consulta su estado con mi_firma_alta_vigente()
+--   0.8: módulo c integrado (19-oct): estados de la solicitud pendiente→validada→asignada→activada→cerrada|rechazada,
+--        catálogo de servicios en especie de los AI leaders (servicios_oferta), solicitudes de
+--        servicio y asiento «servicio» en el ledger
 --
 -- Módulos: a) casos · b) diagnóstico · c) hub de créditos · d) formación
 --          e) área de empresa · transversal (roles, auditoría, ledger)
@@ -525,17 +528,34 @@ create table lotes_credito (
                      check (estado in ('previsto', 'cedido', 'agotado', 'caducado'))
 );
 
+-- Servicios en especie que aportan los AI leaders (mentoría, consultoría, formación…).
+-- Se solicitan y asignan igual que los créditos; al asignar nace un servicio_valorado.
+create table servicios_oferta (
+  id                uuid primary key default gen_random_uuid(),
+  aportante_interno text not null,                -- marca real: SOLO staff
+  aportante_publico text not null,                -- genérico: «Empresa líder en IA A»
+  tipo              text not null check (tipo in ('formacion', 'mentoria', 'consultoria', 'prueba_concepto', 'diagnostico', 'otro')),
+  concepto          text not null,
+  descripcion       text,
+  importe_eur       numeric(12,2) not null check (importe_eur > 0),  -- valor documentado por empresa
+  plazas            integer not null check (plazas >= 0),
+  modalidad         text,
+  publicado         boolean not null default false
+);
+
 create table solicitudes_credito (
   id                uuid primary key default gen_random_uuid(),
   empresa_id        uuid not null references empresas(id),
-  programa_id       uuid not null references programas_credito(id),
+  programa_id       uuid references programas_credito(id),
+  servicio_id       uuid references servicios_oferta(id),
   caso_id           uuid references casos(id),
   necesidad         text not null,
   consumo_estimado_eur numeric(12,2),
-  estado            text not null default 'recibida'
-                    check (estado in ('recibida', 'elegible', 'asignada', 'rechazada', 'cerrada')),
+  estado            text not null default 'pendiente'
+                    check (estado in ('pendiente', 'validada', 'asignada', 'activada', 'cerrada', 'rechazada')),
   motivo_estado     text,
-  creado_en         timestamptz not null default now()
+  creado_en         timestamptz not null default now(),
+  check ((programa_id is null) <> (servicio_id is null))  -- o un programa de créditos o un servicio
 );
 
 -- Minimis (Reg. UE 2023/2831): la ayuda nace al ASIGNAR, por el importe
@@ -638,8 +658,11 @@ end $$;
 create table servicios_valorados (
   id            uuid primary key default gen_random_uuid(),
   empresa_id    uuid not null references empresas(id),
-  tipo          text not null check (tipo in ('formacion', 'mentoria', 'prueba_concepto', 'diagnostico', 'otro')),
+  tipo          text not null check (tipo in ('formacion', 'mentoria', 'consultoria', 'prueba_concepto', 'diagnostico', 'otro')),
   concepto      text not null,
+  solicitud_id  uuid unique references solicitudes_credito(id),
+  servicio_id   uuid references servicios_oferta(id),
+  activada_en   timestamptz,                      -- la empresa confirma el inicio del servicio
   importe_eur   numeric(12,2) not null check (importe_eur > 0),  -- coste documentado por empresa
   fecha         date not null default current_date,
   declaracion_minimis_id uuid not null references declaraciones_minimis(id),
@@ -667,11 +690,14 @@ create table asignaciones (
 -- (y hay que reflejarlo también en el registro de minimis).
 create table correcciones_minimis (
   id            uuid primary key default gen_random_uuid(),
-  asignacion_id uuid not null references asignaciones(id),
+  asignacion_id uuid references asignaciones(id),
+  servicio_valorado_id uuid references servicios_valorados(id),
   importe_eur   numeric(12,2) not null check (importe_eur < 0),
   motivo        text not null check (motivo in ('caducidad', 'devolucion', 'revocacion', 'error')),
   registrado_por uuid references perfiles(id),
-  creado_en     timestamptz not null default now()
+  ledger_n      bigint,                           -- contraasiento que la origina
+  creado_en     timestamptz not null default now(),
+  check ((asignacion_id is null) <> (servicio_valorado_id is null))
 );
 create trigger correcciones_inmutable before update or delete on correcciones_minimis
   for each row execute function solo_insercion();
@@ -683,6 +709,9 @@ create view ayudas_minimis as
   union all
   select a.empresa_id, c.creado_en::date, c.importe_eur, 'correccion', c.id
     from correcciones_minimis c join asignaciones a on a.id = c.asignacion_id
+  union all
+  select v.empresa_id, c.creado_en::date, c.importe_eur, 'correccion', c.id
+    from correcciones_minimis c join servicios_valorados v on v.id = c.servicio_valorado_id
   union all
   select empresa_id, fecha, importe_eur, 'servicio', id from servicios_valorados;
 
@@ -810,13 +839,13 @@ create table evidencias (
 create table ledger (
   n             bigserial primary key,
   ts            timestamptz not null default now(),
-  tipo          text not null check (tipo in ('cesion', 'asignacion', 'activacion', 'consumo', 'cierre', 'contraasiento')),
+  tipo          text not null check (tipo in ('cesion', 'asignacion', 'activacion', 'consumo', 'servicio', 'cierre', 'contraasiento')),
   lote_id       uuid references lotes_credito(id),
   empresa_id    uuid references empresas(id),
   asignacion_id uuid references asignaciones(id),
   importe_eur   numeric(12,2) not null,          -- negativo en contraasientos
   corrige_n     bigint references ledger(n),
-  detalle       jsonb not null default '{}',
+  detalle       jsonb not null default '{}',     -- servicios: {servicio_valorado: id}
   actor         uuid,
   hash_prev     text not null,
   hash          text not null
@@ -943,7 +972,7 @@ declare t text;
 begin
   foreach t in array array['empresas','perfiles','firmas_externas','revisiones_anexo','coaceptaciones_minimis','copias_enviadas','casos','casos_internos','solicitudes_caso','diagnosticos','servicios_valorados',
     'proveedores','programas_credito','lotes_credito','solicitudes_credito','asignaciones',
-    'consumos','evidencias','mentorias','kpis_empresa']
+    'servicios_oferta','consumos','evidencias','mentorias','kpis_empresa']
   loop
     execute format('create trigger %I_audit after insert or update or delete on %I
                     for each row execute function auditar()', t, t);
@@ -961,7 +990,7 @@ begin
     'revisiones_anexo','declaraciones_minimis','coaceptaciones_minimis','servicios_valorados','parametros_legales',
     'correcciones_minimis','casos','casos_internos','casos_recursos','solicitudes_caso',
     'preguntas','diagnosticos','respuestas','recomendaciones','proveedores','programas_credito',
-    'lotes_credito','solicitudes_credito','asignaciones','consumos','evidencias','ledger',
+    'lotes_credito','servicios_oferta','solicitudes_credito','asignaciones','consumos','evidencias','ledger',
     'recursos','itinerarios','progreso','mentorias','kpis_empresa','audit_log']
   loop
     execute format('alter table %I enable row level security', t);
@@ -1012,7 +1041,7 @@ create policy reco_propia on recomendaciones for select
   using (exists (select 1 from diagnosticos d where d.id = diagnostico_id and d.empresa_id = mi_empresa()));
 create policy sol_cred_propia on solicitudes_credito for select using (empresa_id = mi_empresa());
 create policy sol_cred_crea on solicitudes_credito for insert
-  with check (empresa_id = mi_empresa() and estado = 'recibida');
+  with check (empresa_id = mi_empresa() and estado = 'pendiente');
 create policy asig_propia on asignaciones for select using (empresa_id = mi_empresa());
 create policy consumo_propio on consumos for select using (empresa_id = mi_empresa());
 create policy progreso_propio on progreso for all
@@ -1035,6 +1064,15 @@ create policy gestor_casos_int on casos_internos for all
   using (mi_rol() = 'gestor') with check (mi_rol() = 'gestor');
 create policy gestor_sol_cred on solicitudes_credito for update
   using (mi_rol() = 'gestor') with check (mi_rol() = 'gestor');
+create policy gestor_servicios_oferta on servicios_oferta for all
+  using (mi_rol() = 'gestor') with check (mi_rol() = 'gestor');
+
+-- Catálogo de servicios en especie para las empresas: sin aportante_interno (la marca
+-- solo la ve el staff en la tabla). La vista se ejecuta con permisos de su dueño.
+create view servicios_oferta_publica as
+  select id, aportante_publico, tipo, concepto, descripcion, importe_eur, plazas, modalidad
+    from servicios_oferta where publicado;
+grant select on servicios_oferta_publica to authenticated;
 
 -- proveedores.nombre_interno no debe salir a la empresa: la empresa
 -- solo consulta programas_credito (nombre_publico); proveedores es staff.
