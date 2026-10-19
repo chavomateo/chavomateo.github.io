@@ -161,10 +161,22 @@
       ${vacios.length ? `<p class="pf-hoja-vacia">${llenos.length ? `Sin casos del catálogo a ${vacios.map((v) => v.replace('a ', '')).join(' ni a ')}.` : 'Todavía no hay casos del catálogo para tu perfil.'}</p>` : ''}
       ${frenos.length ? `<h3>Para lo que os frena</h3><div class="pf-modulos">${[...new Set(frenos)].map((k) => `<div class="pf-mod pf-pronto"><h3>${esc(ENLACES[k].t)}</h3><p>${esc(ENLACES[k].d)}</p><span class="pf-estado">Próximamente</span></div>`).join('')}</div>` : ''}
       ${conoceCreditos === 'Sí' ? '<p class="pf-nota-pie">Ya habéis usado un programa de créditos: algunos solo se conceden una vez. Lo revisaremos al tramitar vuestra solicitud.</p>' : ''}
-      <div class="pf-acciones"><button class="pf-btn" type="button" id="repetir">Repetir el diagnóstico</button><a class="pf-btn pf-sec" href="/plataforma/casos/">Ver todos los casos</a></div>`;
+      <div class="pf-acciones"><button class="pf-btn" type="button" id="repetir">Repetir el diagnóstico</button><a class="pf-btn pf-sec" href="/plataforma/casos/">Ver todos los casos</a><button class="pf-btn pf-sec" type="button" data-borrar>Borrar mis resultados</button></div>`;
     $('repetir').addEventListener('click', () => { paso = 0; $('form').hidden = false; document.querySelector('.pf-nav').hidden = false; $('paso').hidden = false; $('resultado').hidden = true; pintar(); });
     window.scrollTo({ top: $('resultado').offsetTop - 24, behavior: 'smooth' });
   }
+
+  // Borra los diagnósticos guardados en este navegador (incluido el punto de partida).
+  function borrar() {
+    if (!confirm('Se borrarán de este navegador todos tus resultados, también el punto de partida. ¿Continuar?')) return;
+    localStorage.removeItem(CLAVE);
+    $('borrado').hidden = false;
+    $('borrado').textContent = 'Resultados borrados de este navegador.';
+    $('borrar-guardados').hidden = true;
+    if (!$('resultado').hidden) $('repetir').click();
+  }
+  document.addEventListener('click', (e) => { if (e.target.closest('[data-borrar]')) borrar(); });
+  $('borrar-guardados').hidden = !localStorage.getItem(CLAVE);
 
   $('siguiente').addEventListener('click', () => {
     if (!leerPaso()) return;

@@ -158,3 +158,4 @@ fieldset.pf-falta::after{content:"Falta responder esta pregunta";display:block;m
 @media (max-width:640px){.pf-ficha .pf-acciones{background:#FFFFFF;z-index:2;padding-bottom:calc(14px + env(safe-area-inset-bottom))}}
 .pf-ficha .pf-acciones .pf-btn:disabled{opacity:1;background:var(--a-blue);color:#fff;cursor:not-allowed}
 .pf-ficha .pf-acciones small{flex-basis:100%;font-size:.8rem;color:var(--a-gris)}
+.pf-enlace{background:none;border:0;padding:0;font:inherit;color:var(--a-blue);text-decoration:underline;cursor:pointer}
