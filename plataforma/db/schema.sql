@@ -551,7 +551,7 @@ create table parametros_legales (
 create trigger parametros_inmutable before update or delete on parametros_legales
   for each row execute function solo_insercion();
 insert into parametros_legales (clave, valor, provisional, fuente)
-  values ('minimis_validez_dias', '30', true, 'CTO, pendiente de Legal');
+  values ('minimis_validez_dias', '30', false, 'Legal Counsel (19-oct-2026, Anexo 5-bis A)');
 create or replace function minimis_validez() returns interval
   language sql stable security definer set search_path = public as $$
   select make_interval(days => valor::int) from parametros_legales
