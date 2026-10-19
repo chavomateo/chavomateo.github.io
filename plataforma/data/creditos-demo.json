@@ -1,0 +1,89 @@
+{
+  "_nota": "Datos de demostración del Módulo c. Nombres genéricos, sin marcas de proveedores. Las fechas «hace:N» se resuelven al cargar (N días antes de hoy). El ledger se encadena con SHA-256 al iniciar la demo.",
+  "empresa_actual": "emp-1",
+  "empresas": [
+    { "id": "emp-1", "nif": "B00000001", "razon_social": "Empresa Demo Uno, S.L.", "tipo": "startup", "tamano": "micro", "provincia": "Madrid", "ccaa": "Comunidad de Madrid", "estado": "validada" },
+    { "id": "emp-2", "nif": "B00000002", "razon_social": "Startup Demo Dos, S.L.", "tipo": "startup", "tamano": "pequena", "provincia": "Valencia", "ccaa": "Comunitat Valenciana", "estado": "validada" },
+    { "id": "emp-3", "nif": "A00000003", "razon_social": "Pyme Demo Tres, S.A.", "tipo": "pyme", "tamano": "mediana", "provincia": "Sevilla", "ccaa": "Andalucía", "estado": "validada" }
+  ],
+  "proveedores": [
+    { "id": "prov-a", "nombre_publico": "Proveedor cloud A", "tipo": "cloud", "region_ue": true },
+    { "id": "prov-b", "nombre_publico": "Proveedor cloud B", "tipo": "cloud", "region_ue": true },
+    { "id": "prov-c", "nombre_publico": "Proveedor cloud C", "tipo": "cloud", "region_ue": false },
+    { "id": "prov-d", "nombre_publico": "Proveedor de modelos de IA D", "tipo": "modelos_ia", "region_ue": true },
+    { "id": "prov-e", "nombre_publico": "Proveedor de modelos de IA E", "tipo": "modelos_ia", "region_ue": false },
+    { "id": "prov-f", "nombre_publico": "Modelos abiertos servidos en la UE", "tipo": "modelos_ia", "region_ue": true }
+  ],
+  "programas_credito": [
+    { "id": "prog-1", "proveedor_id": "prov-a", "nombre_publico": "Créditos cloud · Programa A", "tipo": "cloud", "modo_activacion": "cuenta_facturacion", "elegibilidad": "Startups y pymes con menos de 10 años y un caso de uso definido.", "importe_max_eur": 25000, "caducidad_meses": 12, "region_ue": true, "verificado": false, "fecha_info": "2026-10-15" },
+    { "id": "prog-2", "proveedor_id": "prov-b", "nombre_publico": "Créditos cloud · Programa B", "tipo": "cloud", "modo_activacion": "codigo", "elegibilidad": "Empresas sin créditos previos del mismo proveedor.", "importe_max_eur": 10000, "caducidad_meses": 12, "region_ue": true, "verificado": false, "fecha_info": "2026-10-15" },
+    { "id": "prog-3", "proveedor_id": "prov-c", "nombre_publico": "Créditos cloud · Programa C", "tipo": "cloud", "modo_activacion": "enlace_alta", "elegibilidad": "Startups en fase inicial.", "importe_max_eur": 5000, "caducidad_meses": 24, "region_ue": false, "verificado": false, "fecha_info": "2026-10-15" },
+    { "id": "prog-4", "proveedor_id": "prov-d", "nombre_publico": "Créditos de modelos de IA · Programa D", "tipo": "tokens", "modo_activacion": "clave_api", "elegibilidad": "Empresas con un prototipo o caso de uso en desarrollo.", "importe_max_eur": 5000, "caducidad_meses": 6, "region_ue": true, "verificado": false, "fecha_info": "2026-10-15" },
+    { "id": "prog-5", "proveedor_id": "prov-e", "nombre_publico": "Créditos de modelos de IA · Programa E", "tipo": "tokens", "modo_activacion": "clave_api", "elegibilidad": "Startups con producto en el mercado.", "importe_max_eur": 2500, "caducidad_meses": 12, "region_ue": false, "verificado": false, "fecha_info": "2026-10-15" },
+    { "id": "prog-6", "proveedor_id": "prov-f", "nombre_publico": "Créditos de modelos de IA · Modelos abiertos en la UE", "tipo": "tokens", "modo_activacion": "clave_api", "elegibilidad": "Cualquier empresa de la plataforma. Clave virtual con presupuesto emitida por la pasarela de la Alianza.", "importe_max_eur": 3000, "caducidad_meses": 6, "region_ue": true, "verificado": false, "fecha_info": "2026-10-15" }
+  ],
+  "lotes_credito": [
+    { "id": "lote-1", "programa_id": "prog-1", "miembro_receptor": "AES", "unidades": 100000, "unidad": "USD", "valor_eur_tarifa": 92000, "fuente_tarifa": "Tarifa pública del proveedor (demo)", "fecha_tarifa": "2026-10-01", "caduca_en": "2027-12-31", "estado": "cedido" },
+    { "id": "lote-2", "programa_id": "prog-2", "miembro_receptor": "AES", "unidades": 50000, "unidad": "EUR", "valor_eur_tarifa": 50000, "fuente_tarifa": "Tarifa pública del proveedor (demo)", "fecha_tarifa": "2026-10-01", "caduca_en": "2027-12-31", "estado": "cedido" },
+    { "id": "lote-3", "programa_id": "prog-3", "miembro_receptor": "AES", "unidades": 20000, "unidad": "USD", "valor_eur_tarifa": 18400, "fuente_tarifa": "Tarifa pública del proveedor (demo)", "fecha_tarifa": "2026-10-01", "caduca_en": "2027-06-30", "estado": "cedido" },
+    { "id": "lote-4", "programa_id": "prog-4", "miembro_receptor": "AES", "unidades": 2000, "unidad": "millones de tokens", "valor_eur_tarifa": 30000, "fuente_tarifa": "Tarifa pública por millón de tokens (demo)", "fecha_tarifa": "2026-10-01", "caduca_en": "2027-06-30", "estado": "cedido" },
+    { "id": "lote-5", "programa_id": "prog-5", "miembro_receptor": "AES", "unidades": 15000, "unidad": "USD", "valor_eur_tarifa": 13800, "fuente_tarifa": "Tarifa pública del proveedor (demo)", "fecha_tarifa": "2026-10-01", "caduca_en": "2027-06-30", "estado": "previsto" },
+    { "id": "lote-6", "programa_id": "prog-6", "miembro_receptor": "AES", "unidades": 20000, "unidad": "EUR", "valor_eur_tarifa": 20000, "fuente_tarifa": "Coste de la pasarela a tarifa pública (demo)", "fecha_tarifa": "2026-10-01", "caduca_en": "2027-12-31", "estado": "cedido" }
+  ],
+  "servicios_oferta": [
+    { "id": "srv-1", "aportante_publico": "Empresa líder en IA A", "tipo": "mentoria", "concepto": "Mentoría técnica en IA generativa", "descripcion": "Cuatro sesiones de una hora con un especialista para revisar el diseño, los datos y la puesta en producción de tu caso de uso.", "importe_eur": 1200, "plazas": 10, "modalidad": "En línea" },
+    { "id": "srv-2", "aportante_publico": "Empresa líder en IA B", "tipo": "formacion", "concepto": "Taller de adopción de IA para equipos", "descripcion": "Taller práctico de ocho horas para que tu equipo use asistentes de IA con criterio, seguridad y medición del ahorro.", "importe_eur": 900, "plazas": 20, "modalidad": "Presencial o en línea" },
+    { "id": "srv-3", "aportante_publico": "Empresa líder en IA C", "tipo": "consultoria", "concepto": "Consultoría de datos y priorización de casos de uso", "descripcion": "Dos jornadas para ordenar tus fuentes de datos, elegir el primer caso de uso y estimar su retorno.", "importe_eur": 2400, "plazas": 5, "modalidad": "En línea" },
+    { "id": "srv-4", "aportante_publico": "Empresa líder en IA A", "tipo": "consultoria", "concepto": "Revisión de cumplimiento del Reglamento de IA", "descripcion": "Sesión de dos horas para clasificar el riesgo de tu sistema y preparar las obligaciones de transparencia.", "importe_eur": 400, "plazas": 15, "modalidad": "En línea" }
+  ],
+  "solicitudes_credito": [
+    { "id": "sol-1", "empresa_id": "emp-1", "programa_id": "prog-1", "servicio_id": null, "necesidad": "Entrenar y servir un modelo de previsión de demanda para nuestra tienda en línea.", "consumo_estimado_eur": 2000, "estado": "activada", "motivo_estado": null, "creado_en": "hace:40" },
+    { "id": "sol-2", "empresa_id": "emp-1", "programa_id": "prog-6", "servicio_id": null, "necesidad": "Asistente de atención al cliente con un modelo abierto servido en la UE.", "consumo_estimado_eur": 800, "estado": "asignada", "motivo_estado": null, "creado_en": "hace:6" },
+    { "id": "sol-3", "empresa_id": "emp-2", "programa_id": "prog-4", "servicio_id": null, "necesidad": "Clasificación automática de incidencias de soporte.", "consumo_estimado_eur": 1500, "estado": "pendiente", "motivo_estado": null, "creado_en": "hace:2" },
+    { "id": "sol-4", "empresa_id": "emp-3", "programa_id": "prog-2", "servicio_id": null, "necesidad": "Migrar el ERP y el almacén de datos a la nube para analítica.", "consumo_estimado_eur": 6000, "estado": "validada", "motivo_estado": null, "creado_en": "hace:4" },
+    { "id": "sol-5", "empresa_id": "emp-2", "programa_id": "prog-3", "servicio_id": null, "necesidad": "Alojamiento de pruebas.", "consumo_estimado_eur": 500, "estado": "rechazada", "motivo_estado": "No hay caso de uso definido: falta concretar la necesidad.", "creado_en": "hace:12" },
+    { "id": "sol-6", "empresa_id": "emp-3", "programa_id": null, "servicio_id": "srv-1", "necesidad": "Acompañamiento para poner en producción un buscador semántico interno.", "consumo_estimado_eur": 1200, "estado": "pendiente", "motivo_estado": null, "creado_en": "hace:1" },
+    { "id": "sol-7", "empresa_id": "emp-1", "programa_id": null, "servicio_id": "srv-2", "necesidad": "Formar al equipo comercial en el uso de asistentes de IA.", "consumo_estimado_eur": 900, "estado": "activada", "motivo_estado": null, "creado_en": "hace:20" }
+  ],
+  "declaraciones_minimis": [
+    { "id": "dm-1", "empresa_id": "emp-1", "solicitud_id": "sol-1", "representa": true, "ayudas_otras_eur": 15000, "sector_excluido": false, "creado_en": "hace:40" },
+    { "id": "dm-2", "empresa_id": "emp-1", "solicitud_id": "sol-2", "representa": true, "ayudas_otras_eur": 15000, "sector_excluido": false, "creado_en": "hace:6" },
+    { "id": "dm-3", "empresa_id": "emp-2", "solicitud_id": "sol-3", "representa": true, "ayudas_otras_eur": 0, "sector_excluido": false, "creado_en": "hace:2" },
+    { "id": "dm-4", "empresa_id": "emp-3", "solicitud_id": "sol-4", "representa": true, "ayudas_otras_eur": 290000, "sector_excluido": false, "creado_en": "hace:4" },
+    { "id": "dm-5", "empresa_id": "emp-2", "solicitud_id": "sol-5", "representa": true, "ayudas_otras_eur": 0, "sector_excluido": false, "creado_en": "hace:12" },
+    { "id": "dm-6", "empresa_id": "emp-3", "solicitud_id": "sol-6", "representa": true, "ayudas_otras_eur": 290000, "sector_excluido": false, "creado_en": "hace:1" },
+    { "id": "dm-7", "empresa_id": "emp-1", "solicitud_id": "sol-7", "representa": true, "ayudas_otras_eur": 15000, "sector_excluido": false, "creado_en": "hace:20" }
+  ],
+  "asignaciones": [
+    { "id": "asg-1", "solicitud_id": "sol-1", "lote_id": "lote-1", "empresa_id": "emp-1", "importe_eur": 2000, "codigo_demo": "DEMO-CLOUD-7F3K", "activada_en": "hace:35", "caduca_en": "2027-09-30", "declaracion_minimis_id": "dm-1", "creado_en": "hace:38" },
+    { "id": "asg-2", "solicitud_id": "sol-2", "lote_id": "lote-6", "empresa_id": "emp-1", "importe_eur": 800, "codigo_demo": "DEMO-PASARELA-Q9W2", "activada_en": null, "caduca_en": "2027-04-30", "declaracion_minimis_id": "dm-2", "creado_en": "hace:3" }
+  ],
+  "servicios_valorados": [
+    { "id": "sv-1", "empresa_id": "emp-1", "solicitud_id": "sol-7", "servicio_id": "srv-2", "tipo": "formacion", "concepto": "Taller de adopción de IA para equipos", "importe_eur": 900, "fecha": "hace:18", "declaracion_minimis_id": "dm-7", "comunicado_en": "hace:18", "activada_en": "hace:15" }
+  ],
+  "evidencias": [
+    { "id": "ev-1", "tipo": "Informe de facturación (API)", "ruta": "demo/api/emp-1/2026-08.json", "contenido_demo": "{\"cuenta\":\"demo-emp-1\",\"periodo\":\"2026-08\",\"coste_eur\":420.50}" },
+    { "id": "ev-2", "tipo": "Informe de facturación (API)", "ruta": "demo/api/emp-1/2026-09.json", "contenido_demo": "{\"cuenta\":\"demo-emp-1\",\"periodo\":\"2026-09\",\"coste_eur\":610.25}" },
+    { "id": "ev-3", "tipo": "Factura del proveedor (carga manual)", "ruta": "demo/manual/emp-1/factura-2026-10.pdf", "contenido_demo": "Factura demo · periodo 2026-10-01 a 2026-10-15 · 180,00 EUR" }
+  ],
+  "consumos": [
+    { "id": "con-1", "asignacion_id": "asg-1", "empresa_id": "emp-1", "periodo_desde": "2026-08-01", "periodo_hasta": "2026-08-31", "importe_eur": 420.5, "unidades": 457.07, "origen": "api", "evidencia_id": "ev-1", "creado_en": "hace:30" },
+    { "id": "con-2", "asignacion_id": "asg-1", "empresa_id": "emp-1", "periodo_desde": "2026-09-01", "periodo_hasta": "2026-09-30", "importe_eur": 610.25, "unidades": 663.32, "origen": "api", "evidencia_id": "ev-2", "creado_en": "hace:14" },
+    { "id": "con-3", "asignacion_id": "asg-1", "empresa_id": "emp-1", "periodo_desde": "2026-10-01", "periodo_hasta": "2026-10-15", "importe_eur": 180, "unidades": 195.65, "origen": "manual", "evidencia_id": "ev-3", "creado_en": "hace:3" }
+  ],
+  "ledger": [
+    { "ts": "hace:60", "tipo": "cesion", "lote_id": "lote-1", "importe_eur": 92000, "detalle": { "programa": "prog-1" } },
+    { "ts": "hace:60", "tipo": "cesion", "lote_id": "lote-2", "importe_eur": 50000, "detalle": { "programa": "prog-2" } },
+    { "ts": "hace:60", "tipo": "cesion", "lote_id": "lote-3", "importe_eur": 18400, "detalle": { "programa": "prog-3" } },
+    { "ts": "hace:60", "tipo": "cesion", "lote_id": "lote-4", "importe_eur": 30000, "detalle": { "programa": "prog-4" } },
+    { "ts": "hace:60", "tipo": "cesion", "lote_id": "lote-6", "importe_eur": 20000, "detalle": { "programa": "prog-6" } },
+    { "ts": "hace:38", "tipo": "asignacion", "lote_id": "lote-1", "empresa_id": "emp-1", "asignacion_id": "asg-1", "importe_eur": 2000, "detalle": { "solicitud": "sol-1", "declaracion_minimis": "dm-1" } },
+    { "ts": "hace:35", "tipo": "activacion", "lote_id": "lote-1", "empresa_id": "emp-1", "asignacion_id": "asg-1", "importe_eur": 0, "detalle": { "modo": "cuenta_facturacion" } },
+    { "ts": "hace:30", "tipo": "consumo", "lote_id": "lote-1", "empresa_id": "emp-1", "asignacion_id": "asg-1", "importe_eur": 420.5, "detalle": { "consumo": "con-1", "origen": "api", "evidencia": "ev-1" } },
+    { "ts": "hace:18", "tipo": "servicio", "empresa_id": "emp-1", "importe_eur": 900, "detalle": { "servicio_valorado": "sv-1", "solicitud": "sol-7", "servicio": "srv-2", "declaracion_minimis": "dm-7" } },
+    { "ts": "hace:15", "tipo": "activacion", "empresa_id": "emp-1", "importe_eur": 0, "detalle": { "servicio_valorado": "sv-1", "modo": "servicio" } },
+    { "ts": "hace:14", "tipo": "consumo", "lote_id": "lote-1", "empresa_id": "emp-1", "asignacion_id": "asg-1", "importe_eur": 610.25, "detalle": { "consumo": "con-2", "origen": "api", "evidencia": "ev-2" } },
+    { "ts": "hace:3", "tipo": "asignacion", "lote_id": "lote-6", "empresa_id": "emp-1", "asignacion_id": "asg-2", "importe_eur": 800, "detalle": { "solicitud": "sol-2", "declaracion_minimis": "dm-2" } },
+    { "ts": "hace:3", "tipo": "consumo", "lote_id": "lote-1", "empresa_id": "emp-1", "asignacion_id": "asg-1", "importe_eur": 180, "detalle": { "consumo": "con-3", "origen": "manual", "evidencia": "ev-3" } }
+  ]
+}
