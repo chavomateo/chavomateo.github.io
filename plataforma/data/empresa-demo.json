@@ -1,0 +1,62 @@
+{
+  "aviso": "Datos de demostración. Empresas, NIF y registros ficticios; no corresponden a ninguna empresa real.",
+  "parametros_legales": [
+    { "clave": "minimis_validez_dias", "valor": "30", "provisional": true, "fuente": "CTO, pendiente de Legal", "creado_en": "2026-10-19T10:00:00+02:00" },
+    { "clave": "minimis_tope_eur", "valor": "300000", "provisional": false, "fuente": "Reglamento (UE) 2023/2831, art. 3.2", "creado_en": "2026-10-19T10:00:00+02:00" }
+  ],
+  "textos_legales": [
+    { "documento": "condiciones", "version": "1.0", "url": "/condiciones.html", "titulo": "Condiciones de uso" },
+    { "documento": "privacidad", "version": "1.0", "url": "/privacidad.html", "titulo": "Política de privacidad" },
+    { "documento": "minimis", "version": "0.1-borrador", "titulo": "Declaración responsable de ayudas de minimis",
+      "texto": "Declaración responsable de ayudas de minimis (BORRADOR pendiente de Legal). La persona firmante, en representación de la empresa indicada, declara: 1) que las ayudas de minimis recibidas por la empresa única (Reglamento (UE) 2023/2831) en el ejercicio en curso y en los dos anteriores son las que se indican; 2) que la empresa no opera en los sectores excluidos del artículo 1 del Reglamento, o que, si lo hace, la ayuda no se destinará a esas actividades; 3) que comunicará cualquier cambio en estos datos antes de recibir una nueva ayuda; 4) que conoce que las ayudas de la Plataforma AlianzaIA (créditos en especie y servicios valorados) son ayudas de minimis y computan en el mismo límite." }
+  ],
+  "cnae": [
+    { "codigo": "0111", "nombre": "Cultivo de cereales, leguminosas y semillas oleaginosas" },
+    { "codigo": "1071", "nombre": "Fabricación de pan y productos de panadería" },
+    { "codigo": "2562", "nombre": "Ingeniería mecánica por cuenta de terceros" },
+    { "codigo": "4120", "nombre": "Construcción de edificios" },
+    { "codigo": "4791", "nombre": "Comercio al por menor por correspondencia o Internet" },
+    { "codigo": "4941", "nombre": "Transporte de mercancías por carretera" },
+    { "codigo": "5510", "nombre": "Hoteles y alojamientos similares" },
+    { "codigo": "6201", "nombre": "Actividades de programación informática" },
+    { "codigo": "6202", "nombre": "Actividades de consultoría informática" },
+    { "codigo": "6311", "nombre": "Proceso de datos, hosting y actividades relacionadas" },
+    { "codigo": "6920", "nombre": "Actividades de contabilidad, auditoría y asesoría fiscal" },
+    { "codigo": "7022", "nombre": "Otras actividades de consultoría de gestión empresarial" },
+    { "codigo": "7219", "nombre": "Otra investigación y desarrollo experimental en ciencias naturales y técnicas" },
+    { "codigo": "8559", "nombre": "Otra educación n.c.o.p." },
+    { "codigo": "8621", "nombre": "Actividades de medicina general" }
+  ],
+  "ccaa": ["Andalucía", "Aragón", "Asturias", "Illes Balears", "Canarias", "Cantabria", "Castilla-La Mancha", "Castilla y León", "Cataluña", "Comunitat Valenciana", "Extremadura", "Galicia", "La Rioja", "Comunidad de Madrid", "Región de Murcia", "Navarra", "País Vasco", "Ceuta", "Melilla"],
+  "empresas_demo": [
+    { "id": "demo-01", "nif": "B91000018", "razon_social": "Ejemplo Panadería Digital, S.L.", "tipo": "pyme", "tamano": "micro", "cnae": "1071", "ccaa": "Andalucía", "estado": "validada", "creado_en": "2026-09-02T09:12:00+02:00", "apoyos": ["diagnostico", "formacion"] },
+    { "id": "demo-02", "nif": "B91011387", "razon_social": "Ejemplo Logística Norte, S.L.", "tipo": "pyme", "tamano": "pequena", "cnae": "4941", "ccaa": "País Vasco", "estado": "validada", "creado_en": "2026-09-05T11:40:00+02:00", "apoyos": ["diagnostico", "creditos", "mentoria"] },
+    { "id": "demo-03", "nif": "B91022756", "razon_social": "Ejemplo Datalab, S.L.", "tipo": "startup", "tamano": "micro", "cnae": "6201", "ccaa": "Comunidad de Madrid", "estado": "validada", "creado_en": "2026-09-09T16:03:00+02:00", "apoyos": ["diagnostico", "creditos", "formacion"] },
+    { "id": "demo-04", "nif": "A91034124", "razon_social": "Ejemplo Industrias Mecánicas, S.A.", "tipo": "pyme", "tamano": "mediana", "cnae": "2562", "ccaa": "Cataluña", "estado": "validada", "creado_en": "2026-09-12T10:25:00+02:00", "apoyos": ["diagnostico", "mentoria"] },
+    { "id": "demo-05", "nif": "B91045492", "razon_social": "Ejemplo Hoteles Atlántico, S.L.", "tipo": "pyme", "tamano": "pequena", "cnae": "5510", "ccaa": "Canarias", "estado": "validada", "creado_en": "2026-09-20T13:17:00+02:00", "apoyos": ["diagnostico"] },
+    { "id": "demo-06", "nif": "B91056861", "razon_social": "Ejemplo Salud Conectada, S.L.", "tipo": "startup", "tamano": "micro", "cnae": "8621", "ccaa": "Comunitat Valenciana", "estado": "pendiente", "creado_en": "2026-10-14T08:50:00+02:00", "apoyos": [] },
+    { "id": "demo-07", "nif": "B91068239", "razon_social": "Ejemplo Agro Meseta, S.L.", "tipo": "pyme", "tamano": "pequena", "cnae": "0111", "ccaa": "Castilla y León", "estado": "baja", "creado_en": "2026-09-01T12:00:00+02:00", "apoyos": ["diagnostico"] },
+    { "id": "demo-08", "nif": "B91079608", "razon_social": "Ejemplo Asesores Asociados, S.L.", "tipo": "pyme", "tamano": "micro", "cnae": "6920", "ccaa": "Galicia", "estado": "validada", "creado_en": "2026-10-01T17:31:00+02:00", "apoyos": ["formacion", "creditos"] }
+  ],
+  "audit_log_demo": [
+    { "ts": "2026-09-02T09:12:00+02:00", "actor": "usuario-demo-01", "empresa_id": "demo-01", "tabla": "empresas", "accion": "INSERT", "fila_id": "demo-01", "detalle": "Alta de empresa (estado pendiente)" },
+    { "ts": "2026-09-02T09:12:01+02:00", "actor": "usuario-demo-01", "empresa_id": "demo-01", "tabla": "aceptaciones", "accion": "INSERT", "fila_id": "acept-demo-01", "detalle": "Acepta condiciones 1.0 y privacidad 1.0" },
+    { "ts": "2026-09-03T10:00:00+02:00", "actor": "gestor-demo", "empresa_id": "demo-01", "tabla": "empresas", "accion": "UPDATE", "fila_id": "demo-01", "detalle": "Estado: pendiente → validada" },
+    { "ts": "2026-09-05T11:40:00+02:00", "actor": "usuario-demo-02", "empresa_id": "demo-02", "tabla": "empresas", "accion": "INSERT", "fila_id": "demo-02", "detalle": "Alta de empresa (estado pendiente)" },
+    { "ts": "2026-09-06T09:30:00+02:00", "actor": "gestor-demo", "empresa_id": "demo-02", "tabla": "empresas", "accion": "UPDATE", "fila_id": "demo-02", "detalle": "Estado: pendiente → validada" },
+    { "ts": "2026-09-08T12:15:00+02:00", "actor": "usuario-demo-02", "empresa_id": "demo-02", "tabla": "declaraciones_minimis", "accion": "INSERT", "fila_id": "dm-demo-02", "detalle": "Declaración de minimis: 45.000 € en 3 ejercicios" },
+    { "ts": "2026-09-09T16:03:00+02:00", "actor": "usuario-demo-03", "empresa_id": "demo-03", "tabla": "empresas", "accion": "INSERT", "fila_id": "demo-03", "detalle": "Alta de empresa (estado pendiente)" },
+    { "ts": "2026-09-10T09:00:00+02:00", "actor": "gestor-demo", "empresa_id": "demo-03", "tabla": "empresas", "accion": "UPDATE", "fila_id": "demo-03", "detalle": "Estado: pendiente → validada" },
+    { "ts": "2026-09-15T18:20:00+02:00", "actor": "usuario-demo-03", "empresa_id": "demo-03", "tabla": "diagnosticos", "accion": "INSERT", "fila_id": "diag-demo-03", "detalle": "Autodiagnóstico (línea base): 38/100" },
+    { "ts": "2026-09-22T11:05:00+02:00", "actor": "gestor-demo", "empresa_id": "demo-03", "tabla": "asignaciones", "accion": "INSERT", "fila_id": "asig-demo-03", "detalle": "Asignación de créditos cloud: 5.000 €" },
+    { "ts": "2026-09-30T08:45:00+02:00", "actor": "gestor-demo", "empresa_id": "demo-07", "tabla": "empresas", "accion": "UPDATE", "fila_id": "demo-07", "detalle": "Estado: validada → baja" },
+    { "ts": "2026-10-01T17:31:00+02:00", "actor": "usuario-demo-08", "empresa_id": "demo-08", "tabla": "perfiles", "accion": "INSERT", "fila_id": "perfil-demo-08b", "detalle": "Invita a un miembro (rol miembro)" },
+    { "ts": "2026-10-14T08:50:00+02:00", "actor": "usuario-demo-06", "empresa_id": "demo-06", "tabla": "empresas", "accion": "INSERT", "fila_id": "demo-06", "detalle": "Alta de empresa (estado pendiente)" }
+  ],
+  "apoyos_no_financieros": {
+    "diagnostico": "Autodiagnóstico y orientación",
+    "formacion": "Formación",
+    "mentoria": "Mentoría y acompañamiento",
+    "creditos": "Créditos cloud y de IA (en especie)"
+  }
+}
