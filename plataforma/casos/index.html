@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link href="/fonts/roboto.css" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/plataforma/plataforma.css">
+  <style>.brand{display:inline-flex;align-items:center;gap:.55rem;text-decoration:none;white-space:nowrap}.brand-word{font-weight:800;font-size:1.05rem;letter-spacing:.12em;text-transform:uppercase;line-height:1}.brand-ring{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;background:url(/img/isotipo-oficial.png) center/contain no-repeat;font-weight:800;font-size:.72rem}</style>
+  <title>Casos de uso replicables · Plataforma AlianzaIA</title>
+</head>
+<body>
+  <header class="pf-top">
+    <a class="brand" href="/plataforma/"><span class="brand-word">Alianza</span><span class="brand-ring" aria-hidden="true">IA</span></a>
+    <nav><a href="/plataforma/">Plataforma</a><a href="/plataforma/casos/">Casos de uso</a><a href="/proyecto-alianzaia/">El proyecto</a></nav>
+  </header>
+  <section class="pf-hero"><div class="pf-wrap">
+    <span class="pf-eyebrow">Módulo a · Catálogo</span>
+    <h1>Casos de uso de IA replicables</h1>
+    <p>Soluciones de IA ya probadas en empresas como la tuya, con lo que necesitas para implantarlas: requisitos, coste y plazo orientativos, e indicadores para medir el resultado.</p>
+  </div></section>
+  <main class="pf-wrap pf-section">
+    <div class="pf-aviso">Fichas de ejemplo. El catálogo definitivo (36 casos) se carga tras la validación de la Alianza.</div>
+    <div class="pf-filtros" role="search">
+      <input id="f-texto" type="search" placeholder="Buscar un caso…" aria-label="Buscar">
+      <select id="f-sector" aria-label="Sector"><option value="">Todos los sectores</option></select>
+      <select id="f-funcion" aria-label="Área"><option value="">Todas las áreas</option></select>
+      <select id="f-madurez" aria-label="Madurez">
+        <option value="">Cualquier nivel de madurez</option>
+        <option value="1">Nivel 1 · inicial</option><option value="2">Hasta nivel 2</option>
+        <option value="3">Hasta nivel 3</option><option value="4">Hasta nivel 4</option><option value="5">Hasta nivel 5</option>
+      </select>
+      <label><input id="f-rep" type="checkbox"> Solo replicables</label>
+    </div>
+    <div id="casos" class="pf-grid" aria-live="polite"></div>
+  </main>
+  <dialog class="pf-ficha" id="ficha"><div class="pf-ficha-in" id="ficha-in"></div></dialog>
+  <footer class="pf-pie"><div class="pf-wrap">Plataforma AlianzaIA · Titularidad de la Asociación Española de Startups (AES), coordinadora de la agrupación · Datos alojados en la Unión Europea · <a href="/privacidad.html">Privacidad</a></div></footer>
+  <script src="/plataforma/casos/casos.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+/* Plataforma AlianzaIA · estilos propios (usan las variables de styles.css) */
+.pf-wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.pf-hero{background:var(--panel);color:#fff;padding:140px 0 64px}
+.pf-hero h1{font-size:clamp(2rem,4vw,3rem);line-height:1.1;margin:0 0 16px;color:#fff}
+.pf-hero p{max-width:760px;color:var(--muted-light);font-size:1.1rem;margin:0}
+.pf-eyebrow{display:block;font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:.74rem;color:var(--cyan-2);margin-bottom:14px}
+.pf-aviso{background:#fff7e0;border:1px solid #f0d27a;color:#5a4500;border-radius:12px;padding:12px 16px;margin:24px 0;font-size:.92rem}
+.pf-section{padding:48px 0}
+.pf-modulos{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:24px}
+.pf-mod{display:block;border:1px solid var(--line);border-radius:16px;padding:20px;text-decoration:none;color:var(--text);background:#fff;transition:box-shadow .2s,transform .2s}
+.pf-mod:hover{box-shadow:0 10px 30px rgba(0,38,233,.12);transform:translateY(-2px)}
+.pf-mod h3{margin:6px 0 8px;color:var(--ink);font-size:1.05rem}
+.pf-mod .pf-letra{font-weight:800;color:var(--blue)}
+.pf-mod.pf-pronto{opacity:.6;pointer-events:none}
+.pf-estado{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--bg-alt);color:var(--muted)}
+.pf-filtros{display:flex;flex-wrap:wrap;gap:12px;margin:8px 0 24px;align-items:center}
+.pf-filtros input,.pf-filtros select{font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;min-width:180px}
+.pf-filtros label{display:inline-flex;gap:6px;align-items:center;font-size:.92rem}
+.pf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.pf-card{border:1px solid var(--line);border-radius:16px;padding:22px;background:#fff;display:flex;flex-direction:column;gap:10px}
+.pf-card h3{margin:0;color:var(--ink);font-size:1.1rem;line-height:1.3}
+.pf-card p{margin:0;font-size:.95rem}
+.pf-tags{display:flex;flex-wrap:wrap;gap:6px}
+.pf-tag{font-size:.75rem;padding:3px 9px;border-radius:999px;background:var(--bg-alt);color:var(--muted)}
+.pf-tag.pf-rep{background:rgba(25,227,200,.16);color:#05715f;font-weight:700}
+.pf-tag.pf-ej{background:#fff1c9;color:#7a5a00;font-weight:700}
+.pf-card button{align-self:flex-start;margin-top:auto;font:inherit;font-weight:700;border:0;border-radius:var(--rad-btn);padding:10px 16px;background:var(--blue);color:#fff;cursor:pointer}
+.pf-card button:hover{background:var(--blue-2)}
+.pf-vacio{color:var(--muted);padding:24px 0}
+dialog.pf-ficha{max-width:760px;width:calc(100% - 32px);border:0;border-radius:18px;padding:0;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+dialog.pf-ficha::backdrop{background:rgba(8,12,40,.55)}
+.pf-ficha-in{padding:28px}
+.pf-ficha h2{margin:4px 0 12px;color:var(--ink)}
+.pf-ficha h4{margin:18px 0 6px;color:var(--ink);font-size:.95rem;text-transform:uppercase;letter-spacing:.06em}
+.pf-ficha p,.pf-ficha li{font-size:.97rem}
+.pf-ficha .pf-cerrar{float:right;font-size:1.5rem;line-height:1;background:none;border:0;cursor:pointer;color:var(--muted)}
+.pf-ficha .pf-acciones{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap}
+.pf-btn{display:inline-block;font-weight:700;border-radius:var(--rad-btn);padding:11px 18px;text-decoration:none;background:var(--blue);color:#fff;border:0;cursor:pointer;font:inherit}
+.pf-btn.pf-sec{background:var(--bg-alt);color:var(--ink)}
+.pf-pie{padding:32px 0;border-top:1px solid var(--line);color:var(--muted);font-size:.88rem}
+.pf-top{position:absolute;top:0;left:0;right:0;padding:20px 24px;display:flex;justify-content:space-between;align-items:center}
+.pf-top .brand{color:#fff}
+.pf-top nav a{color:#fff;text-decoration:none;font-weight:600;margin-left:20px;font-size:.95rem}
+@media (max-width:640px){.pf-top nav{display:none}.pf-hero{padding-top:110px}}
+.pf-filtros label input{min-width:0;width:auto;padding:0;margin:0;border:0;box-shadow:none;outline:none}
