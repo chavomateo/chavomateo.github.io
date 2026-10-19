@@ -467,7 +467,7 @@
         return `<tr><td>${fecha(x.creado_en)}</td><td><b>${esc(x.empresa)}</b><br><small>${esc(x.nif)}</small></td>
           <td><b>${esc(x.objeto.nombre)}</b><br><small>${esc(x.objeto.sub)}</small><br><small class="pf-cr-necesidad">${esc(x.necesidad)}</small>${x.motivo_estado ? `<br><small>Motivo: ${esc(x.motivo_estado)}</small>` : ''}</td>
           <td class="pf-cr-num">${eur(x.consumo_estimado_eur)}</td>
-          <td><small>${d ? `Otras: ${eur(d.ayudas_otras_eur)}<br>Plataforma: ${eur(x.minimis_plataforma_eur)}<br>Declarada hace ${edad} d${edad > VALIDEZ_DECLARACION_DIAS ? ' · <b>caducada</b>' : ''}` : '<b>Sin declaración</b>'}</small></td>
+          <td><small>${d ? `Otras: ${eur(d.ayudas_otras_eur)}<br>Plataforma: ${eur(x.minimis_plataforma_eur)}<br>Declarada ${edad === 0 ? 'hoy' : `hace ${edad} d`}${edad > VALIDEZ_DECLARACION_DIAS && ['pendiente', 'validada'].includes(x.estado) ? ' · <b>caducada: renovar</b>' : ''}` : '<b>Sin declaración</b>'}</small></td>
           <td>${chip(x.estado)}</td><td><div class="pf-cr-acciones">${acc.join('') || '—'}</div></td></tr>`;
       }), 'No hay solicitudes con ese filtro.')}`;
   }
