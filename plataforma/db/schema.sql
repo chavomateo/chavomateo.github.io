@@ -14,7 +14,8 @@
 --   0.7: ajustes de alianza-ceo (19-oct) en firmas_externas: corrección de errores con
 --        sustituye_a + motivo (el registro sustituido se conserva y deja de contar), régimen de
 --        administración comprobado con escritura o nota simple (si no, mancomunado y dos firmas)
---        y almacén privado «firmas» con acceso solo del gestor
+--        y almacén privado «firmas» con acceso solo del gestor; firmas_externas solo la lee el
+--        gestor (RLS) y la empresa consulta su estado con mi_firma_alta_vigente()
 --
 -- Módulos: a) casos · b) diagnóstico · c) hub de créditos · d) formación
 --          e) área de empresa · transversal (roles, auditoría, ledger)
@@ -313,6 +314,11 @@ begin
   end if;
   return true;
 end $$;
+
+-- Para la empresa: si su firma del alta está vigente (solo un sí o un no, sin datos de firmantes).
+create or replace function mi_firma_alta_vigente() returns boolean
+  language sql stable security definer set search_path = public as $$
+  select coalesce(firma_alta_vigente(mi_empresa()), false) $$;
 
 -- ---------------------------------------------------------------------
 -- a) Catálogo de casos de uso replicables
@@ -711,8 +717,10 @@ create or replace function minimis_validez() returns interval
   language sql stable security definer set search_path = public as $$
   select make_interval(days => parametro_legal('minimis_validez_dias')::int) $$;
 
+-- security definer: lee firmas_externas, que con RLS solo ve el gestor (la comprobación es la
+-- misma la haga quien la haga).
 create or replace function minimis_comprobar() returns trigger
-  language plpgsql as $$
+  language plpgsql security definer set search_path = public as $$
 declare d declaraciones_minimis; f firmas_externas; v_total numeric; v_fecha date := current_date;
   v_motivos text[] := '{}';
 begin
@@ -948,7 +956,8 @@ end $$;
 do $$
 declare t text;
 begin
-  foreach t in array array['empresas','perfiles','textos_legales','aceptaciones','copias_enviadas','firmas_externas',
+  -- firmas_externas no está aquí: lleva nombre, email e IP de los firmantes y solo la lee el gestor
+  foreach t in array array['empresas','perfiles','textos_legales','aceptaciones','copias_enviadas',
     'revisiones_anexo','declaraciones_minimis','coaceptaciones_minimis','servicios_valorados','parametros_legales',
     'correcciones_minimis','casos','casos_internos','casos_recursos','solicitudes_caso',
     'preguntas','diagnosticos','respuestas','recomendaciones','proveedores','programas_credito',
@@ -961,6 +970,11 @@ begin
   end loop;
 end $$;
 
+-- firmas_externas: solo el gestor lee y anota (ni la empresa ni el auditor). La empresa sabe si
+-- su firma del alta está vigente con mi_firma_alta_vigente(), que no devuelve datos personales.
+alter table firmas_externas enable row level security;
+create policy gestor_lee_firmas on firmas_externas for select using (mi_rol() = 'gestor');
+
 -- Contenido público (catálogo, cuestionario, formación publicada)
 create policy casos_publico on casos for select using (publicado);
 create policy casos_rec_publico on casos_recursos for select
@@ -971,10 +985,7 @@ create policy acept_propia on aceptaciones for select using (perfil_id = auth.ui
 create policy decl_propia on declaraciones_minimis for select using (empresa_id = mi_empresa());
 create policy copias_propias on copias_enviadas for select
   using (exists (select 1 from aceptaciones a where a.id = aceptacion_id and a.perfil_id = auth.uid()));
-create policy firmas_propias on firmas_externas for select using (empresa_id = mi_empresa());
 create policy gestor_firmas on firmas_externas for insert with check (mi_rol() = 'gestor');
-create policy revisiones_propias on revisiones_anexo for select
-  using (exists (select 1 from firmas_externas f where f.id = firma_id and f.empresa_id = mi_empresa()));
 create policy gestor_revisiones on revisiones_anexo for insert with check (mi_rol() = 'gestor');
 create policy coacept_propias on coaceptaciones_minimis for select
   using (exists (select 1 from declaraciones_minimis d where d.id = declaracion_id and d.empresa_id = mi_empresa()));
