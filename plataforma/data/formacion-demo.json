@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "estado": "contenido de ejemplo; los recursos reales se cargan tras la validación de la Alianza",
+  "recursos": [
+    { "id": "R-GEN-1", "tipo": "video", "titulo": "Qué es la IA generativa y qué no es", "descripcion": "Conceptos básicos: modelos de lenguaje, imágenes y voz, y sus límites en una empresa.", "url": null, "duracion_min": 45, "nivel": 1, "dimension": "D3", "publicado": true },
+    { "id": "R-GEN-2", "tipo": "documento", "titulo": "Guía de uso seguro de asistentes de IA en la empresa", "descripcion": "Qué datos no se deben introducir, cómo revisar las respuestas y cómo citar las fuentes.", "url": null, "duracion_min": 60, "nivel": 1, "dimension": "D3", "publicado": true },
+    { "id": "R-GEN-3", "tipo": "ejercicio", "titulo": "Ejercicio: redacta tus primeras instrucciones (prompts)", "descripcion": "Tres tareas reales de oficina para practicar instrucciones claras y comparar resultados.", "url": null, "duracion_min": 90, "nivel": 2, "dimension": "D3", "publicado": true },
+    { "id": "R-GEN-4", "tipo": "video", "titulo": "Asistentes con el conocimiento de tu empresa", "descripcion": "Cómo funciona un asistente que responde con tus propios documentos y cuándo tiene sentido.", "url": null, "duracion_min": 60, "nivel": 3, "dimension": "D5", "publicado": true },
+    { "id": "R-GEN-5", "tipo": "ejercicio", "titulo": "Ejercicio: elige un caso de IA generativa para tu equipo", "descripcion": "Plantilla para valorar impacto, esfuerzo y riesgo de dos o tres ideas y quedarte con una.", "url": null, "duracion_min": 45, "nivel": 2, "dimension": "D1", "publicado": true },
+
+    { "id": "R-DAT-1", "tipo": "video", "titulo": "Datos listos para IA: qué significa", "descripcion": "Calidad, cantidad, formato y acceso: los cuatro requisitos antes de cualquier proyecto.", "url": null, "duracion_min": 45, "nivel": 1, "dimension": "D4", "publicado": true },
+    { "id": "R-DAT-2", "tipo": "documento", "titulo": "Inventario de datos de la empresa", "descripcion": "Plantilla para listar qué datos tenéis, dónde están, quién es responsable y si contienen datos personales.", "url": null, "duracion_min": 60, "nivel": 2, "dimension": "D4", "publicado": true },
+    { "id": "R-DAT-3", "tipo": "ejercicio", "titulo": "Ejercicio: limpia y estructura una hoja de cálculo real", "descripcion": "Duplicados, formatos de fecha, categorías y campos vacíos con una hoja de ventas de ejemplo.", "url": null, "duracion_min": 120, "nivel": 2, "dimension": "D4", "publicado": true },
+    { "id": "R-DAT-4", "tipo": "video", "titulo": "Conectar aplicaciones para que los datos fluyan", "descripcion": "Integraciones por API y conectores entre ERP, CRM y hojas de cálculo sin pasar datos a mano.", "url": null, "duracion_min": 60, "nivel": 3, "dimension": "D2", "publicado": true },
+    { "id": "R-DAT-5", "tipo": "documento", "titulo": "Gobierno del dato para pymes", "descripcion": "Roles, permisos, copias de seguridad y conservación: lo mínimo para trabajar con IA con garantías.", "url": null, "duracion_min": 45, "nivel": 3, "dimension": "D4", "publicado": true },
+
+    { "id": "R-RES-1", "tipo": "video", "titulo": "El Reglamento Europeo de IA (AI Act) en una hora", "descripcion": "Niveles de riesgo, usos prohibidos, obligaciones de transparencia y calendario de aplicación.", "url": null, "duracion_min": 60, "nivel": 1, "dimension": "D1", "publicado": true },
+    { "id": "R-RES-2", "tipo": "documento", "titulo": "Cómo clasificar el riesgo de un uso de IA", "descripcion": "Árbol de decisión para saber si un caso es de riesgo mínimo, limitado o alto, y qué implica.", "url": null, "duracion_min": 45, "nivel": 2, "dimension": "D1", "publicado": true },
+    { "id": "R-RES-3", "tipo": "documento", "titulo": "IA y protección de datos (RGPD)", "descripcion": "Base jurídica, información a las personas, proveedores encargados del tratamiento y evaluaciones de impacto.", "url": null, "duracion_min": 60, "nivel": 2, "dimension": "D4", "publicado": true },
+    { "id": "R-RES-4", "tipo": "ejercicio", "titulo": "Ejercicio: redacta la política de uso de IA de tu empresa", "descripcion": "Plantilla guiada con los apartados mínimos: usos permitidos, datos, revisión humana y responsables.", "url": null, "duracion_min": 90, "nivel": 3, "dimension": "D1", "publicado": true },
+    { "id": "R-RES-5", "tipo": "video", "titulo": "IA sostenible: consumo y eficiencia", "descripcion": "Cómo elegir modelos y servicios con menor consumo energético y medir su huella.", "url": null, "duracion_min": 30, "nivel": 2, "dimension": "D6", "publicado": true },
+
+    { "id": "R-AUT-1", "tipo": "video", "titulo": "Automatizar procesos: por dónde empezar", "descripcion": "Cómo detectar tareas repetitivas que merece la pena automatizar y calcular el ahorro.", "url": null, "duracion_min": 45, "nivel": 1, "dimension": "D5", "publicado": true },
+    { "id": "R-AUT-2", "tipo": "ejercicio", "titulo": "Ejercicio: mapa de un proceso de tu empresa", "descripcion": "Dibuja paso a paso un proceso (pedidos, facturas, altas) y marca dónde se pierde tiempo.", "url": null, "duracion_min": 60, "nivel": 2, "dimension": "D5", "publicado": true },
+    { "id": "R-AUT-3", "tipo": "video", "titulo": "Herramientas sin código para automatizar", "descripcion": "Flujos entre correo, hojas de cálculo y aplicaciones de gestión con herramientas visuales.", "url": null, "duracion_min": 90, "nivel": 2, "dimension": "D2", "publicado": true },
+    { "id": "R-AUT-4", "tipo": "documento", "titulo": "Lectura automática de documentos", "descripcion": "Extraer datos de facturas, albaranes y contratos con IA y revisarlos antes de contabilizar.", "url": null, "duracion_min": 60, "nivel": 3, "dimension": "D5", "publicado": true },
+    { "id": "R-AUT-5", "tipo": "ejercicio", "titulo": "Ejercicio: calcula el retorno de una automatización", "descripcion": "Plantilla de horas ahorradas, coste y plazo de recuperación para presentarlo a la dirección.", "url": null, "duracion_min": 45, "nivel": 3, "dimension": "D1", "publicado": true }
+  ],
+  "itinerarios": [
+    { "id": "IT-GEN", "titulo": "IA generativa en el día a día", "descripcion": "Para que el equipo use asistentes de IA con criterio y de forma segura en tareas reales.", "nivel": 1, "dimensiones": ["D3", "D5"], "recursos": ["R-GEN-1", "R-GEN-2", "R-GEN-3", "R-GEN-4", "R-GEN-5"] },
+    { "id": "IT-DAT", "titulo": "Datos listos para IA", "descripcion": "Ordenar, limpiar y conectar los datos de la empresa antes de cualquier proyecto de IA.", "nivel": 2, "dimensiones": ["D4", "D2"], "recursos": ["R-DAT-1", "R-DAT-2", "R-DAT-3", "R-DAT-4", "R-DAT-5"] },
+    { "id": "IT-RES", "titulo": "IA responsable y AI Act", "descripcion": "Lo que exige el Reglamento Europeo de IA y el RGPD, y cómo fijar una política de uso en la empresa.", "nivel": 2, "dimensiones": ["D1", "D6"], "recursos": ["R-RES-1", "R-RES-2", "R-RES-3", "R-RES-4", "R-RES-5"] },
+    { "id": "IT-AUT", "titulo": "Automatización de procesos con IA", "descripcion": "Detectar, diseñar y medir automatizaciones que ahorran horas en tareas administrativas.", "nivel": 3, "dimensiones": ["D5", "D2"], "recursos": ["R-AUT-1", "R-AUT-2", "R-AUT-3", "R-AUT-4", "R-AUT-5"] }
+  ],
+  "blueprints": [
+    { "id": "BP-EJ1", "caso_codigo": "CU-EJ1", "titulo": "Blueprint · Asistente de atención al cliente", "descripcion": "Arquitectura de referencia: base de conocimiento, modelo de lenguaje con búsqueda en documentos, derivación a persona y aviso de que responde una IA.", "componentes": ["Base de conocimiento", "Búsqueda semántica", "Modelo de lenguaje", "Canal web y mensajería", "Derivación a persona"], "nivel": 2, "dimensiones": ["D1", "D5"], "url": null },
+    { "id": "BP-EJ2", "caso_codigo": "CU-EJ2", "titulo": "Blueprint · Mantenimiento predictivo", "descripcion": "Captura de datos de sensores, almacenamiento de series temporales en la nube, modelo de detección de anomalías y panel con alertas.", "componentes": ["Sensores y pasarela", "Series temporales", "Modelo de anomalías", "Panel y alertas"], "nivel": 3, "dimensiones": ["D2", "D4", "D5", "D6"], "url": null },
+    { "id": "BP-EJ3", "caso_codigo": "CU-EJ3", "titulo": "Blueprint · Lectura automática de facturas", "descripcion": "Buzón de entrada, extracción de campos con IA, revisión humana de las dudosas y exportación al programa de contabilidad.", "componentes": ["Buzón de entrada", "Extracción con IA", "Revisión humana", "Exportación contable"], "nivel": 1, "dimensiones": ["D2", "D4", "D5"], "url": null }
+  ],
+  "mentores": [
+    { "id": "M-1", "nombre": "Mentora demo 1", "especialidad": "IA generativa y asistentes" },
+    { "id": "M-2", "nombre": "Mentor demo 2", "especialidad": "Datos e integraciones" },
+    { "id": "M-3", "nombre": "Mentora demo 3", "especialidad": "AI Act y RGPD" }
+  ],
+  "perfiles": [
+    { "id": "U-1", "nombre": "Persona demo 1", "cargo": "Dirección", "empresa_id": "E-DEMO" },
+    { "id": "U-2", "nombre": "Persona demo 2", "cargo": "Administración", "empresa_id": "E-DEMO" }
+  ],
+  "empresa": { "id": "E-DEMO", "razon_social": "Empresa de demostración, S. L." }
+}
