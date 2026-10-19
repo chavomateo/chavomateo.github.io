@@ -78,6 +78,7 @@
       opciones($('f-sector'), casos.map((c) => c.sector));
       opciones($('f-funcion'), casos.map((c) => c.funcion));
       pintar();
+      if (location.hash) ficha(decodeURIComponent(location.hash.slice(1))); // enlace desde el diagnóstico
     })
     .catch(() => { $('casos').innerHTML = '<p class="pf-vacio">No se ha podido cargar el catálogo.</p>'; });
 })();

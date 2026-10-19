@@ -1,0 +1,83 @@
+{
+  "version": 2,
+  "estado": "validado por la Alianza el 19-oct-2026; pendiente de contraste con el DMAT oficial",
+  "escala": [
+    { "puntos": 0, "etiqueta": "Nada / no lo sé" },
+    { "puntos": 1, "etiqueta": "Lo hemos hablado" },
+    { "puntos": 2, "etiqueta": "Algo puntual" },
+    { "puntos": 3, "etiqueta": "En parte de la empresa" },
+    { "puntos": 4, "etiqueta": "En casi toda la empresa" },
+    { "puntos": 5, "etiqueta": "Implantado y medido" }
+  ],
+  "niveles": [
+    { "nivel": 1, "nombre": "Inicial", "hasta": 20 },
+    { "nivel": 2, "nombre": "Explorando", "hasta": 40 },
+    { "nivel": 3, "nombre": "Experimentando", "hasta": 60 },
+    { "nivel": 4, "nombre": "Implantando", "hasta": 80 },
+    { "nivel": 5, "nombre": "Avanzado", "hasta": 100 }
+  ],
+  "dimensiones": [
+    { "id": "D1", "nombre": "Estrategia digital y de IA", "peso": 0.20, "preguntas": [
+      { "id": "D1.1", "texto": "¿La dirección tiene objetivos concretos sobre cómo usar la IA en el negocio?", "tipo": "escala", "peso": 1.5 },
+      { "id": "D1.2", "texto": "¿Tenéis identificados los procesos o áreas donde la IA aportaría más valor?", "tipo": "escala", "peso": 1.5 },
+      { "id": "D1.3", "texto": "¿Hay un presupuesto asignado a digitalización o IA para los próximos 12 meses?", "tipo": "unica", "peso": 1, "opciones": [
+        { "etiqueta": "No", "puntos": 0 }, { "etiqueta": "Menos de 2.000 €", "puntos": 2 }, { "etiqueta": "2.000-10.000 €", "puntos": 3 },
+        { "etiqueta": "10.000-50.000 €", "puntos": 4 }, { "etiqueta": "Más de 50.000 €", "puntos": 5 } ] },
+      { "id": "D1.4", "texto": "¿Hay una persona responsable de los proyectos digitales o de IA?", "tipo": "unica", "peso": 1, "opciones": [
+        { "etiqueta": "No", "puntos": 0 }, { "etiqueta": "Sí, a tiempo parcial", "puntos": 3 }, { "etiqueta": "Sí, con dedicación", "puntos": 5 } ] },
+      { "id": "D1.5", "texto": "¿Medís el resultado de las iniciativas digitales con indicadores (ahorro, ventas, tiempo)?", "tipo": "escala", "peso": 1 }
+    ] },
+    { "id": "D2", "nombre": "Preparación digital", "peso": 0.15, "preguntas": [
+      { "id": "D2.1", "texto": "¿Qué herramientas digitales usáis? Marca todas las que apliquen.", "tipo": "multiple", "peso": 1.5, "tope": 5, "opciones": [
+        { "etiqueta": "ERP o programa de gestión" }, { "etiqueta": "CRM" }, { "etiqueta": "Comercio electrónico" }, { "etiqueta": "Herramientas colaborativas en la nube" },
+        { "etiqueta": "Facturación electrónica" }, { "etiqueta": "Firma electrónica" }, { "etiqueta": "Gestión documental" } ] },
+      { "id": "D2.2", "texto": "¿Vuestras aplicaciones están conectadas entre sí o hay que pasar datos a mano?", "tipo": "escala", "peso": 1, "ayuda": "0 = todo a mano · 5 = integradas por API" },
+      { "id": "D2.3", "texto": "¿Usáis servicios en la nube (almacenamiento, servidores, software como servicio)?", "tipo": "escala", "peso": 1 },
+      { "id": "D2.4", "texto": "¿Tenéis medidas básicas de ciberseguridad (copias de seguridad, doble factor, actualizaciones, formación)?", "tipo": "escala", "peso": 1 },
+      { "id": "D2.5", "texto": "¿Vuestros clientes pueden relacionarse con vosotros por canales digitales (web, pedidos online, atención digital)?", "tipo": "escala", "peso": 0.5 }
+    ] },
+    { "id": "D3", "nombre": "Personas y capacidades", "peso": 0.15, "preguntas": [
+      { "id": "D3.1", "texto": "¿Qué parte de la plantilla usa ya herramientas de IA (asistentes, generación de textos o imágenes) en su trabajo?", "tipo": "unica", "peso": 1.5, "opciones": [
+        { "etiqueta": "Nadie", "puntos": 0 }, { "etiqueta": "Algunas personas", "puntos": 1 }, { "etiqueta": "Menos de la mitad", "puntos": 3 },
+        { "etiqueta": "Más de la mitad", "puntos": 4 }, { "etiqueta": "Casi todos", "puntos": 5 } ] },
+      { "id": "D3.2", "texto": "¿Habéis formado a la plantilla en IA o competencias digitales en los últimos 12 meses?", "tipo": "escala", "peso": 1 },
+      { "id": "D3.3", "texto": "¿Contáis con perfiles técnicos propios o con un proveedor de confianza para proyectos de datos o IA?", "tipo": "unica", "peso": 1, "opciones": [
+        { "etiqueta": "No", "puntos": 0 }, { "etiqueta": "Proveedor externo", "puntos": 3 }, { "etiqueta": "Perfil propio", "puntos": 4 }, { "etiqueta": "Ambos", "puntos": 5 } ] },
+      { "id": "D3.4", "texto": "¿Implicáis a las personas afectadas cuando cambiáis un proceso con tecnología?", "tipo": "escala", "peso": 1 },
+      { "id": "D3.5", "texto": "¿Tenéis normas internas sobre el uso de la IA (qué datos se pueden usar, revisión de resultados)?", "tipo": "escala", "peso": 1 }
+    ] },
+    { "id": "D4", "nombre": "Gestión y gobierno de los datos", "peso": 0.15, "preguntas": [
+      { "id": "D4.1", "texto": "¿Vuestros datos clave (clientes, ventas, producción) están en formato digital y en sistemas, no en papel o en hojas sueltas?", "tipo": "escala", "peso": 1.5 },
+      { "id": "D4.2", "texto": "¿Los datos son fiables (sin duplicados, actualizados) y se sabe quién es responsable de cada uno?", "tipo": "escala", "peso": 1 },
+      { "id": "D4.3", "texto": "¿Analizáis los datos para tomar decisiones (cuadros de mando, informes periódicos)?", "tipo": "escala", "peso": 1 },
+      { "id": "D4.4", "texto": "¿Cumplís el RGPD en el tratamiento de datos personales (registro de tratamientos, contratos con proveedores, información a los interesados)?", "tipo": "escala", "peso": 1 },
+      { "id": "D4.5", "texto": "¿Compartís o aprovecháis datos con socios, proveedores o espacios de datos sectoriales?", "tipo": "escala", "peso": 0.5 }
+    ] },
+    { "id": "D5", "nombre": "Automatización e IA", "peso": 0.25, "preguntas": [
+      { "id": "D5.1", "texto": "¿Qué tecnologías usáis ya? Marca todas las que apliquen.", "tipo": "multiple", "peso": 1.5, "tope": 5, "opciones": [
+        { "etiqueta": "Automatización de tareas (RPA o flujos)" }, { "etiqueta": "IA generativa" }, { "etiqueta": "Asistentes o chatbots" }, { "etiqueta": "Análisis predictivo" },
+        { "etiqueta": "Visión artificial" }, { "etiqueta": "Procesamiento de documentos" }, { "etiqueta": "Recomendación o personalización" }, { "etiqueta": "IoT o sensores" } ] },
+      { "id": "D5.2", "texto": "¿Hasta dónde habéis llegado con la IA?", "tipo": "unica", "peso": 1.5, "opciones": [
+        { "etiqueta": "Nada", "puntos": 0 }, { "etiqueta": "Pruebas individuales", "puntos": 1 }, { "etiqueta": "Piloto en un proceso", "puntos": 2 },
+        { "etiqueta": "En producción en un proceso", "puntos": 4 }, { "etiqueta": "En varios procesos y medido", "puntos": 5 } ] },
+      { "id": "D5.3", "texto": "¿En qué áreas la usáis? Marca todas las que apliquen.", "tipo": "multiple", "peso": 1, "tope": 5, "opciones": [
+        { "etiqueta": "Atención al cliente" }, { "etiqueta": "Marketing y ventas" }, { "etiqueta": "Operaciones o producción" }, { "etiqueta": "Logística" },
+        { "etiqueta": "Administración y finanzas" }, { "etiqueta": "Recursos humanos" }, { "etiqueta": "I+D o producto" } ] },
+      { "id": "D5.4", "texto": "¿Habéis medido el resultado de algún uso de IA (horas ahorradas, ventas, errores)?", "tipo": "escala", "peso": 1 },
+      { "id": "D5.5", "texto": "¿Revisáis los riesgos de la IA que usáis (sesgos, errores, transparencia, obligaciones del Reglamento Europeo de IA)?", "tipo": "escala", "peso": 1 }
+    ] },
+    { "id": "D6", "nombre": "Digitalización sostenible", "peso": 0.10, "preguntas": [
+      { "id": "D6.1", "texto": "¿Tenéis en cuenta el consumo energético y el impacto ambiental al elegir tecnología o proveedores cloud?", "tipo": "escala", "peso": 1 },
+      { "id": "D6.2", "texto": "¿Usáis la tecnología para reducir consumos o residuos (papel, energía, desplazamientos, materias primas)?", "tipo": "escala", "peso": 1 },
+      { "id": "D6.3", "texto": "¿Medís algún indicador ambiental de vuestra actividad?", "tipo": "escala", "peso": 0.5 }
+    ] }
+  ],
+  "aparte": [
+    { "id": "X1", "texto": "¿Qué os frena más para usar IA? Marca todas las que apliquen.", "tipo": "multiple", "opciones": [
+      { "etiqueta": "Coste de la nube o de los modelos", "enlace": "creditos" }, { "etiqueta": "Falta de personal preparado", "enlace": "formacion" },
+      { "etiqueta": "Datos poco preparados", "enlace": "consultoria" }, { "etiqueta": "No saber por dónde empezar", "enlace": "consultoria" },
+      { "etiqueta": "Dudas legales o de RGPD", "enlace": "legal" }, { "etiqueta": "Otro", "enlace": null } ] },
+    { "id": "X2", "texto": "¿Habéis usado antes algún programa de créditos cloud o de IA?", "tipo": "unica", "opciones": [
+      { "etiqueta": "Sí" }, { "etiqueta": "No" }, { "etiqueta": "No lo conozco" } ] }
+  ]
+}

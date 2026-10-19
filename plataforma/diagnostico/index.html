@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link href="/fonts/roboto.css" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/plataforma/plataforma.css">
+  <style>.brand{display:inline-flex;align-items:center;gap:.55rem;text-decoration:none;white-space:nowrap}.brand-word{font-weight:800;font-size:1.05rem;letter-spacing:.12em;text-transform:uppercase;line-height:1}.brand-ring{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;background:url(/img/isotipo-oficial.png) center/contain no-repeat;font-weight:800;font-size:.72rem}</style>
+  <title>Autodiagnóstico de madurez en IA · Plataforma AlianzaIA</title>
+</head>
+<body>
+  <header class="pf-top">
+    <a class="brand" href="/plataforma/"><span class="brand-word">Alianza</span><span class="brand-ring" aria-hidden="true">IA</span></a>
+    <nav><a href="/plataforma/">Plataforma</a><a href="/plataforma/casos/">Casos de uso</a><a href="/plataforma/diagnostico/">Autodiagnóstico</a><a href="/proyecto-alianzaia/">El proyecto</a></nav>
+  </header>
+  <section class="pf-hero"><div class="pf-wrap">
+    <span class="pf-eyebrow">Módulo b · Autodiagnóstico</span>
+    <h1>¿Cómo de preparada está tu empresa para la IA?</h1>
+    <p>28 preguntas en 6 dimensiones, alineadas con la herramienta europea de madurez digital. Unos 11 minutos. Al terminar verás tu nivel, tus puntos fuertes y débiles, y los casos de uso que encajan contigo.</p>
+  </div></section>
+  <main class="pf-wrap pf-section">
+    <div class="pf-aviso">Versión de desarrollo. En esta versión las respuestas se guardan solo en tu navegador; no se envían a ningún servidor.</div>
+    <div class="pf-progreso" aria-hidden="true"><div id="barra"></div></div>
+    <p class="pf-paso" id="paso" aria-live="polite"></p>
+    <form id="form" novalidate></form>
+    <div class="pf-nav">
+      <button class="pf-btn pf-sec" type="button" id="atras">Anterior</button>
+      <button class="pf-btn" type="button" id="siguiente">Siguiente</button>
+    </div>
+    <div id="resultado" hidden></div>
+  </main>
+  <footer class="pf-pie"><div class="pf-wrap">Plataforma AlianzaIA · Titularidad de la Asociación Española de Startups (AES), coordinadora de la agrupación · Datos alojados en la Unión Europea · <a href="/privacidad.html">Privacidad</a></div></footer>
+  <script src="/plataforma/diagnostico/diagnostico.js" defer></script>
+</body>
+</html>
