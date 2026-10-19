@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link href="/fonts/roboto.css" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/plataforma/plataforma.css">
+  <style>.brand{display:inline-flex;align-items:center;gap:.55rem;text-decoration:none;white-space:nowrap}.brand-word{font-weight:800;font-size:1.05rem;letter-spacing:.12em;text-transform:uppercase;line-height:1}.brand-ring{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;background:url(/img/isotipo-oficial.png) center/contain no-repeat;font-weight:800;font-size:.72rem}</style>
+  <title>Alta de empresa · Plataforma AlianzaIA</title>
+</head>
+<body class="pf-body">
+  <header class="pf-top">
+    <a class="brand" href="/plataforma/"><span class="brand-word">Alianza</span><span class="brand-ring" aria-hidden="true">IA</span></a>
+    <nav><a href="/plataforma/">Plataforma</a><a href="/plataforma/casos/">Casos de uso</a><a href="/plataforma/diagnostico/">Autodiagnóstico</a><a href="/plataforma/alta/" aria-current="page">Mi empresa</a></nav>
+  </header>
+  <section class="pf-hero"><div class="pf-wrap">
+    <span class="pf-eyebrow">Plataforma AlianzaIA · Mi empresa</span>
+    <h1>Da de alta tu empresa</h1>
+    <p>Para startups y pymes españolas que quieren adoptar IA: casos de uso, créditos cloud y de IA, formación y mentoría. El alta es gratuita.</p>
+  </div></section>
+  <main class="pf-wrap pf-alta">
+    <div id="msg" class="pf-aviso" role="status" hidden></div>
+    <section id="v-cargando"><p>Cargando…</p></section>
+
+    <section id="v-acceso" hidden>
+      <div class="pf-tabs" role="tablist">
+        <button type="button" role="tab" id="t-nueva" aria-selected="true">Crear cuenta</button>
+        <button type="button" role="tab" id="t-entrar" aria-selected="false">Ya tengo cuenta</button>
+      </div>
+      <form id="f-acceso" class="pf-form" novalidate>
+        <label class="pf-campo">Correo electrónico profesional<input id="a-email" type="email" autocomplete="email" required></label>
+        <label class="pf-campo">Contraseña<input id="a-clave" type="password" autocomplete="new-password" minlength="8" required><span class="pf-ayuda">Al menos 8 caracteres.</span></label>
+        <button class="pf-btn" type="submit" id="a-btn">Crear cuenta y continuar</button>
+      </form>
+    </section>
+
+    <section id="v-empresa" hidden>
+      <p class="pf-paso">Has entrado como <strong id="e-usuario"></strong>. <button type="button" class="pf-enlace" data-salir>Salir</button></p>
+      <form id="f-empresa" class="pf-form" novalidate>
+        <h2>Datos de la empresa</h2>
+        <label class="pf-campo">NIF o CIF de la empresa<input id="e-nif" type="text" autocomplete="off" spellcheck="false" maxlength="12" required><span class="pf-ayuda">Se comprueba el dígito de control.</span></label>
+        <label class="pf-campo">Razón social<input id="e-razon" type="text" autocomplete="organization" required></label>
+        <div class="pf-fila2">
+          <label class="pf-campo">Tipo<select id="e-tipo" required><option value="">Elige…</option><option value="startup">Startup</option><option value="pyme">Pyme</option><option value="autonomo">Autónomo</option><option value="otra">Otra</option></select></label>
+          <label class="pf-campo">Tamaño (definición UE)<select id="e-tamano" required><option value="">Elige…</option><option value="micro">Micro (menos de 10 personas y hasta 2 M€)</option><option value="pequena">Pequeña (menos de 50 y hasta 10 M€)</option><option value="mediana">Mediana (menos de 250 y hasta 50 M€ de facturación o 43 M€ de balance)</option></select></label>
+        </div>
+        <div class="pf-fila2">
+          <label class="pf-campo">Actividad principal (CNAE, 4 cifras)<input id="e-cnae" type="text" inputmode="numeric" maxlength="4" pattern="\d{4}" required></label>
+          <label class="pf-campo">Comunidad autónoma<select id="e-ccaa" required><option value="">Elige…</option></select></label>
+        </div>
+        <label class="pf-campo">Provincia<input id="e-provincia" type="text" required></label>
+        <h2>Persona que da de alta la empresa</h2>
+        <div class="pf-fila2">
+          <label class="pf-campo">Nombre y apellidos<input id="e-nombre" type="text" autocomplete="name" required></label>
+          <label class="pf-campo">Cargo<input id="e-cargo" type="text" autocomplete="organization-title" required></label>
+        </div>
+        <p class="pf-capa">AES (G87461075) trata tus datos para gestionar el alta y la participación de tu empresa en la plataforma AlianzaIA, por interés legítimo y, en su caso, obligación legal, y, si lo aceptas, tu consentimiento para enviarte información de AES sobre otros programas. Se podrán comunicar a las entidades públicas que financien o controlen el proyecto. Derechos: <a href="mailto:legal@asociacionstartups.es">legal@asociacionstartups.es</a>. Más información en la <a href="/plataforma/legal/privacidad.html" target="_blank" rel="noopener">Política de privacidad</a>.</p>
+        <label class="pf-check"><input id="e-condiciones" type="checkbox" required> <span>He leído y acepto las <a href="/plataforma/legal/condiciones.html" target="_blank" rel="noopener">Condiciones de uso</a> en nombre de la empresa y declaro que tengo facultades para ello.</span></label>
+        <label class="pf-check"><input id="e-comercial" type="checkbox"> <span>Quiero recibir información de AES sobre otros programas y actividades.</span></label>
+        <button class="pf-btn" type="submit" id="e-btn">Dar de alta la empresa</button>
+      </form>
+    </section>
+
+    <section id="v-cuenta" hidden>
+      <p class="pf-paso">Has entrado como <strong id="c-usuario"></strong>. <button type="button" class="pf-enlace" data-salir>Salir</button></p>
+      <div class="pf-tarjeta">
+        <h2 id="c-razon"></h2>
+        <dl class="pf-dl">
+          <dt>NIF</dt><dd id="c-nif"></dd>
+          <dt>Estado</dt><dd id="c-estado"></dd>
+          <dt>Alta</dt><dd id="c-fecha"></dd>
+        </dl>
+        <p id="c-explica"></p>
+      </div>
+      <h2>Siguientes pasos</h2>
+      <div class="pf-modulos">
+        <a class="pf-mod" href="/plataforma/diagnostico/"><span class="pf-etq">Paso 1</span><h3>Haz el autodiagnóstico</h3><p>Mide la madurez en IA de tu empresa: es la línea base del programa.</p></a>
+        <a class="pf-mod" href="/plataforma/creditos/"><span class="pf-etq">Paso 2</span><h3>Solicita créditos y servicios</h3><p>Créditos cloud y de IA, y servicios de los socios tecnológicos de la Alianza.</p></a>
+        <a class="pf-mod" href="/plataforma/casos/"><span class="pf-etq">Paso 3</span><h3>Elige un caso de uso</h3><p>Soluciones probadas para replicar en tu empresa.</p></a>
+      </div>
+      <h3>Textos aceptados</h3>
+      <ul id="c-acept" class="pf-lista"></ul>
+    </section>
+  </main>
+  <footer class="pf-pie"><div class="pf-wrap">Plataforma AlianzaIA · Titularidad de la Asociación Española de Startups (AES), coordinadora de la agrupación · Datos alojados en la Unión Europea · <a href="/plataforma/legal/privacidad.html">Privacidad</a> · <a href="/plataforma/legal/aviso-legal.html">Aviso legal</a> · <a href="/plataforma/legal/cookies.html">Cookies</a></div></footer>
+  <script src="/plataforma/js/sb.js"></script>
+  <script src="/plataforma/alta/alta.js"></script>
+</body>
+</html>
