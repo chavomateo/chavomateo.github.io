@@ -511,6 +511,25 @@ create view ayudas_minimis as
   select empresa_id, fecha, importe_eur, 'servicio', id from servicios_valorados;
 
 -- Bloqueo: declaración vigente de la misma empresa y tope de 300.000 €
+-- Validez de la declaración de minimis. La fija Legal: hasta entonces, 30 días
+-- PROVISIONALES. Se cambia con un INSERT nuevo (el histórico se conserva).
+create table parametros_legales (
+  clave       text not null,
+  valor       text not null,
+  provisional boolean not null default true,
+  fuente      text,
+  creado_en   timestamptz not null default now(),
+  primary key (clave, creado_en)
+);
+create trigger parametros_inmutable before update or delete on parametros_legales
+  for each row execute function solo_insercion();
+insert into parametros_legales (clave, valor, provisional, fuente)
+  values ('minimis_validez_dias', '30', true, 'CTO, pendiente de Legal');
+create or replace function minimis_validez() returns interval
+  language sql stable security definer set search_path = public as $$
+  select make_interval(days => valor::int) from parametros_legales
+   where clave = 'minimis_validez_dias' order by creado_en desc limit 1 $$;
+
 create or replace function minimis_comprobar() returns trigger
   language plpgsql as $$
 declare d declaraciones_minimis; v_total numeric; v_fecha date := current_date;
@@ -526,8 +545,8 @@ begin
   else
     v_fecha := (to_jsonb(new)->>'fecha')::date;
   end if;
-  if d.creado_en < now() - interval '30 days' then
-    raise exception 'la declaración de minimis tiene más de 30 días: hay que renovarla';
+  if d.creado_en < now() - minimis_validez() then
+    raise exception 'la declaración de minimis ha caducado (validez: %): hay que renovarla', minimis_validez();
   end if;
   if d.sector_excluido then
     raise exception 'la empresa declara operar en un sector excluido del Reg. 2023/2831';
@@ -725,7 +744,7 @@ do $$
 declare t text;
 begin
   foreach t in array array['empresas','perfiles','textos_legales','aceptaciones','copias_enviadas','firmas_externas',
-    'declaraciones_minimis','servicios_valorados',
+    'declaraciones_minimis','servicios_valorados','parametros_legales',
     'correcciones_minimis','casos','casos_internos','casos_recursos','solicitudes_caso',
     'preguntas','diagnosticos','respuestas','recomendaciones','proveedores','programas_credito',
     'lotes_credito','solicitudes_credito','asignaciones','consumos','evidencias','ledger',
@@ -753,6 +772,7 @@ create policy serv_propios on servicios_valorados for select using (empresa_id =
 create policy gestor_servicios on servicios_valorados for insert with check (mi_rol() = 'gestor');
 create policy gestor_correcciones on correcciones_minimis for insert with check (mi_rol() = 'gestor');
 create policy gestor_textos on textos_legales for insert with check (mi_rol() = 'gestor');
+create policy gestor_parametros on parametros_legales for insert with check (mi_rol() = 'gestor');
 create policy recursos_publico on recursos for select using (publicado);
 create policy itinerarios_publico on itinerarios for select using (true);
 create policy programas_publico on programas_credito for select using (auth.uid() is not null);
