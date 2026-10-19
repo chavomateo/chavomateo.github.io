@@ -136,14 +136,14 @@
     const barra = (d) => {
       const debil = rec.debiles.includes(d.id);
       return `<div class="pf-dim${debil ? ' pf-debil' : ''}"><span class="pf-dim-nombre">${esc(d.id)} · ${esc(d.nombre)}${debil ? ' <span class="pf-prio">Prioridad</span>' : ''}</span>` +
-        `<div class="pf-pista" style="--media:${r.global}%"><div class="pf-barra" role="img" aria-label="${esc(d.id)} ${esc(d.nombre)}: ${d.nota} de 100${debil ? ', prioridad' : ''}"><div style="width:${d.nota}%"></div></div></div><b aria-hidden="true">${d.nota}</b></div>`;
+        `<div class="pf-pista" style="--media:${r.global}%"><div class="pf-barra" role="img" aria-label="${esc(d.id)} ${esc(d.nombre)}: ${d.nota} de 100${debil ? ', prioridad' : ''}"><div${d.nota === 0 ? ' class="pf-cero"' : ''} style="width:${d.nota}%"></div></div></div><b aria-hidden="true">${d.nota}</b></div>`;
     };
     const C = 2 * Math.PI * 56;
     $('form').hidden = true; document.querySelector('.pf-nav').hidden = true; $('paso').hidden = true; $('barra').style.width = '100%';
     $('resultado').hidden = false;
     $('resultado').innerHTML = `
       <div class="pf-res-cab">
-        <div class="pf-anillo" role="img" aria-label="Puntuación global: ${r.global} de 100">
+        <div class="pf-anillo${r.global >= 100 ? ' pf-tres' : ''}" role="img" aria-label="Puntuación global: ${r.global} de 100">
           <svg viewBox="0 0 132 132" aria-hidden="true"><defs><linearGradient id="pf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1230F0"/><stop offset=".55" stop-color="#35B4F0"/><stop offset="1" stop-color="#50E0E0"/></linearGradient></defs>
             <circle cx="66" cy="66" r="56" fill="none" stroke="#EEF2F8" stroke-width="12"/>
             <circle cx="66" cy="66" r="56" fill="none" stroke="url(#pf-grad)" stroke-width="12" stroke-linecap="round" stroke-dasharray="${(C * r.global / 100).toFixed(1)} ${C.toFixed(1)}"/></svg>

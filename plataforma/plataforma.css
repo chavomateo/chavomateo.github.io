@@ -147,3 +147,11 @@ fieldset.pf-falta::after{content:"Falta responder esta pregunta";display:block;m
   .pf-niveles>span{display:none}
 }
 .pf-nav[hidden],#resultado[hidden],.pf-paso[hidden]{display:none}
+/* Ajustes de Arte (2.ª ronda) */
+.pf-anillo.pf-tres div{flex-direction:column;align-items:center;justify-content:center;padding-top:0}
+.pf-anillo.pf-tres strong{font-size:2.1rem}
+.pf-anillo.pf-tres span{font-size:.85rem;margin-top:2px}
+.pf-barra div{min-width:8px}
+.pf-barra div.pf-cero{background:var(--a-sky)}
+.pf-hoja>div{padding:22px}
+@media (max-width:640px){.pf-ficha .pf-acciones{position:sticky;bottom:0;background:#fff;border-top:1px solid #DDE3F0;margin:22px -20px -28px;padding:14px 20px}}
