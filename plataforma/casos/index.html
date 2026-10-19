@@ -11,7 +11,7 @@
   <style>.brand{display:inline-flex;align-items:center;gap:.55rem;text-decoration:none;white-space:nowrap}.brand-word{font-weight:800;font-size:1.05rem;letter-spacing:.12em;text-transform:uppercase;line-height:1}.brand-ring{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;background:url(/img/isotipo-oficial.png) center/contain no-repeat;font-weight:800;font-size:.72rem}</style>
   <title>Casos de uso replicables · Plataforma AlianzaIA</title>
 </head>
-<body>
+<body class="pf-body">
   <header class="pf-top">
     <a class="brand" href="/plataforma/"><span class="brand-word">Alianza</span><span class="brand-ring" aria-hidden="true">IA</span></a>
     <nav><a href="/plataforma/">Plataforma</a><a href="/plataforma/casos/">Casos de uso</a><a href="/plataforma/diagnostico/">Autodiagnóstico</a><a href="/proyecto-alianzaia/">El proyecto</a></nav>
@@ -36,7 +36,7 @@
     </div>
     <div id="casos" class="pf-grid" aria-live="polite"></div>
   </main>
-  <dialog class="pf-ficha" id="ficha"><div class="pf-ficha-in" id="ficha-in"></div></dialog>
+  <dialog class="pf-ficha" id="ficha" aria-labelledby="ficha-titulo"><div class="pf-ficha-cab"><button class="pf-cerrar" type="button" aria-label="Cerrar">×</button></div><div class="pf-ficha-in" id="ficha-in"></div></dialog>
   <footer class="pf-pie"><div class="pf-wrap">Plataforma AlianzaIA · Titularidad de la Asociación Española de Startups (AES), coordinadora de la agrupación · Datos alojados en la Unión Europea · <a href="/privacidad.html">Privacidad</a></div></footer>
   <script src="/plataforma/casos/casos.js" defer></script>
 </body>
