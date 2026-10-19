@@ -1,7 +1,7 @@
 -- =====================================================================
 -- Plataforma AlianzaIA · Esquema de datos MVP (PostgreSQL / Supabase UE)
 -- Titularidad: Asociación Española de Startups (AES), coordinadora.
--- Versión 0.6 · 19-oct-2026 · BORRADOR (no aplicado en ningún entorno)
+-- Versión 0.7 · 19-oct-2026 · BORRADOR (no aplicado en ningún entorno)
 --   0.2: campos de las fichas v1 de alianza-ceo (listas cerradas, flujo de estados, casos_internos)
 --   0.3: registro de aceptaciones (versión, hora, IP) y minimis en cada asignación (Legal)
 --   0.4: firma electrónica simple (art. 25 eIDAS) en cada asignación
@@ -11,6 +11,10 @@
 --        revisión del anexo por AES), renovación a los 30 días con la casilla de la plataforma
 --        (sin volver a firmar), motivos tasados para volver a firmar en Dropbox Sign y doble
 --        aceptación de la casilla y del A-bis en régimen mancomunado
+--   0.7: ajustes de alianza-ceo (19-oct) en firmas_externas: corrección de errores con
+--        sustituye_a + motivo (el registro sustituido se conserva y deja de contar), régimen de
+--        administración comprobado con escritura o nota simple (si no, mancomunado y dos firmas)
+--        y almacén privado «firmas» con acceso solo del gestor
 --
 -- Módulos: a) casos · b) diagnóstico · c) hub de créditos · d) formación
 --          e) área de empresa · transversal (roles, auditoría, ledger)
@@ -165,13 +169,24 @@ create trigger copias_inmutable before update or delete on copias_enviadas
 create table firmas_externas (
   id                   uuid primary key default gen_random_uuid(),
   empresa_id           uuid not null references empresas(id),
-  tipo                 text not null check (tipo in ('declaracion_alta', 'revocacion')),
+  -- anulacion: deja sin efecto un registro anotado por error (sustituye_a), sin datos de firma
+  tipo                 text not null check (tipo in ('declaracion_alta', 'revocacion', 'anulacion')),
   proveedor            text not null default 'dropbox_sign',
-  ref_firma            text not null,                 -- signature_request_id de Dropbox Sign
-  regimen_administracion text not null default 'unico'
+  ref_firma            text,                          -- signature_request_id de Dropbox Sign
+  -- Corrección de errores: el registro nuevo apunta al que sustituye. El anterior no se toca
+  -- (solo inserción) y deja de contar: las funciones leen solo firmas_vigentes.
+  sustituye_a          uuid unique references firmas_externas(id),
+  motivo_sustitucion   text,
+  -- Régimen de administración: lo declara la empresa y el gestor lo comprueba con un documento
+  -- que aporta ella (escritura o nota simple). Su referencia va en notas_verificacion.
+  -- Si no se puede comprobar, se registra como mancomunado y se piden las dos firmas.
+  regimen_declarado    text check (regimen_declarado in ('unico', 'solidario', 'mancomunado')),
+  regimen_comprobado_con text
+                       check (regimen_comprobado_con in ('escritura', 'nota_simple', 'sin_documento')),
+  regimen_administracion text not null default 'mancomunado'
                        check (regimen_administracion in ('unico', 'solidario', 'mancomunado')),
   -- Documento firmado y certificado de auditoría
-  documento_sha256     text not null,                 -- huella SHA-256 del PDF firmado
+  documento_sha256     text,                          -- huella SHA-256 del PDF firmado
   documento_ruta       text,                          -- ruta en bucket privado de almacenamiento
   audit_trail_sha256   text,                          -- huella SHA-256 del log de auditoría
   audit_trail_ruta     text,
@@ -184,10 +199,10 @@ create table firmas_externas (
   anexo_sha256         text,
   anexo_ruta           text,
   -- Firmante principal (o primer administrador)
-  firmante_nombre      text not null,
-  firmante_email       text not null,
-  firmante_cargo       text not null,
-  firmado_en           timestamptz not null,
+  firmante_nombre      text,
+  firmante_email       text,
+  firmante_cargo       text,
+  firmado_en           timestamptz,
   -- Segundo firmante (obligatorio en régimen mancomunado)
   firmante2_nombre     text,
   firmante2_email      text,
@@ -197,9 +212,21 @@ create table firmas_externas (
   registrado_por       uuid not null references perfiles(id),
   notas_verificacion   text,
   creado_en            timestamptz not null default now(),
-  unique (proveedor, ref_firma, tipo),
+  -- (proveedor, ref_firma, tipo) es único entre los registros vigentes: lo mira firmas_antes_insertar()
+  -- Todo registro que no sea una anulación lleva los datos de la firma y cómo se comprobó el régimen.
+  constraint firmas_datos_firma check (tipo = 'anulacion' or (
+    ref_firma is not null and documento_sha256 is not null and firmante_nombre is not null
+    and firmante_email is not null and firmante_cargo is not null and firmado_en is not null
+    and regimen_comprobado_con is not null)),
+  constraint firmas_anulacion_sustituye check (tipo <> 'anulacion' or sustituye_a is not null),
+  constraint firmas_sustitucion_motivada check (
+    (sustituye_a is null) = (nullif(btrim(motivo_sustitucion), '') is null)),
+  constraint firmas_regimen_comprobado check (
+    regimen_comprobado_con = 'sin_documento' or nullif(btrim(notas_verificacion), '') is not null),
+  constraint firmas_regimen_sin_documento check (
+    regimen_comprobado_con <> 'sin_documento' or regimen_administracion = 'mancomunado'),
   constraint firmas_mancomunadas_completas check (
-    regimen_administracion <> 'mancomunado' or
+    tipo = 'anulacion' or regimen_administracion <> 'mancomunado' or
     (firmante2_nombre is not null and firmante2_email is not null and firmado2_en is not null)
   ),
   -- La declaración del alta guarda PDF y certificado de auditoría con sus huellas, y el total.
@@ -217,6 +244,34 @@ create table firmas_externas (
 create trigger firmas_inmutable before update or delete on firmas_externas
   for each row execute function solo_insercion();
 
+-- Registros vigentes: los que ningún otro registro sustituye (ni corrige ni anula).
+create or replace view firmas_vigentes with (security_invoker = true) as
+  select f.* from firmas_externas f
+   where not exists (select 1 from firmas_externas s where s.sustituye_a = f.id);
+
+-- Antes de anotar: la misma firma de Dropbox Sign no puede estar dos veces vigente, salvo
+-- que el registro nuevo sustituya precisamente al que la tiene (corrección de un error).
+create or replace function firmas_antes_insertar() returns trigger
+  language plpgsql security definer set search_path = public as $$
+begin
+  if new.tipo = 'anulacion' then
+    if not exists (select 1 from firmas_externas where id = new.sustituye_a and empresa_id = new.empresa_id) then
+      raise exception 'la anulación tiene que ser de un registro de la misma empresa';
+    end if;
+    return new;
+  end if;
+  perform pg_advisory_xact_lock(hashtext('firmas_externas:' || new.proveedor || ':' || new.ref_firma));
+  if exists (select 1 from firmas_vigentes v
+              where v.proveedor = new.proveedor and v.ref_firma = new.ref_firma and v.tipo = new.tipo
+                and v.id is distinct from new.sustituye_a) then
+    raise exception 'la firma % ya está anotada: para corregirla, anota un registro nuevo con sustituye_a y el motivo',
+      new.ref_firma;
+  end if;
+  return new;
+end $$;
+create trigger firmas_antes_insertar before insert on firmas_externas
+  for each row execute function firmas_antes_insertar();
+
 -- Revisión manual del anexo por AES (obligatoria antes de la primera asignación si hay anexo).
 create table revisiones_anexo (
   id           uuid primary key default gen_random_uuid(),
@@ -229,10 +284,11 @@ create table revisiones_anexo (
 create trigger revisiones_anexo_inmutable before update or delete on revisiones_anexo
   for each row execute function solo_insercion();
 
--- Última anotación de firma de la empresa (alta o revocación).
+-- Última anotación vigente de firma de la empresa (alta o revocación). Nunca devuelve un
+-- registro sustituido: si se corrige, cuenta solo el registro que lo sustituye.
 create or replace function firma_alta_actual(p_empresa uuid) returns firmas_externas
   language sql stable security definer set search_path = public as $$
-  select * from firmas_externas where empresa_id = p_empresa
+  select * from firmas_vigentes where empresa_id = p_empresa and tipo <> 'anulacion'
    order by greatest(firmado_en, coalesce(firmado2_en, firmado_en)) desc, creado_en desc limit 1 $$;
 
 -- Firma del alta vigente: la última anotación es una declaración de alta (no una revocación),
@@ -641,7 +697,8 @@ insert into parametros_legales (clave, valor, provisional, fuente) values
   ('minimis_validez_dias', '30', false, 'Legal Counsel (19-oct-2026, Anexo 5-bis A): se renueva con la casilla'),
   ('minimis_refirma_meses', '12', false, 'Legal Counsel (19-oct-2026): volver a firmar a los 12 meses'),
   ('minimis_refirma_ayuda_nueva_eur', '50000', false, 'Legal Counsel (19-oct-2026): ayuda nueva de más de 50.000 €'),
-  ('minimis_refirma_acumulado_eur', '240000', false, 'Legal Counsel (19-oct-2026): recibidas + nueva > 240.000 €');
+  ('minimis_refirma_acumulado_eur', '240000', false, 'Legal Counsel (19-oct-2026): recibidas + nueva > 240.000 €'),
+  ('conservacion_firmas_anos', '10', true, 'Propuesta CTO (19-oct-2026): 10 años desde la última ayuda amparada (art. 6.4 Reg. 2023/2831). Lo decide Legal');
 create or replace function parametro_legal(p_clave text) returns text
   language plpgsql stable security definer set search_path = public as $$
 declare v text;
