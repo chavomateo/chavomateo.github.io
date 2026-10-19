@@ -57,6 +57,7 @@
       <div class="pf-acciones">
         <button class="pf-btn" type="button" disabled title="Disponible con el área de empresa">Quiero replicarlo</button>
         <button class="pf-btn pf-sec pf-cerrar2" type="button">Volver al catálogo</button>
+        <small>«Quiero replicarlo» estará disponible con el área de empresa.</small>
       </div>`;
     $('ficha').showModal();
     $('ficha').scrollTop = 0;
