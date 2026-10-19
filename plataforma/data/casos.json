@@ -4,18 +4,76 @@
     "ejemplo": true,
     "titulo": "Asistente de atención al cliente multicanal",
     "resumen": "Un asistente de IA generativa responde las consultas frecuentes por web, WhatsApp y email con el catálogo y las políticas de la empresa, y pasa a una persona lo que no sabe resolver.",
-    "sector": "Comercio y distribución",
+    "sector": "Comercio & Consumo",
     "funcion": "Atención al cliente",
-    "tecnologias": ["IA generativa", "RAG", "Integración de canales"],
+    "tecnologias": [
+      "IA generativa (texto)",
+      "Agentes"
+    ],
     "madurez_minima": 2,
     "replicable": true,
     "problema": "El equipo dedica gran parte de la jornada a responder siempre las mismas preguntas (envíos, devoluciones, disponibilidad), con tiempos de respuesta de horas fuera del horario comercial.",
     "solucion": "Base de conocimiento con el catálogo, las preguntas frecuentes y las políticas; modelo de lenguaje con recuperación de documentos (RAG) desplegado en la UE; derivación a persona con el historial de la conversación.",
     "requisitos": "Catálogo y preguntas frecuentes en formato digital; una persona responsable de revisar respuestas las primeras semanas; canal web o WhatsApp Business.",
-    "coste_orientativo": "Bajo: créditos de IA del hub y unas 20-40 horas de implantación.",
+    "coste_orientativo": "2.000-10.000 €",
     "plazo_orientativo": "4-6 semanas",
-    "kpis": ["% de consultas resueltas sin intervención humana", "Tiempo medio de primera respuesta", "Satisfacción del cliente (CSAT)"],
-    "dimensiones_dmat": ["D1", "D5"]
+    "kpis": [
+      {
+        "nombre": "% de consultas resueltas sin intervención humana"
+      },
+      {
+        "nombre": "Tiempo medio de primera respuesta"
+      },
+      {
+        "nombre": "Satisfacción del cliente (CSAT)"
+      }
+    ],
+    "dimensiones_dmat": [
+      "D1",
+      "D5"
+    ],
+    "tamano_objetivo": [
+      "micro",
+      "pequena",
+      "mediana"
+    ],
+    "datos_necesarios": "Catálogo, preguntas frecuentes, políticas de envío y devolución e historial de consultas (web, email o WhatsApp).",
+    "esfuerzo_interno": "40-160 h",
+    "fases": [
+      {
+        "orden": 1,
+        "nombre": "Base de conocimiento",
+        "semanas": 2,
+        "entregable": "Contenidos revisados y cargados"
+      },
+      {
+        "orden": 2,
+        "nombre": "Piloto en un canal",
+        "semanas": 2,
+        "entregable": "Asistente en la web con derivación a persona"
+      },
+      {
+        "orden": 3,
+        "nombre": "Extensión y medición",
+        "semanas": 2,
+        "entregable": "Más canales e informe de KPIs frente a la línea base"
+      }
+    ],
+    "sectores_replicables": [
+      "Turismo",
+      "Salud & Bienestar",
+      "Educación",
+      "Legal & Servicios"
+    ],
+    "riesgo_ai_act": "limitado",
+    "datos_personales": "si",
+    "notas_rgpd": "Trata datos de clientes en las conversaciones: aviso de que se habla con una IA (AI Act, art. 50), modelo con DPA y sin entrenamiento con los datos.",
+    "frenos_que_resuelve": [
+      "por_donde_empezar",
+      "personal"
+    ],
+    "creditos_aplicables": "tokens_ia",
+    "estado": "publicado"
   },
   {
     "codigo": "CU-EJ2",
@@ -23,34 +81,146 @@
     "titulo": "Mantenimiento predictivo de maquinaria",
     "resumen": "Sensores y un modelo de detección de anomalías avisan de que una máquina va a fallar antes de que se pare la línea, para programar el mantenimiento en el mejor momento.",
     "sector": "Industria",
-    "funcion": "Operaciones y producción",
-    "tecnologias": ["IoT", "Aprendizaje automático", "Series temporales"],
+    "funcion": "Calidad y mantenimiento",
+    "tecnologias": [
+      "Predicción / ML clásico"
+    ],
     "madurez_minima": 3,
     "replicable": true,
     "problema": "Las paradas no planificadas de la maquinaria crítica cuestan horas de producción y obligan a mantener un stock alto de repuestos.",
     "solucion": "Captura de vibración, temperatura y consumo eléctrico; modelo de detección de anomalías entrenado con el histórico; panel con el estado de cada máquina y alertas al equipo de mantenimiento.",
     "requisitos": "Máquinas con sensores o posibilidad de instalarlos; histórico de averías (aunque sea en papel o en hojas de cálculo); conectividad en planta.",
-    "coste_orientativo": "Medio: sensores, créditos cloud del hub y unas 80-120 horas de implantación.",
+    "coste_orientativo": "10.000-50.000 €",
     "plazo_orientativo": "3-4 meses",
-    "kpis": ["Horas de parada no planificada", "Tiempo medio entre fallos (MTBF)", "Coste de mantenimiento por unidad producida"],
-    "dimensiones_dmat": ["D2", "D4", "D5", "D6"]
+    "kpis": [
+      {
+        "nombre": "Horas de parada no planificada"
+      },
+      {
+        "nombre": "Tiempo medio entre fallos (MTBF)"
+      },
+      {
+        "nombre": "Coste de mantenimiento por unidad producida"
+      }
+    ],
+    "dimensiones_dmat": [
+      "D2",
+      "D4",
+      "D5",
+      "D6"
+    ],
+    "tamano_objetivo": [
+      "pequena",
+      "mediana"
+    ],
+    "datos_necesarios": "Lecturas de sensores (vibración, temperatura, consumo) e histórico de averías y paradas, aunque esté en hojas de cálculo.",
+    "esfuerzo_interno": "160-500 h",
+    "fases": [
+      {
+        "orden": 1,
+        "nombre": "Sensorización y captura",
+        "semanas": 4,
+        "entregable": "Datos de las máquinas críticas llegando a la nube"
+      },
+      {
+        "orden": 2,
+        "nombre": "Modelo de anomalías",
+        "semanas": 5,
+        "entregable": "Modelo entrenado con el histórico"
+      },
+      {
+        "orden": 3,
+        "nombre": "Panel y alertas",
+        "semanas": 4,
+        "entregable": "Panel por máquina y avisos al equipo de mantenimiento"
+      }
+    ],
+    "sectores_replicables": [
+      "Energía & Sostenibilidad",
+      "Alimentación & Agro",
+      "Movilidad & Logística"
+    ],
+    "riesgo_ai_act": "minimo",
+    "datos_personales": "no",
+    "notas_rgpd": "Sin datos personales si los sensores no identifican a operarios.",
+    "frenos_que_resuelve": [
+      "datos",
+      "coste"
+    ],
+    "creditos_aplicables": "cloud",
+    "estado": "publicado"
   },
   {
     "codigo": "CU-EJ3",
     "ejemplo": true,
     "titulo": "Lectura automática de facturas y documentos",
     "resumen": "La IA lee facturas, albaranes y contratos en PDF o foto, extrae los datos clave y los carga en el programa de gestión para que el equipo solo revise las excepciones.",
-    "sector": "Transversal (todos los sectores)",
-    "funcion": "Administración y finanzas",
-    "tecnologias": ["OCR", "IA generativa", "Automatización de procesos"],
+    "sector": "Transversal",
+    "funcion": "Finanzas y administración",
+    "tecnologias": [
+      "Clasificación y extracción de documentos",
+      "Automatización con IA"
+    ],
     "madurez_minima": 1,
     "replicable": true,
     "problema": "La introducción manual de facturas y albaranes consume horas cada semana y genera errores que se arrastran hasta la contabilidad.",
     "solucion": "Buzón de entrada de documentos; extracción con OCR y un modelo de lenguaje que valida importes, NIF e IVA; exportación al ERP o al programa contable; cola de revisión para los casos dudosos.",
     "requisitos": "Programa de gestión o contable con importación (CSV o API); volumen mínimo de unas 100 facturas al mes para que compense.",
-    "coste_orientativo": "Bajo: créditos de IA del hub y unas 15-30 horas de implantación.",
+    "coste_orientativo": "Menos de 2.000 €",
     "plazo_orientativo": "2-4 semanas",
-    "kpis": ["Horas de introducción manual ahorradas al mes", "% de documentos procesados sin corrección", "Errores detectados en contabilidad"],
-    "dimensiones_dmat": ["D2", "D4", "D5"]
+    "kpis": [
+      {
+        "nombre": "Horas de introducción manual ahorradas al mes"
+      },
+      {
+        "nombre": "% de documentos procesados sin corrección"
+      },
+      {
+        "nombre": "Errores detectados en contabilidad"
+      }
+    ],
+    "dimensiones_dmat": [
+      "D2",
+      "D4",
+      "D5"
+    ],
+    "tamano_objetivo": [
+      "startup",
+      "micro",
+      "pequena",
+      "mediana"
+    ],
+    "datos_necesarios": "Facturas de proveedores en PDF o imagen y el plan de cuentas o la exportación del programa de contabilidad.",
+    "esfuerzo_interno": "Menos de 40 h",
+    "fases": [
+      {
+        "orden": 1,
+        "nombre": "Configuración",
+        "semanas": 1,
+        "entregable": "Buzón de entrada y reglas de extracción"
+      },
+      {
+        "orden": 2,
+        "nombre": "Piloto con un mes de facturas",
+        "semanas": 2,
+        "entregable": "Facturas extraídas y revisadas"
+      },
+      {
+        "orden": 3,
+        "nombre": "Integración contable",
+        "semanas": 1,
+        "entregable": "Exportación al programa de contabilidad"
+      }
+    ],
+    "sectores_replicables": [],
+    "riesgo_ai_act": "minimo",
+    "datos_personales": "si",
+    "notas_rgpd": "Las facturas de autónomos contienen datos personales: proveedor con DPA y conservación según la normativa fiscal.",
+    "frenos_que_resuelve": [
+      "coste",
+      "por_donde_empezar"
+    ],
+    "creditos_aplicables": "tokens_ia",
+    "estado": "publicado"
   }
 ]

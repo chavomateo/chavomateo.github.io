@@ -22,6 +22,7 @@
     consultoria: { t: 'Acompañamiento', d: 'Una sesión para ordenar datos y elegir el primer caso.' },
     legal: { t: 'Guías de RGPD y Reglamento de IA', d: 'Qué obligaciones tienes y cómo cumplirlas.' }
   };
+  const MARGEN = 10;
   let Q, casos = [], paso = 0, pasos = [];
   const resp = {};
 
@@ -95,9 +96,14 @@
   }
 
   function recomendar(r) {
-    const debiles = [...r.dims].filter((d) => d.nota < 100).sort((a, b) => a.nota - b.nota).slice(0, 2).map((d) => d.id);
+    // Prioridad = dimensiones al menos MARGEN puntos por debajo de la media global (máx. 2).
+    // Con empate o perfil homogéneo no se marca ninguna.
+    const debiles = r.dims.filter((d) => d.nota <= r.global - MARGEN).sort((a, b) => a.nota - b.nota).slice(0, 2).map((d) => d.id);
     const brecha = r.dims.filter((d) => (d.id === 'D3' || d.id === 'D4') && d.nota < 40).map((d) => d.id);
-    const encaje = (c) => (c.dimensiones_dmat || []).filter((x) => debiles.includes(x)).length;
+    const frenos = (resp.X1 || []).map((i) => Q.aparte[0].opciones[i].codigo).filter(Boolean);
+    // Primero, encaje con las dimensiones débiles; a igualdad, con lo que frena a la empresa (X1).
+    const encaje = (c) => (c.dimensiones_dmat || []).filter((x) => debiles.includes(x)).length * 10
+      + (c.frenos_que_resuelve || []).filter((x) => frenos.includes(x)).length;
     const hoja = { '3m': [], '6m': [], '12m': [] };
     casos.forEach((c) => {
       const necesitaBrecha = (c.dimensiones_dmat || []).some((x) => brecha.includes(x));
@@ -122,24 +128,37 @@
     const r = calcular(), rec = recomendar(r), { reg, base } = guardar(r);
     const frenos = (resp.X1 || []).map((i) => Q.aparte[0].opciones[i].enlace).filter(Boolean);
     const conoceCreditos = resp.X2 !== undefined ? Q.aparte[1].opciones[resp.X2].etiqueta : null;
-    const lista = (l) => l.length ? `<ul>${l.map((c) => `<li><a href="/plataforma/casos/#${esc(c.codigo)}">${esc(c.titulo)}</a> <span class="pf-tag">Madurez ${esc(c.madurez_minima)}+</span></li>`).join('')}</ul>` : '<p class="pf-vacio">Ningún caso del catálogo en este horizonte.</p>';
+    const lista = (l) => `<ul>${l.map((c) => `<li><a href="/plataforma/casos/#${esc(c.codigo)}">${esc(c.titulo)}</a> <span class="pf-meta">· Madurez ${esc(c.madurez_minima)}+</span></li>`).join('')}</ul>`;
+    const horizontes = [['3m', 'A 3 meses'], ['6m', 'A 6 meses'], ['12m', 'A 12 meses']];
+    const llenos = horizontes.filter(([k]) => rec.hoja[k].length);
+    const vacios = horizontes.filter(([k]) => !rec.hoja[k].length).map(([, t]) => t.toLowerCase());
+    const nombreDebil = r.dims.filter((d) => rec.debiles.includes(d.id));
+    const barra = (d) => {
+      const debil = rec.debiles.includes(d.id);
+      return `<div class="pf-dim${debil ? ' pf-debil' : ''}"><span class="pf-dim-nombre">${esc(d.id)} · ${esc(d.nombre)}${debil ? ' <span class="pf-prio">Prioridad</span>' : ''}</span>` +
+        `<div class="pf-pista" style="--media:${r.global}%"><div class="pf-barra" role="img" aria-label="${esc(d.id)} ${esc(d.nombre)}: ${d.nota} de 100${debil ? ', prioridad' : ''}"><div style="width:${d.nota}%"></div></div></div><b aria-hidden="true">${d.nota}</b></div>`;
+    };
+    const C = 2 * Math.PI * 56;
     $('form').hidden = true; document.querySelector('.pf-nav').hidden = true; $('paso').hidden = true; $('barra').style.width = '100%';
     $('resultado').hidden = false;
     $('resultado').innerHTML = `
       <div class="pf-res-cab">
-        <div class="pf-nota"><strong>${r.global}</strong><span>/100</span></div>
+        <div class="pf-anillo" role="img" aria-label="Puntuación global: ${r.global} de 100">
+          <svg viewBox="0 0 132 132" aria-hidden="true"><defs><linearGradient id="pf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1230F0"/><stop offset=".55" stop-color="#35B4F0"/><stop offset="1" stop-color="#50E0E0"/></linearGradient></defs>
+            <circle cx="66" cy="66" r="56" fill="none" stroke="#EEF2F8" stroke-width="12"/>
+            <circle cx="66" cy="66" r="56" fill="none" stroke="url(#pf-grad)" stroke-width="12" stroke-linecap="round" stroke-dasharray="${(C * r.global / 100).toFixed(1)} ${C.toFixed(1)}"/></svg>
+          <div aria-hidden="true"><strong>${r.global}</strong><span>/100</span></div>
+        </div>
         <div><span class="pf-eyebrow pf-oscuro">Tu nivel</span><h2>Nivel ${r.nivel.nivel} · ${esc(r.nivel.nombre)}</h2>
         <p>${reg.es_linea_base ? 'Este es tu primer diagnóstico: queda guardado como punto de partida para medir tu evolución.' : `Punto de partida: ${base.global}/100 (${new Date(base.fecha).toLocaleDateString('es-ES')}). Diferencia: ${r.global - base.global >= 0 ? '+' : ''}${r.global - base.global}.`}</p></div>
       </div>
       <h3>Por dimensión</h3>
-      <div class="pf-dims">${r.dims.map((d) => `<div class="pf-dim${rec.debiles.includes(d.id) ? ' pf-debil' : ''}"><span>${esc(d.id)} · ${esc(d.nombre)}</span><div class="pf-dim-barra"><div style="width:${d.nota}%"></div></div><b>${d.nota}</b></div>`).join('')}</div>
-      <p class="pf-nota-pie">Marcadas en naranja, las dos dimensiones donde más margen de mejora tienes. Las recomendaciones empiezan por los casos que las refuerzan.</p>
+      <div class="pf-niveles" aria-hidden="true"><span></span><div><span>N1</span><span>N2</span><span>N3</span><span>N4</span><span>N5</span></div><span></span></div>
+      <div class="pf-dims">${r.dims.map(barra).join('')}</div>
+      <p class="pf-nota-pie"><span class="pf-leyenda-media" aria-hidden="true"></span>Tu media global: ${r.global}.${nombreDebil.length ? ` Con la etiqueta «Prioridad», ${nombreDebil.length === 1 ? 'la dimensión que queda' : 'las dimensiones que quedan'} claramente por debajo de tu media: las recomendaciones empiezan por los casos que ${nombreDebil.length === 1 ? 'la refuerzan' : 'las refuerzan'}.` : ''}</p>
       <h3>Tu hoja de ruta</h3>
-      <div class="pf-hoja">
-        <div><h4>A 3 meses</h4>${lista(rec.hoja['3m'])}</div>
-        <div><h4>A 6 meses</h4>${lista(rec.hoja['6m'])}</div>
-        <div><h4>A 12 meses</h4>${lista(rec.hoja['12m'])}</div>
-      </div>
+      ${llenos.length ? `<div class="pf-hoja">${llenos.map(([k, t]) => `<div><h4>${t}</h4>${lista(rec.hoja[k])}</div>`).join('')}</div>` : ''}
+      ${vacios.length ? `<p class="pf-hoja-vacia">${llenos.length ? `Sin casos del catálogo a ${vacios.map((v) => v.replace('a ', '')).join(' ni a ')}.` : 'Todavía no hay casos del catálogo para tu perfil.'}</p>` : ''}
       ${frenos.length ? `<h3>Para lo que os frena</h3><div class="pf-modulos">${[...new Set(frenos)].map((k) => `<div class="pf-mod pf-pronto"><h3>${esc(ENLACES[k].t)}</h3><p>${esc(ENLACES[k].d)}</p><span class="pf-estado">Próximamente</span></div>`).join('')}</div>` : ''}
       ${conoceCreditos === 'Sí' ? '<p class="pf-nota-pie">Ya habéis usado un programa de créditos: algunos solo se conceden una vez. Lo revisaremos al tramitar vuestra solicitud.</p>' : ''}
       <div class="pf-acciones"><button class="pf-btn" type="button" id="repetir">Repetir el diagnóstico</button><a class="pf-btn pf-sec" href="/plataforma/casos/">Ver todos los casos</a></div>`;

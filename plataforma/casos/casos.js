@@ -30,16 +30,12 @@
     const lista = filtrados();
     $('casos').innerHTML = lista.length ? lista.map((c) => `
       <article class="pf-card">
-        <div class="pf-tags">
-          ${c.ejemplo ? '<span class="pf-tag pf-ej">Ejemplo</span>' : ''}
-          ${c.replicable ? '<span class="pf-tag pf-rep">Replicable</span>' : ''}
-          <span class="pf-tag">${esc(c.sector)}</span>
-          <span class="pf-tag">Madurez ${esc(c.madurez_minima)}+</span>
-        </div>
+        ${c.ejemplo || c.replicable ? `<div class="pf-tags">${c.ejemplo ? '<span class="pf-tag pf-ej">Ejemplo</span>' : ''}${c.replicable ? '<span class="pf-tag pf-rep">Replicable</span>' : ''}</div>` : ''}
         <h3>${esc(c.titulo)}</h3>
+        <span class="pf-meta">${esc(c.sector)} · Madurez ${esc(c.madurez_minima)}+</span>
         <p>${esc(c.resumen)}</p>
-        <div class="pf-tags">${(c.tecnologias || []).map((x) => `<span class="pf-tag">${esc(x)}</span>`).join('')}</div>
-        <button type="button" data-codigo="${esc(c.codigo)}">Ver ficha</button>
+        ${(c.tecnologias || []).length ? `<span class="pf-tecs">${(c.tecnologias || []).map(esc).join(' · ')}</span>` : ''}
+        <button class="pf-ver" type="button" data-codigo="${esc(c.codigo)}" aria-label="Ver ficha: ${esc(c.titulo)}">Ver ficha →</button>
       </article>`).join('') : '<p class="pf-vacio">No hay casos con esos filtros.</p>';
   }
 
@@ -47,20 +43,23 @@
     const c = casos.find((x) => x.codigo === codigo);
     if (!c) return;
     $('ficha-in').innerHTML = `
-      <button class="pf-cerrar" type="button" aria-label="Cerrar">×</button>
       <span class="pf-estado">${esc(c.codigo)} · ${esc(c.sector)} · ${esc(c.funcion)}</span>
-      <h2>${esc(c.titulo)}</h2>
+      <h2 id="ficha-titulo">${esc(c.titulo)}</h2>
       <p>${esc(c.resumen)}</p>
       <h4>El problema</h4><p>${esc(c.problema)}</p>
       <h4>La solución</h4><p>${esc(c.solucion)}</p>
       <h4>Qué necesitas</h4><p>${esc(c.requisitos)}</p>
-      <h4>Coste y plazo orientativos</h4><p>${esc(c.coste_orientativo)} · ${esc(c.plazo_orientativo)}</p>
-      <h4>Cómo se mide</h4><ul>${(c.kpis || []).map((k) => `<li>${esc(k)}</li>`).join('')}</ul>
+      ${c.datos_necesarios ? `<h4>Datos necesarios</h4><p>${esc(c.datos_necesarios)}</p>` : ''}
+      <h4>Coste, plazo y esfuerzo orientativos</h4><p>${esc(c.coste_orientativo)} · ${esc(c.plazo_orientativo)}${c.esfuerzo_interno ? ` · ${esc(c.esfuerzo_interno)} de vuestro equipo` : ''}</p>
+      ${(c.fases || []).length ? `<h4>Fases</h4><ol>${c.fases.map((f) => `<li><b>${esc(f.nombre)}</b> (${esc(f.semanas)} sem.): ${esc(f.entregable)}</li>`).join('')}</ol>` : ''}
+      <h4>Cómo se mide</h4><ul>${(c.kpis || []).map((k) => `<li>${esc(k.nombre || k)}</li>`).join('')}</ul>
+      ${c.riesgo_ai_act === 'limitado' ? '<p class="pf-meta">Este caso interactúa con personas: hay que avisar de que responde una IA (AI Act, art. 50).</p>' : ''}
       <div class="pf-acciones">
         <button class="pf-btn" type="button" disabled title="Disponible con el área de empresa">Quiero replicarlo</button>
         <button class="pf-btn pf-sec pf-cerrar2" type="button">Volver al catálogo</button>
       </div>`;
     $('ficha').showModal();
+    $('ficha').scrollTop = 0;
   }
 
   document.addEventListener('click', (e) => {

@@ -74,9 +74,9 @@
   ],
   "aparte": [
     { "id": "X1", "texto": "¿Qué os frena más para usar IA? Marca todas las que apliquen.", "tipo": "multiple", "opciones": [
-      { "etiqueta": "Coste de la nube o de los modelos", "enlace": "creditos" }, { "etiqueta": "Falta de personal preparado", "enlace": "formacion" },
-      { "etiqueta": "Datos poco preparados", "enlace": "consultoria" }, { "etiqueta": "No saber por dónde empezar", "enlace": "consultoria" },
-      { "etiqueta": "Dudas legales o de RGPD", "enlace": "legal" }, { "etiqueta": "Otro", "enlace": null } ] },
+      { "etiqueta": "Coste de la nube o de los modelos", "codigo": "coste", "enlace": "creditos" }, { "etiqueta": "Falta de personal preparado", "codigo": "personal", "enlace": "formacion" },
+      { "etiqueta": "Datos poco preparados", "codigo": "datos", "enlace": "consultoria" }, { "etiqueta": "No saber por dónde empezar", "codigo": "por_donde_empezar", "enlace": "consultoria" },
+      { "etiqueta": "Dudas legales o de RGPD", "codigo": "rgpd", "enlace": "legal" }, { "etiqueta": "Otro", "enlace": null } ] },
     { "id": "X2", "texto": "¿Habéis usado antes algún programa de créditos cloud o de IA?", "tipo": "unica", "opciones": [
       { "etiqueta": "Sí" }, { "etiqueta": "No" }, { "etiqueta": "No lo conozco" } ] }
   ]

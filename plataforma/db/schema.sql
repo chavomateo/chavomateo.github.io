@@ -1,7 +1,8 @@
 -- =====================================================================
 -- Plataforma AlianzaIA · Esquema de datos MVP (PostgreSQL / Supabase UE)
 -- Titularidad: Asociación Española de Startups (AES), coordinadora.
--- Versión 0.1 · 19-oct-2026 · BORRADOR (no aplicado en ningún entorno)
+-- Versión 0.2 · 19-oct-2026 · BORRADOR (no aplicado en ningún entorno)
+--   0.2: campos de las fichas v1 de alianza-ceo (listas cerradas, flujo de estados, casos_internos)
 --
 -- Módulos: a) casos · b) diagnóstico · c) hub de créditos · d) formación
 --          e) área de empresa · transversal (roles, auditoría, ledger)
@@ -63,25 +64,105 @@ create or replace function es_staff() returns boolean
 -- ---------------------------------------------------------------------
 -- a) Catálogo de casos de uso replicables
 -- ---------------------------------------------------------------------
+-- Campos según «CAMPOS-Fichas-Casos-de-Uso-v1» (alianza-ceo, 19-oct).
+-- Listas cerradas: sector = 19 macroáreas de AES + «Transversal».
+create or replace function lista_sectores() returns text[] language sql immutable as $$
+  select array['Fintech & Seguros','Salud & Bienestar','Educación','Trabajo & Personas',
+    'Legal & Servicios','Inmobiliario & Construcción','Alimentación & Agro','Movilidad & Logística',
+    'Turismo','Energía & Sostenibilidad','Comercio & Consumo','Software & Datos','IA & Deeptech',
+    'Marketing & Medios','Industria','Deporte & Gaming','Cultura','Sector público & Impacto',
+    'Telecom','Transversal'] $$;
+
 create table casos (
   id              uuid primary key default gen_random_uuid(),
-  codigo          text not null unique,          -- p. ej. CU-01
-  titulo          text not null,
-  resumen         text not null,
-  sector          text not null,
-  funcion         text,                          -- atención al cliente, operaciones…
-  tecnologias     text[] not null default '{}',
-  madurez_minima  smallint check (madurez_minima between 1 and 5),
-  replicable      boolean not null default false, -- paquete replicable (18 de 36)
+  codigo          text not null unique check (codigo ~ '^CU-([0-9]{2}|EJ[0-9]+)$'),
+  titulo          text not null check (char_length(titulo) <= 80),
+  resumen         text not null check (char_length(resumen) <= 300),
+  sector          text not null check (sector = any (lista_sectores())),
+  funcion         text not null check (funcion in ('Atención al cliente', 'Ventas y marketing',
+                    'Operaciones y producción', 'Finanzas y administración', 'Personas (RR. HH.)',
+                    'Logística y compras', 'Calidad y mantenimiento', 'Legal y cumplimiento')),
+  tamano_objetivo text[] not null default '{}'
+                  check (tamano_objetivo <@ array['startup','micro','pequena','mediana']),
+  -- Contenido
   problema        text,
   solucion        text,
+  tecnologias     text[] not null default '{}'
+                  check (tecnologias <@ array['IA generativa (texto)','Agentes','Visión artificial','Voz',
+                    'Predicción / ML clásico','Clasificación y extracción de documentos','Automatización con IA']),
+  datos_necesarios text,
   requisitos      text,
-  coste_orientativo text,
-  plazo_orientativo text,
-  kpis            jsonb not null default '[]',
-  dimensiones_dmat text[] not null default '{}',  -- enlace con el diagnóstico
-  publicado       boolean not null default false,
-  actualizado_en  timestamptz not null default now()
+  madurez_minima  smallint check (madurez_minima between 1 and 5),
+  dimensiones_dmat text[] not null default '{}'   -- enlace con el diagnóstico y la hoja de ruta
+                  check (dimensiones_dmat <@ array['D1','D2','D3','D4','D5','D6']),
+  -- Implantación (siempre tramos orientativos, nunca precio cerrado)
+  plazo_orientativo text,                         -- semanas, p. ej. «4-6 semanas»
+  coste_orientativo text check (coste_orientativo in   -- mismos tramos que D1.3
+                    ('Menos de 2.000 €', '2.000-10.000 €', '10.000-50.000 €', 'Más de 50.000 €')),
+  esfuerzo_interno text check (esfuerzo_interno in
+                    ('Menos de 40 h', '40-160 h', '160-500 h', 'Más de 500 h')),
+  fases           jsonb not null default '[]'     -- [{orden, nombre, semanas, entregable}]
+                  check (jsonb_typeof(fases) = 'array'),
+  -- Impacto: [{nombre, unidad, como_medir_linea_base, objetivo_orientativo}]
+  kpis            jsonb not null default '[]' check (jsonb_typeof(kpis) = 'array'),
+  -- Replicabilidad (Red.es: ≥15 reutilizables; objetivo 18 de 36)
+  replicable      boolean not null default false,
+  sectores_replicables text[] not null default '{}' check (sectores_replicables <@ lista_sectores()),
+  licencia_reutilizacion text,                    -- pendiente de Legal
+  -- Cumplimiento
+  riesgo_ai_act   text not null default 'minimo' check (riesgo_ai_act in ('minimo', 'limitado', 'alto')),
+  datos_personales text not null default 'no'
+                  check (datos_personales in ('no', 'si', 'categorias_especiales')),
+  notas_rgpd      text,
+  -- Conexión con los módulos de apoyo
+  frenos_que_resuelve text[] not null default '{}' -- códigos de la pregunta X1
+                  check (frenos_que_resuelve <@ array['coste','personal','datos','por_donde_empezar','rgpd']),
+  creditos_aplicables text not null default 'ninguno'   -- genérico, sin marcas
+                  check (creditos_aplicables in ('ninguno', 'cloud', 'tokens_ia', 'ambos')),
+  -- Gestión (los campos [i] van en casos_internos, que solo ve el staff)
+  estado          text not null default 'borrador'
+                  check (estado in ('borrador', 'validado_alianza', 'validado_legal', 'publicado')),
+  publicado       boolean generated always as (estado = 'publicado') stored,
+  actualizado_en  timestamptz not null default now(),
+  -- Una ficha publicada tiene que estar completa
+  constraint casos_publicable check (estado <> 'publicado' or (
+    problema is not null and solucion is not null and coste_orientativo is not null
+    and plazo_orientativo is not null and madurez_minima is not null
+    and jsonb_array_length(kpis) >= 2 and cardinality(tamano_objetivo) > 0))
+);
+
+-- Flujo de estados: borrador → validado_alianza → (validado_legal) → publicado.
+-- Riesgo alto del AI Act o categorías especiales de datos: Legal obligatorio.
+create or replace function casos_flujo() returns trigger language plpgsql as $$
+declare previo text := case when tg_op = 'UPDATE' then old.estado else 'borrador' end;
+begin
+  new.actualizado_en := now();
+  if new.estado = 'publicado' and previo <> 'publicado' then
+    if (new.riesgo_ai_act = 'alto' or new.datos_personales = 'categorias_especiales')
+       and previo <> 'validado_legal' then
+      raise exception 'caso %: riesgo alto o categorías especiales: necesita «validado_legal» antes de publicar', new.codigo;
+    elsif previo not in ('validado_alianza', 'validado_legal') then
+      raise exception 'caso %: no se publica sin validar', new.codigo;
+    end if;
+  end if;
+  -- Si cambia el riesgo de una ficha publicada a alto, vuelve a revisión de Legal
+  if tg_op = 'UPDATE' and new.estado = 'publicado'
+     and (new.riesgo_ai_act = 'alto' or new.datos_personales = 'categorias_especiales')
+     and not (old.riesgo_ai_act = 'alto' or old.datos_personales = 'categorias_especiales') then
+    new.estado := 'validado_alianza';
+  end if;
+  return new;
+end $$;
+create trigger casos_flujo before insert or update on casos
+  for each row execute function casos_flujo();
+
+-- [i] Datos internos: nunca se publican (ni nombres de partners ni importes).
+create table casos_internos (
+  caso_id             uuid primary key references casos(id) on delete cascade,
+  proveedor_tipo      text check (proveedor_tipo in
+                        ('integradora', 'startup_proveedora', 'consultora', 'desarrollo_propio')),
+  partida_presupuesto text check (partida_presupuesto ~ '^P[1-9]$'),   -- P1-P9 del CFO
+  notas               text
 );
 
 create table casos_recursos (
@@ -369,7 +450,7 @@ end $$;
 do $$
 declare t text;
 begin
-  foreach t in array array['empresas','perfiles','casos','solicitudes_caso','diagnosticos',
+  foreach t in array array['empresas','perfiles','casos','casos_internos','solicitudes_caso','diagnosticos',
     'proveedores','programas_credito','lotes_credito','solicitudes_credito','asignaciones',
     'consumos','evidencias','mentorias','kpis_empresa']
   loop
@@ -384,7 +465,7 @@ end $$;
 do $$
 declare t text;
 begin
-  foreach t in array array['empresas','perfiles','casos','casos_recursos','solicitudes_caso',
+  foreach t in array array['empresas','perfiles','casos','casos_internos','casos_recursos','solicitudes_caso',
     'preguntas','diagnosticos','respuestas','recomendaciones','proveedores','programas_credito',
     'lotes_credito','solicitudes_credito','asignaciones','consumos','evidencias','ledger',
     'recursos','itinerarios','progreso','mentorias','kpis_empresa','audit_log']
@@ -436,6 +517,8 @@ create policy gestor_lotes on lotes_credito for all
 create policy gestor_programas on programas_credito for all
   using (mi_rol() = 'gestor') with check (mi_rol() = 'gestor');
 create policy gestor_casos on casos for all
+  using (mi_rol() = 'gestor') with check (mi_rol() = 'gestor');
+create policy gestor_casos_int on casos_internos for all
   using (mi_rol() = 'gestor') with check (mi_rol() = 'gestor');
 create policy gestor_sol_cred on solicitudes_credito for update
   using (mi_rol() = 'gestor') with check (mi_rol() = 'gestor');
