@@ -1,12 +1,16 @@
 -- =====================================================================
 -- Plataforma AlianzaIA · Esquema de datos MVP (PostgreSQL / Supabase UE)
 -- Titularidad: Asociación Española de Startups (AES), coordinadora.
--- Versión 0.5 · 19-oct-2026 · BORRADOR (no aplicado en ningún entorno)
+-- Versión 0.6 · 19-oct-2026 · BORRADOR (no aplicado en ningún entorno)
 --   0.2: campos de las fichas v1 de alianza-ceo (listas cerradas, flujo de estados, casos_internos)
 --   0.3: registro de aceptaciones (versión, hora, IP) y minimis en cada asignación (Legal)
 --   0.4: firma electrónica simple (art. 25 eIDAS) en cada asignación
 --   0.5: firmas_externas adaptada a registro manual por el gestor (Dropbox Sign sin API),
 --        soporte para administradores mancomunados (doble firmante) y custodia de audit trail
+--   0.6: correcciones de Legal (19-oct): total declarado frente a la tabla (con o sin anexo,
+--        revisión del anexo por AES), renovación a los 30 días con la casilla de la plataforma
+--        (sin volver a firmar), motivos tasados para volver a firmar en Dropbox Sign y doble
+--        aceptación de la casilla y del A-bis en régimen mancomunado
 --
 -- Módulos: a) casos · b) diagnóstico · c) hub de créditos · d) formación
 --          e) área de empresa · transversal (roles, auditoría, ledger)
@@ -171,6 +175,14 @@ create table firmas_externas (
   documento_ruta       text,                          -- ruta en bucket privado de almacenamiento
   audit_trail_sha256   text,                          -- huella SHA-256 del log de auditoría
   audit_trail_ruta     text,
+  texto_version        text,                          -- versión del texto firmado (mancomunados: v1.1 sin cambios)
+  -- Ayudas declaradas en el documento firmado (3 años, empresa única)
+  total_ayudas_eur     numeric(12,2) check (total_ayudas_eur >= 0),  -- total que declara la empresa
+  suma_tabla_eur       numeric(12,2) check (suma_tabla_eur >= 0),    -- suma de las filas de la tabla
+  num_ayudas           int check (num_ayudas >= 0),
+  con_anexo            boolean not null default false,               -- más de 8 ayudas: van en anexo
+  anexo_sha256         text,
+  anexo_ruta           text,
   -- Firmante principal (o primer administrador)
   firmante_nombre      text not null,
   firmante_email       text not null,
@@ -189,24 +201,62 @@ create table firmas_externas (
   constraint firmas_mancomunadas_completas check (
     regimen_administracion <> 'mancomunado' or
     (firmante2_nombre is not null and firmante2_email is not null and firmado2_en is not null)
-  )
+  ),
+  -- La declaración del alta guarda PDF y certificado de auditoría con sus huellas, y el total.
+  constraint firmas_alta_completa check (tipo <> 'declaracion_alta' or (
+    documento_ruta is not null and audit_trail_sha256 is not null and audit_trail_ruta is not null
+    and texto_version is not null and total_ayudas_eur is not null and suma_tabla_eur is not null
+    and num_ayudas is not null)),
+  -- Sin anexo (hasta 8 ayudas): el total coincide con la tabla. Con anexo (más de 8): el total
+  -- es igual o mayor que la tabla, el anexo se guarda con su huella y AES lo revisa a mano.
+  constraint firmas_total_coherente check (tipo <> 'declaracion_alta' or
+    (not con_anexo and num_ayudas <= 8 and total_ayudas_eur = suma_tabla_eur) or
+    (con_anexo and num_ayudas > 8 and total_ayudas_eur >= suma_tabla_eur
+       and anexo_sha256 is not null and anexo_ruta is not null))
 );
 create trigger firmas_inmutable before update or delete on firmas_externas
   for each row execute function solo_insercion();
 
--- Firma del alta vigente: la última anotación es una declaración de alta válida, no una revocación.
--- En régimen mancomunado verifica que conste la firma de ambos administradores.
-create or replace function firma_alta_vigente(p_empresa uuid) returns boolean
+-- Revisión manual del anexo por AES (obligatoria antes de la primera asignación si hay anexo).
+create table revisiones_anexo (
+  id           uuid primary key default gen_random_uuid(),
+  firma_id     uuid not null references firmas_externas(id),
+  conforme     boolean not null,
+  notas        text,
+  revisado_por uuid not null references perfiles(id),
+  creado_en    timestamptz not null default now()
+);
+create trigger revisiones_anexo_inmutable before update or delete on revisiones_anexo
+  for each row execute function solo_insercion();
+
+-- Última anotación de firma de la empresa (alta o revocación).
+create or replace function firma_alta_actual(p_empresa uuid) returns firmas_externas
   language sql stable security definer set search_path = public as $$
-  select coalesce((
-    select (tipo = 'declaracion_alta' and (
-      regimen_administracion <> 'mancomunado' or (firmante2_nombre is not null and firmado2_en is not null)
-    ))
-    from firmas_externas
-    where empresa_id = p_empresa
-    order by firmado_en desc, creado_en desc
-    limit 1
-  ), false) $$;
+  select * from firmas_externas where empresa_id = p_empresa
+   order by greatest(firmado_en, coalesce(firmado2_en, firmado_en)) desc, creado_en desc limit 1 $$;
+
+-- Firma del alta vigente: la última anotación es una declaración de alta (no una revocación),
+-- con las dos firmas si es mancomunada, de hace menos de 12 meses y, si lleva anexo, revisada
+-- por AES como conforme. Los 30 días NO caducan la firma: se renueva con la casilla.
+create or replace function firma_alta_vigente(p_empresa uuid) returns boolean
+  language plpgsql stable security definer set search_path = public as $$
+declare f firmas_externas;
+begin
+  f := firma_alta_actual(p_empresa);
+  if f.id is null or f.tipo <> 'declaracion_alta' then return false; end if;
+  if f.regimen_administracion = 'mancomunado' and (f.firmante2_nombre is null or f.firmado2_en is null) then
+    return false;
+  end if;
+  if greatest(f.firmado_en, coalesce(f.firmado2_en, f.firmado_en))
+       < now() - make_interval(months => parametro_legal('minimis_refirma_meses')::int) then
+    return false;
+  end if;
+  if f.con_anexo and not coalesce((select conforme from revisiones_anexo where firma_id = f.id
+                                    order by creado_en desc limit 1), false) then
+    return false;
+  end if;
+  return true;
+end $$;
 
 -- ---------------------------------------------------------------------
 -- a) Catálogo de casos de uso replicables
@@ -449,6 +499,9 @@ create table declaraciones_minimis (
   solicitud_id      uuid not null,                -- una por asignación (la del alta se firma fuera: firmas_externas)
   ayudas_otras_eur  numeric(12,2) not null check (ayudas_otras_eur >= 0), -- minimis de otras fuentes, 3 años, empresa única
   sector_excluido   boolean not null,             -- art. 1 (pesca, producción agrícola primaria…)
+  -- Hechos declarados en la casilla de renovación (punto 10) y en la confirmación corta (A-bis)
+  cambio_representacion boolean not null default false, -- cambia el representante o las empresas vinculadas
+  ayuda_nueva_max_eur numeric(12,2) not null default 0 check (ayuda_nueva_max_eur >= 0), -- mayor ayuda nueva desde la última firma
   detalle_cifrado   bytea not null,               -- empresa única y ayudas, cifrado por columna (EUDPO)
   aceptacion_id     uuid not null references aceptaciones(id),
   declarado_por     uuid not null references perfiles(id),
@@ -458,7 +511,8 @@ create trigger declaraciones_inmutable before update or delete on declaraciones_
   for each row execute function solo_insercion();
 
 create or replace function declarar_minimis(p_solicitud uuid, p_ayudas_otras numeric,
-  p_sector_excluido boolean, p_detalle jsonb, p_version text, p_representa boolean)
+  p_sector_excluido boolean, p_detalle jsonb, p_version text, p_representa boolean,
+  p_cambio_representacion boolean default false, p_ayuda_nueva_max numeric default 0)
   returns uuid language plpgsql security definer set search_path = public as $$
 declare v_acept uuid; v_id uuid; v_doc text; e empresas; v_texto text;
 begin
@@ -473,14 +527,47 @@ begin
   v_doc := coalesce(v_texto, '') || E'\n\n---\n' || jsonb_pretty(jsonb_build_object(
     'empresa', e.razon_social, 'nif', e.nif, 'solicitud', p_solicitud,
     'ayudas_minimis_otras_3_anos_eur', p_ayudas_otras, 'sector_excluido', p_sector_excluido,
+    'cambio_representante_o_vinculadas', coalesce(p_cambio_representacion, false),
+    'mayor_ayuda_nueva_desde_ultima_firma_eur', coalesce(p_ayuda_nueva_max, 0),
     'version_texto', p_version,
     'fecha', to_char(now() at time zone 'Europe/Madrid', 'YYYY-MM-DD HH24:MI:SS')));
   v_acept := registrar_aceptacion('minimis', p_version, true, p_representa, v_doc);
   insert into declaraciones_minimis (empresa_id, solicitud_id, ayudas_otras_eur, sector_excluido,
-    detalle_cifrado, aceptacion_id, declarado_por)
+    cambio_representacion, ayuda_nueva_max_eur, detalle_cifrado, aceptacion_id, declarado_por)
   values (mi_empresa(), p_solicitud, p_ayudas_otras, p_sector_excluido,
+    coalesce(p_cambio_representacion, false), coalesce(p_ayuda_nueva_max, 0),
     pgp_sym_encrypt(p_detalle::text, clave_minimis()), v_acept, auth.uid())
   returning id into v_id;
+  return v_id;
+end $$;
+
+-- Mancomunados: la casilla y el A-bis los aceptan LOS DOS administradores. El segundo acepta
+-- el mismo documento (misma huella). Si no tiene cuenta, hay que volver a firmar en Dropbox Sign.
+create table coaceptaciones_minimis (
+  id             uuid primary key default gen_random_uuid(),
+  declaracion_id uuid not null unique references declaraciones_minimis(id),
+  aceptacion_id  uuid not null references aceptaciones(id),
+  perfil_id      uuid not null references perfiles(id),
+  creado_en      timestamptz not null default now()
+);
+create trigger coaceptaciones_inmutable before update or delete on coaceptaciones_minimis
+  for each row execute function solo_insercion();
+
+create or replace function coaceptar_minimis(p_declaracion uuid, p_representa boolean)
+  returns uuid language plpgsql security definer set search_path = public as $$
+declare d declaraciones_minimis; a aceptaciones; v_acept uuid; v_id uuid;
+begin
+  select * into d from declaraciones_minimis where id = p_declaracion;
+  if d.id is null or d.empresa_id is distinct from mi_empresa() then
+    raise exception 'la declaración no es de tu empresa';
+  end if;
+  if d.declarado_por = auth.uid() then
+    raise exception 'la segunda aceptación tiene que hacerla el otro administrador mancomunado';
+  end if;
+  select * into a from aceptaciones where id = d.aceptacion_id;
+  v_acept := registrar_aceptacion('minimis', a.version, true, p_representa, a.documento_contenido);
+  insert into coaceptaciones_minimis (declaracion_id, aceptacion_id, perfil_id)
+  values (d.id, v_acept, auth.uid()) returning id into v_id;
   return v_id;
 end $$;
 
@@ -550,16 +637,27 @@ create table parametros_legales (
 );
 create trigger parametros_inmutable before update or delete on parametros_legales
   for each row execute function solo_insercion();
-insert into parametros_legales (clave, valor, provisional, fuente)
-  values ('minimis_validez_dias', '30', false, 'Legal Counsel (19-oct-2026, Anexo 5-bis A)');
+insert into parametros_legales (clave, valor, provisional, fuente) values
+  ('minimis_validez_dias', '30', false, 'Legal Counsel (19-oct-2026, Anexo 5-bis A): se renueva con la casilla'),
+  ('minimis_refirma_meses', '12', false, 'Legal Counsel (19-oct-2026): volver a firmar a los 12 meses'),
+  ('minimis_refirma_ayuda_nueva_eur', '50000', false, 'Legal Counsel (19-oct-2026): ayuda nueva de más de 50.000 €'),
+  ('minimis_refirma_acumulado_eur', '240000', false, 'Legal Counsel (19-oct-2026): recibidas + nueva > 240.000 €');
+create or replace function parametro_legal(p_clave text) returns text
+  language plpgsql stable security definer set search_path = public as $$
+declare v text;
+begin
+  select valor into v from parametros_legales where clave = p_clave order by creado_en desc limit 1;
+  if v is null then raise exception 'falta el parámetro legal %', p_clave; end if;
+  return v;
+end $$;
 create or replace function minimis_validez() returns interval
   language sql stable security definer set search_path = public as $$
-  select make_interval(days => valor::int) from parametros_legales
-   where clave = 'minimis_validez_dias' order by creado_en desc limit 1 $$;
+  select make_interval(days => parametro_legal('minimis_validez_dias')::int) $$;
 
 create or replace function minimis_comprobar() returns trigger
   language plpgsql as $$
-declare d declaraciones_minimis; v_total numeric; v_fecha date := current_date;
+declare d declaraciones_minimis; f firmas_externas; v_total numeric; v_fecha date := current_date;
+  v_motivos text[] := '{}';
 begin
   select * into d from declaraciones_minimis where id = new.declaracion_minimis_id;
   if d.empresa_id is distinct from new.empresa_id then
@@ -567,28 +665,51 @@ begin
   end if;
   if tg_table_name = 'asignaciones' then
     if d.solicitud_id is distinct from (to_jsonb(new)->>'solicitud_id')::uuid then
-      raise exception 'cada asignación necesita su propia declaración de minimis (la de esta solicitud)';
+      raise exception 'cada asignación necesita su propia confirmación de minimis (A-bis de esta solicitud)';
     end if;
   else
     v_fecha := (to_jsonb(new)->>'fecha')::date;
   end if;
   if d.creado_en < now() - minimis_validez() then
-    raise exception 'la declaración de minimis ha caducado (validez: %): hay que renovarla', minimis_validez();
+    raise exception 'la declaración de minimis tiene más de % días: hay que renovarla marcando la casilla en la plataforma (no hace falta volver a firmar)',
+      parametro_legal('minimis_validez_dias');
   end if;
   if d.sector_excluido then
     raise exception 'la empresa declara operar en un sector excluido del Reg. 2023/2831';
   end if;
   if not firma_alta_vigente(new.empresa_id) then
-    raise exception 'falta la declaración del alta firmada por el representante (Dropbox Sign)';
+    raise exception 'no hay firma del alta vigente en Dropbox Sign (no consta, está revocada, tiene más de % meses o el anexo no lo ha revisado AES)',
+      parametro_legal('minimis_refirma_meses');
   end if;
   if not exists (select 1 from copias_enviadas where aceptacion_id = d.aceptacion_id) then
     raise exception 'no consta el envío a la empresa de la copia en PDF de la declaración';
   end if;
+  -- Ventana móvil de 3 años contada hacia atrás desde cada asignación (es un cálculo, no un motivo de firma)
   select coalesce(sum(importe_eur), 0) into v_total from ayudas_minimis
    where empresa_id = new.empresa_id and fecha > v_fecha - interval '3 years';
   if d.ayudas_otras_eur + v_total + new.importe_eur > 300000 then
     raise exception 'supera el límite de minimis: % € declarados + % € de la plataforma + % € nuevos > 300.000 €',
       d.ayudas_otras_eur, v_total, new.importe_eur;
+  end if;
+  -- Motivos tasados para volver a firmar en Dropbox Sign (los 12 meses ya los mira firma_alta_vigente).
+  -- Si hay alguno, la firma vigente tiene que ser posterior a esta confirmación.
+  f := firma_alta_actual(new.empresa_id);
+  if d.cambio_representacion then
+    v_motivos := v_motivos || 'cambia el representante o las empresas vinculadas'::text;
+  end if;
+  if d.ayuda_nueva_max_eur > parametro_legal('minimis_refirma_ayuda_nueva_eur')::numeric then
+    v_motivos := v_motivos || format('ayuda nueva de más de %s €', parametro_legal('minimis_refirma_ayuda_nueva_eur'));
+  end if;
+  if d.ayudas_otras_eur + v_total + new.importe_eur > parametro_legal('minimis_refirma_acumulado_eur')::numeric then
+    v_motivos := v_motivos || format('las ayudas más esta asignación superan %s €', parametro_legal('minimis_refirma_acumulado_eur'));
+  end if;
+  if f.regimen_administracion = 'mancomunado'
+     and not exists (select 1 from coaceptaciones_minimis where declaracion_id = d.id) then
+    v_motivos := v_motivos || 'falta la aceptación del segundo administrador mancomunado'::text;
+  end if;
+  if cardinality(v_motivos) > 0
+     and least(f.firmado_en, coalesce(f.firmado2_en, f.firmado_en)) < d.creado_en then
+    raise exception 'hay que volver a firmar en Dropbox Sign antes de asignar: %', array_to_string(v_motivos, '; ');
   end if;
   return new;
 end $$;
@@ -755,7 +876,7 @@ end $$;
 do $$
 declare t text;
 begin
-  foreach t in array array['empresas','perfiles','firmas_externas','copias_enviadas','casos','casos_internos','solicitudes_caso','diagnosticos','servicios_valorados',
+  foreach t in array array['empresas','perfiles','firmas_externas','revisiones_anexo','coaceptaciones_minimis','copias_enviadas','casos','casos_internos','solicitudes_caso','diagnosticos','servicios_valorados',
     'proveedores','programas_credito','lotes_credito','solicitudes_credito','asignaciones',
     'consumos','evidencias','mentorias','kpis_empresa']
   loop
@@ -771,7 +892,7 @@ do $$
 declare t text;
 begin
   foreach t in array array['empresas','perfiles','textos_legales','aceptaciones','copias_enviadas','firmas_externas',
-    'declaraciones_minimis','servicios_valorados','parametros_legales',
+    'revisiones_anexo','declaraciones_minimis','coaceptaciones_minimis','servicios_valorados','parametros_legales',
     'correcciones_minimis','casos','casos_internos','casos_recursos','solicitudes_caso',
     'preguntas','diagnosticos','respuestas','recomendaciones','proveedores','programas_credito',
     'lotes_credito','solicitudes_credito','asignaciones','consumos','evidencias','ledger',
@@ -795,6 +916,11 @@ create policy copias_propias on copias_enviadas for select
   using (exists (select 1 from aceptaciones a where a.id = aceptacion_id and a.perfil_id = auth.uid()));
 create policy firmas_propias on firmas_externas for select using (empresa_id = mi_empresa());
 create policy gestor_firmas on firmas_externas for insert with check (mi_rol() = 'gestor');
+create policy revisiones_propias on revisiones_anexo for select
+  using (exists (select 1 from firmas_externas f where f.id = firma_id and f.empresa_id = mi_empresa()));
+create policy gestor_revisiones on revisiones_anexo for insert with check (mi_rol() = 'gestor');
+create policy coacept_propias on coaceptaciones_minimis for select
+  using (exists (select 1 from declaraciones_minimis d where d.id = declaracion_id and d.empresa_id = mi_empresa()));
 create policy serv_propios on servicios_valorados for select using (empresa_id = mi_empresa());
 create policy gestor_servicios on servicios_valorados for insert with check (mi_rol() = 'gestor');
 create policy gestor_correcciones on correcciones_minimis for insert with check (mi_rol() = 'gestor');
