@@ -1,9 +1,12 @@
 -- =====================================================================
 -- Plataforma AlianzaIA · Esquema de datos MVP (PostgreSQL / Supabase UE)
 -- Titularidad: Asociación Española de Startups (AES), coordinadora.
--- Versión 0.2 · 19-oct-2026 · BORRADOR (no aplicado en ningún entorno)
+-- Versión 0.4 · 19-oct-2026 · BORRADOR (no aplicado en ningún entorno)
 --   0.2: campos de las fichas v1 de alianza-ceo (listas cerradas, flujo de estados, casos_internos)
 --   0.3: registro de aceptaciones (versión, hora, IP) y minimis en cada asignación (Legal)
+--   0.4: firma electrónica simple (art. 25 eIDAS) en cada asignación: declaración de
+--        representación, huella del documento aceptado y copia PDF enviada; firma
+--        externa (Dropbox Sign) de la declaración del alta, sin ella no hay asignaciones
 --
 -- Módulos: a) casos · b) diagnóstico · c) hub de créditos · d) formación
 --          e) área de empresa · transversal (roles, auditoría, ledger)
@@ -90,6 +93,9 @@ create table aceptaciones (
   documento   text not null,
   version     text not null,
   aceptado    boolean not null,
+  representa_empresa boolean,                  -- «declaro que represento a la empresa» (obligatorio en minimis)
+  documento_contenido text,                    -- documento exacto aceptado si se personaliza (minimis)
+  documento_sha256 text not null,              -- huella del documento aceptado
   ip          inet,
   user_agent  text,
   creado_en   timestamptz not null default now(),
@@ -109,20 +115,71 @@ begin
 exception when others then return null;
 end $$;
 
-create or replace function registrar_aceptacion(p_documento text, p_version text, p_aceptado boolean)
+-- p_contenido: documento personalizado (p. ej. la declaración de minimis con los
+-- datos de la empresa y de la solicitud). La huella la calcula el servidor; si no
+-- hay contenido propio, es la del texto legal de esa versión.
+create or replace function registrar_aceptacion(p_documento text, p_version text, p_aceptado boolean,
+  p_representa boolean default null, p_contenido text default null)
   returns uuid language plpgsql security definer set search_path = public as $$
-declare v_id uuid; h json;
+declare v_id uuid; h json; v_sha text;
 begin
   if auth.uid() is null then raise exception 'hay que iniciar sesión'; end if;
   if p_documento in ('condiciones', 'privacidad', 'minimis') and not p_aceptado then
     raise exception 'la aceptación de % es obligatoria', p_documento;
   end if;
+  if p_documento = 'minimis' and p_representa is not true then
+    raise exception 'hay que declarar que se actúa en representación de la empresa';
+  end if;
+  select sha256 into v_sha from textos_legales where documento = p_documento and version = p_version;
+  if v_sha is null then raise exception 'no existe el texto % versión %', p_documento, p_version; end if;
+  if p_contenido is not null then v_sha := encode(digest(p_contenido, 'sha256'), 'hex'); end if;
   h := nullif(current_setting('request.headers', true), '')::json;
-  insert into aceptaciones (perfil_id, empresa_id, documento, version, aceptado, ip, user_agent)
-  values (auth.uid(), mi_empresa(), p_documento, p_version, p_aceptado, ip_peticion(), h->>'user-agent')
+  insert into aceptaciones (perfil_id, empresa_id, documento, version, aceptado, representa_empresa,
+    documento_contenido, documento_sha256, ip, user_agent)
+  values (auth.uid(), mi_empresa(), p_documento, p_version, p_aceptado, p_representa,
+    p_contenido, v_sha, ip_peticion(), h->>'user-agent')
   returning id into v_id;
   return v_id;
 end $$;
+
+-- Copia en PDF del documento aceptado, enviada por email a la empresa.
+-- La genera y envía el servidor (función serverless) y deja aquí la constancia.
+create table copias_enviadas (
+  id            uuid primary key default gen_random_uuid(),
+  aceptacion_id uuid not null references aceptaciones(id),
+  pdf_sha256    text not null,
+  pdf_ruta      text not null,                   -- ruta en el almacén privado (bucket UE)
+  destinatario  text not null,
+  id_mensaje    text,                            -- Message-ID del envío
+  enviado_en    timestamptz not null default now()
+);
+create trigger copias_inmutable before update or delete on copias_enviadas
+  for each row execute function solo_insercion();
+
+-- Firmas hechas fuera de la plataforma. La declaración de minimis del alta la
+-- firma el representante en Dropbox Sign junto con la manifestación de interés.
+create table firmas_externas (
+  id              uuid primary key default gen_random_uuid(),
+  empresa_id      uuid not null references empresas(id),
+  tipo            text not null check (tipo in ('declaracion_alta', 'revocacion')),
+  proveedor       text not null default 'dropbox_sign',
+  ref_firma       text not null,                 -- signature_request_id de Dropbox Sign
+  documento_sha256 text,                         -- huella del PDF firmado
+  firmante_nombre text not null,
+  firmante_cargo  text,
+  firmado_en      timestamptz not null,
+  registrado_por  uuid references perfiles(id),
+  creado_en       timestamptz not null default now(),
+  unique (proveedor, ref_firma, tipo)
+);
+create trigger firmas_inmutable before update or delete on firmas_externas
+  for each row execute function solo_insercion();
+
+-- Firma del alta vigente: la última anotación de la empresa es una declaración, no una revocación
+create or replace function firma_alta_vigente(p_empresa uuid) returns boolean
+  language sql stable security definer set search_path = public as $$
+  select coalesce((select tipo = 'declaracion_alta' from firmas_externas
+                    where empresa_id = p_empresa order by firmado_en desc, creado_en desc limit 1), false) $$;
 
 -- ---------------------------------------------------------------------
 -- a) Catálogo de casos de uso replicables
@@ -362,7 +419,7 @@ end $$;
 create table declaraciones_minimis (
   id                uuid primary key default gen_random_uuid(),
   empresa_id        uuid not null references empresas(id),
-  solicitud_id      uuid,                         -- null = declaración del alta
+  solicitud_id      uuid not null,                -- una por asignación (la del alta se firma fuera: firmas_externas)
   ayudas_otras_eur  numeric(12,2) not null check (ayudas_otras_eur >= 0), -- minimis de otras fuentes, 3 años, empresa única
   sector_excluido   boolean not null,             -- art. 1 (pesca, producción agrícola primaria…)
   detalle_cifrado   bytea not null,               -- empresa única y ayudas, cifrado por columna (EUDPO)
@@ -374,16 +431,24 @@ create trigger declaraciones_inmutable before update or delete on declaraciones_
   for each row execute function solo_insercion();
 
 create or replace function declarar_minimis(p_solicitud uuid, p_ayudas_otras numeric,
-  p_sector_excluido boolean, p_detalle jsonb, p_version text)
+  p_sector_excluido boolean, p_detalle jsonb, p_version text, p_representa boolean)
   returns uuid language plpgsql security definer set search_path = public as $$
-declare v_acept uuid; v_id uuid;
+declare v_acept uuid; v_id uuid; v_doc text; e empresas; v_texto text;
 begin
   if mi_empresa() is null then raise exception 'el usuario no tiene empresa'; end if;
-  if p_solicitud is not null and not exists (select 1 from solicitudes_credito
+  if p_solicitud is null or not exists (select 1 from solicitudes_credito
        where id = p_solicitud and empresa_id = mi_empresa()) then
     raise exception 'la solicitud no es de tu empresa';
   end if;
-  v_acept := registrar_aceptacion('minimis', p_version, true);
+  select * into e from empresas where id = mi_empresa();
+  select texto into v_texto from textos_legales where documento = 'minimis' and version = p_version;
+  -- Documento exacto que se acepta: es el que va en el PDF y del que sale la huella
+  v_doc := coalesce(v_texto, '') || E'\n\n---\n' || jsonb_pretty(jsonb_build_object(
+    'empresa', e.razon_social, 'nif', e.nif, 'solicitud', p_solicitud,
+    'ayudas_minimis_otras_3_anos_eur', p_ayudas_otras, 'sector_excluido', p_sector_excluido,
+    'version_texto', p_version,
+    'fecha', to_char(now() at time zone 'Europe/Madrid', 'YYYY-MM-DD HH24:MI:SS')));
+  v_acept := registrar_aceptacion('minimis', p_version, true, p_representa, v_doc);
   insert into declaraciones_minimis (empresa_id, solicitud_id, ayudas_otras_eur, sector_excluido,
     detalle_cifrado, aceptacion_id, declarado_por)
   values (mi_empresa(), p_solicitud, p_ayudas_otras, p_sector_excluido,
@@ -466,6 +531,12 @@ begin
   end if;
   if d.sector_excluido then
     raise exception 'la empresa declara operar en un sector excluido del Reg. 2023/2831';
+  end if;
+  if not firma_alta_vigente(new.empresa_id) then
+    raise exception 'falta la declaración del alta firmada por el representante (Dropbox Sign)';
+  end if;
+  if not exists (select 1 from copias_enviadas where aceptacion_id = d.aceptacion_id) then
+    raise exception 'no consta el envío a la empresa de la copia en PDF de la declaración';
   end if;
   select coalesce(sum(importe_eur), 0) into v_total from ayudas_minimis
    where empresa_id = new.empresa_id and fecha > v_fecha - interval '3 years';
@@ -638,7 +709,7 @@ end $$;
 do $$
 declare t text;
 begin
-  foreach t in array array['empresas','perfiles','casos','casos_internos','solicitudes_caso','diagnosticos','servicios_valorados',
+  foreach t in array array['empresas','perfiles','firmas_externas','copias_enviadas','casos','casos_internos','solicitudes_caso','diagnosticos','servicios_valorados',
     'proveedores','programas_credito','lotes_credito','solicitudes_credito','asignaciones',
     'consumos','evidencias','mentorias','kpis_empresa']
   loop
@@ -653,7 +724,8 @@ end $$;
 do $$
 declare t text;
 begin
-  foreach t in array array['empresas','perfiles','textos_legales','aceptaciones','declaraciones_minimis','servicios_valorados',
+  foreach t in array array['empresas','perfiles','textos_legales','aceptaciones','copias_enviadas','firmas_externas',
+    'declaraciones_minimis','servicios_valorados',
     'correcciones_minimis','casos','casos_internos','casos_recursos','solicitudes_caso',
     'preguntas','diagnosticos','respuestas','recomendaciones','proveedores','programas_credito',
     'lotes_credito','solicitudes_credito','asignaciones','consumos','evidencias','ledger',
@@ -673,6 +745,10 @@ create policy preguntas_publico on preguntas for select using (true);
 create policy textos_publico on textos_legales for select using (true);
 create policy acept_propia on aceptaciones for select using (perfil_id = auth.uid());
 create policy decl_propia on declaraciones_minimis for select using (empresa_id = mi_empresa());
+create policy copias_propias on copias_enviadas for select
+  using (exists (select 1 from aceptaciones a where a.id = aceptacion_id and a.perfil_id = auth.uid()));
+create policy firmas_propias on firmas_externas for select using (empresa_id = mi_empresa());
+create policy gestor_firmas on firmas_externas for insert with check (mi_rol() = 'gestor');
 create policy serv_propios on servicios_valorados for select using (empresa_id = mi_empresa());
 create policy gestor_servicios on servicios_valorados for insert with check (mi_rol() = 'gestor');
 create policy gestor_correcciones on correcciones_minimis for insert with check (mi_rol() = 'gestor');
