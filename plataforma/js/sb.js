@@ -84,8 +84,9 @@
     async salir() { try { await pedir('/auth/v1/logout', { metodo: 'POST' }); } catch { /* sin sesión */ } guardar(null); },
     // tabla: 'empresas'; consulta: 'select=*&id=eq.…'
     leer: (tabla, consulta = 'select=*') => pedir(`/rest/v1/${tabla}?${consulta}`),
-    insertar: (tabla, fila) => pedir(`/rest/v1/${tabla}`, { metodo: 'POST', cuerpo: fila, cabeceras: { Prefer: 'return=representation' } }),
-    actualizar: (tabla, filtro, cambios) => pedir(`/rest/v1/${tabla}?${filtro}`, { metodo: 'PATCH', cuerpo: cambios, cabeceras: { Prefer: 'return=representation' } }),
+    // minimo: no devuelve la fila (para tablas con columnas que el usuario no puede leer)
+    insertar: (tabla, fila, minimo) => pedir(`/rest/v1/${tabla}`, { metodo: 'POST', cuerpo: fila, cabeceras: { Prefer: minimo ? 'return=minimal' : 'return=representation' } }),
+    actualizar: (tabla, filtro, cambios, minimo) => pedir(`/rest/v1/${tabla}?${filtro}`, { metodo: 'PATCH', cuerpo: cambios, cabeceras: { Prefer: minimo ? 'return=minimal' : 'return=representation' } }),
     rpc: (fn, args = {}) => pedir(`/rest/v1/rpc/${fn}`, { metodo: 'POST', cuerpo: args })
   };
   window.SB = SB;

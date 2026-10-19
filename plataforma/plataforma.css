@@ -191,3 +191,4 @@ fieldset.pf-falta::after{content:"Falta responder esta pregunta";display:block;m
 .pf-legal-otros{margin-top:32px;font-size:.9rem}
 .pf-enlace{background:none;border:0;padding:0;font:inherit;color:var(--a-blue);text-decoration:underline;cursor:pointer}
 @media (max-width:640px){.pf-fila2{grid-template-columns:1fr}}
+.pf-campo textarea{font:inherit;font-size:16px;font-weight:400;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;resize:vertical}
