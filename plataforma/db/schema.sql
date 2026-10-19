@@ -799,19 +799,23 @@ create view saldo_lotes as
 -- ---------------------------------------------------------------------
 create table recursos (
   id          uuid primary key default gen_random_uuid(),
-  tipo        text not null check (tipo in ('video', 'documento', 'blueprint', 'webinar')),
+  tipo        text not null check (tipo in ('video', 'documento', 'ejercicio', 'blueprint', 'webinar')),
   titulo      text not null,
   descripcion text,
-  url         text not null,
-  duracion_min smallint,
+  url         text,                              -- null = contenido pendiente de carga (no se publica)
+  duracion_min smallint check (duracion_min > 0),
   nivel       smallint check (nivel between 1 and 5),
-  publicado   boolean not null default false
+  dimension   text check (dimension in ('D1', 'D2', 'D3', 'D4', 'D5', 'D6')),  -- dimensión del autodiagnóstico que refuerza
+  publicado   boolean not null default false,
+  check (not publicado or url is not null)
 );
 
 create table itinerarios (
   id          uuid primary key default gen_random_uuid(),
   titulo      text not null,
   descripcion text,
+  nivel       smallint check (nivel between 1 and 5),
+  dimensiones text[] not null default '{}',      -- D1-D6: base de la recomendación según el autodiagnóstico
   recursos    uuid[] not null default '{}'
 );
 
@@ -824,15 +828,28 @@ create table progreso (
   primary key (perfil_id, recurso_id)
 );
 
+-- Circuito: solicitada (empresa) → asignada (gestor: mentor y fecha) → realizada (mentor:
+-- asistencia y horas) → valorada (empresa: 1-5). Se puede cancelar mientras está solicitada o asignada.
 create table mentorias (
   id          uuid primary key default gen_random_uuid(),
   empresa_id  uuid not null references empresas(id),
+  perfil_id   uuid references perfiles(id),      -- quién la solicita
   mentor_id   uuid references perfiles(id),
+  itinerario_id uuid references itinerarios(id),
   tema        text not null,
+  descripcion text,
   estado      text not null default 'solicitada'
-              check (estado in ('solicitada', 'programada', 'realizada', 'cancelada')),
+              check (estado in ('solicitada', 'asignada', 'realizada', 'valorada', 'cancelada')),
   fecha       timestamptz,
-  horas       numeric(4,1)
+  horas       numeric(4,1) check (horas >= 0),
+  asistencia  boolean,
+  valoracion  smallint check (valoracion between 1 and 5),
+  comentario  text,
+  creado_en   timestamptz not null default now(),
+  check (estado not in ('asignada', 'realizada', 'valorada') or (mentor_id is not null and fecha is not null)),
+  check (estado not in ('realizada', 'valorada') or (asistencia is not null and horas is not null)),
+  check ((estado = 'valorada') = (valoracion is not null)),
+  check (estado <> 'valorada' or asistencia)
 );
 
 -- ---------------------------------------------------------------------
