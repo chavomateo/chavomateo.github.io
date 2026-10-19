@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link href="/fonts/roboto.css" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/plataforma/plataforma.css">
+  <title>Certificado de formación · Plataforma AlianzaIA</title>
+</head>
+<body class="pf-body pf-cert-body">
+  <div class="pf-cert-barra">
+    <a class="pf-btn pf-sec" href="/plataforma/formacion/#progreso">← Volver a mi progreso</a>
+    <button class="pf-btn" type="button" id="imprimir">Imprimir o guardar en PDF</button>
+  </div>
+  <main id="cert" class="pf-cert" aria-live="polite"><p>Cargando…</p></main>
+  <script src="/plataforma/formacion/datos.js" defer></script>
+  <script defer>
+  document.addEventListener('DOMContentLoaded', async () => {
+    const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const q = new URLSearchParams(location.search);
+    const cert = document.getElementById('cert');
+    document.getElementById('imprimir').addEventListener('click', () => window.print());
+    try {
+      const C = await Datos.catalogo(), Q = await Datos.cuestionario();
+      const it = C.itinerarios.find((x) => x.id === q.get('it'));
+      const perfil = C.perfiles.find((p) => p.id === q.get('p'));
+      if (!it || !perfil) throw new Error('Certificado no encontrado.');
+      const prog = (await Datos.progreso(perfil.id)).filter((p) => it.recursos.includes(p.recurso_id));
+      if (prog.length < it.recursos.length) throw new Error(`Este itinerario aún no está completado (${prog.length} de ${it.recursos.length} recursos).`);
+      const recs = it.recursos.map((id) => C.recursos.find((r) => r.id === id));
+      const min = prog.reduce((a, p) => a + (p.minutos || 0), 0);
+      const fin = prog.map((p) => p.completado_en).sort().pop();
+      const h = (Math.round(min / 6) / 10).toLocaleString('es-ES', { maximumFractionDigits: 1 });
+      // Código de verificación (demo): en producción lo emite el servidor y se comprueba en la plataforma.
+      let x = 0; for (const ch of `${perfil.id}|${it.id}|${fin}`) x = (x * 31 + ch.charCodeAt(0)) >>> 0;
+      const codigo = `AIA-${it.id.replace('IT-', '')}-${x.toString(36).toUpperCase().padStart(7, '0')}`;
+      const dims = it.dimensiones.map((d) => `${d} · ${(Q.dimensiones.find((z) => z.id === d) || {}).nombre || ''}`);
+      document.title = `Certificado · ${it.titulo} · ${perfil.nombre}`;
+      cert.innerHTML = `
+        <p class="pf-cert-demo">Certificado de demostración · sin validez</p>
+        <div class="pf-cert-marca"><span class="brand-word">Alianza</span><img src="/img/isotipo-oficial.png" alt="" width="40" height="40"></div>
+        <p class="pf-cert-eyebrow">Plataforma AlianzaIA · Certificado de aprovechamiento</p>
+        <p>Se certifica que</p>
+        <h1>${esc(perfil.nombre)}</h1>
+        <p>${esc(perfil.cargo)} · ${esc(C.empresa.razon_social)}</p>
+        <p>ha completado el itinerario formativo</p>
+        <h2>${esc(it.titulo)}</h2>
+        <p class="pf-cert-datos"><b>${esc(h)} horas</b> · Nivel ${esc(it.nivel)} · ${dims.map(esc).join(' y ')}</p>
+        <ol class="pf-cert-recs">${recs.map((r) => `<li>${esc(r.titulo)} <span>(${r.duracion_min} min)</span></li>`).join('')}</ol>
+        <div class="pf-cert-pie">
+          <div><span>Fecha de finalización</span><b>${esc(new Date(fin).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }))}</b></div>
+          <div><span>Código de verificación</span><b>${esc(codigo)}</b></div>
+        </div>
+        <p class="pf-cert-legal">Plataforma AlianzaIA · Titularidad de la Asociación Española de Startups (AES), coordinadora de la agrupación.</p>`;
+    } catch (e) {
+      cert.innerHTML = `<h1>No se puede emitir el certificado</h1><p>${esc(e.message)}</p>`;
+      document.getElementById('imprimir').hidden = true;
+    }
+  });
+  </script>
+</body>
+</html>
