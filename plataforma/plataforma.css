@@ -159,6 +159,39 @@ fieldset.pf-falta::after{content:"Falta responder esta pregunta";display:block;m
 .pf-ficha .pf-acciones .pf-btn:disabled{opacity:1;background:var(--a-blue);color:#fff;cursor:not-allowed}
 .pf-ficha .pf-acciones small{flex-basis:100%;font-size:.8rem;color:var(--a-gris)}
 .pf-enlace{background:none;border:0;padding:0;font:inherit;color:var(--a-blue);text-decoration:underline;cursor:pointer}
+/* ===== Alta real, gestión y textos legales ===== */
+.pf-alta,.pf-gestion{padding-top:8px;padding-bottom:48px}.pf-legal{padding-top:24px;padding-bottom:48px}
+.pf-alta h1,.pf-gestion h1,.pf-legal h1{color:var(--a-navy);margin:0 0 12px}
+.pf-intro{color:var(--a-gris);max-width:720px}
+.pf-tabs{display:flex;gap:8px;margin:24px 0 16px}
+.pf-tabs button{font:inherit;font-weight:700;padding:10px 16px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--a-navy);cursor:pointer}
+.pf-tabs button[aria-selected=true]{background:var(--a-navy);color:#fff;border-color:var(--a-navy)}
+.pf-form{display:flex;flex-direction:column;gap:16px;max-width:760px}
+.pf-form h2{color:var(--a-navy);font-size:1.15rem;margin:16px 0 0}
+.pf-ayuda{font-weight:400;color:var(--a-gris);font-size:.85rem}
+.pf-fila2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pf-capa{font-size:.85rem;color:var(--a-gris);background:var(--a-pista);border-radius:10px;padding:12px 14px;margin:0}
+.pf-check{display:flex;gap:10px;align-items:flex-start;font-size:.92rem;color:var(--a-navy)}
+.pf-check input{width:20px;height:20px;margin-top:2px;flex:none}
+.pf-form .pf-btn{align-self:flex-start}
+.pf-aviso.pf-error{background:#FDECEC;border-color:#E3A1A1;color:#7A1414}
+.pf-tarjeta{border:1px solid var(--line);border-radius:14px;padding:20px 24px;margin:16px 0 24px;background:#fff}
+.pf-tarjeta h2{margin:0 0 12px;color:var(--a-navy)}
+.pf-dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 16px;margin:0 0 12px}
+.pf-dl dt{color:var(--a-gris)}.pf-dl dd{margin:0;font-weight:600;color:var(--a-navy)}
+.pf-est-pendiente{background:#FFF6D6;color:#5A4500}.pf-est-validada{background:#DFF6EE;color:#0B5A3C}.pf-est-baja{background:#EEE;color:#444}
+.pf-lista{padding-left:1.2em}
+.pf-legal{max-width:860px}
+.pf-legal h2{color:var(--a-navy);font-size:1.2rem;margin-top:28px}
+.pf-legal p,.pf-legal li{line-height:1.6}
+.pf-tabla{overflow-x:auto;margin:16px 0}
+.pf-tabla table{border-collapse:collapse;width:100%;font-size:.9rem}
+.pf-tabla th,.pf-tabla td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+.pf-tabla th{background:var(--a-pista);color:var(--a-navy)}
+.pf-legal-otros{margin-top:32px;font-size:.9rem}
+.pf-enlace{background:none;border:0;padding:0;font:inherit;color:var(--a-blue);text-decoration:underline;cursor:pointer}
+@media (max-width:640px){.pf-fila2{grid-template-columns:1fr}}
+.pf-campo textarea{font:inherit;font-size:16px;font-weight:400;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;resize:vertical}
 
 /* ===== Módulo c · Hub de créditos ===== */
 .pf-top nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:2px}
@@ -227,6 +260,7 @@ fieldset.pf-falta::after{content:"Falta responder esta pregunta";display:block;m
   .pf-tabs button{white-space:nowrap;padding:12px 12px}
   .pf-cr-kpis strong{font-size:1.25rem}
   .pf-cr-barra-acciones .pf-btn{flex:1 1 100%;text-align:center}
+}
 /* ===== Módulo d · Formación y blueprints ===== */
 .pf-top nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:6px}
 .pf-oculto{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -339,6 +373,7 @@ fieldset.pf-falta::after{content:"Falta responder esta pregunta";display:block;m
   .pf-cert-barra{display:none}
   .pf-cert{margin:0 auto;box-shadow:none;max-width:none;padding:28px 40px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
+
 /* ===== Módulo e · Área de empresa ===== */
 .pf-top nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:6px}
 .pf-e-demo strong{color:var(--a-navy)}
@@ -425,3 +460,6 @@ fieldset.pf-falta::after{content:"Falta responder esta pregunta";display:block;m
 }
 .pf-e-form .pf-perfil+.pf-preg,.pf-e-form .pf-perfil+p{margin-top:20px}
 @media (max-width:640px){.pf-e-log{min-width:760px}.pf-e-ancha{min-width:720px}.pf-e-log td:nth-child(7),.pf-e-ancha td:nth-child(2){min-width:180px}}
+
+/* El atributo hidden siempre oculta, aunque la clase fije display */
+[hidden]{display:none!important}

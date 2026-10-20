@@ -9,26 +9,40 @@
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/plataforma/plataforma.css">
   <style>.brand{display:inline-flex;align-items:center;gap:.55rem;text-decoration:none;white-space:nowrap}.brand-word{font-weight:800;font-size:1.05rem;letter-spacing:.12em;text-transform:uppercase;line-height:1}.brand-ring{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;background:url(/img/isotipo-oficial.png) center/contain no-repeat;font-weight:800;font-size:.72rem}</style>
-  <title>Créditos cloud y de IA · Plataforma AlianzaIA</title>
+  <title>Créditos y servicios · Plataforma AlianzaIA</title>
 </head>
 <body class="pf-body">
   <header class="pf-top">
     <a class="brand" href="/plataforma/"><span class="brand-word">Alianza</span><span class="brand-ring" aria-hidden="true">IA</span></a>
-    <nav><a href="/plataforma/">Plataforma</a><a href="/plataforma/casos/">Casos de uso</a><a href="/plataforma/diagnostico/">Autodiagnóstico</a><a href="/plataforma/creditos/" aria-current="page">Créditos</a><a href="/proyecto-alianzaia/">El proyecto</a></nav>
+    <nav><a href="/plataforma/">Plataforma</a><a href="/plataforma/casos/">Casos de uso</a><a href="/plataforma/diagnostico/">Autodiagnóstico</a><a href="/plataforma/creditos/" aria-current="page">Créditos</a><a href="/plataforma/alta/">Mi empresa</a></nav>
   </header>
   <section class="pf-hero"><div class="pf-wrap">
-    <span class="pf-eyebrow" id="cr-eyebrow">Módulo c · Hub de créditos</span>
-    <h1 id="cr-titulo">Créditos cloud y de IA para tus casos de uso</h1>
-    <p id="cr-intro">Solicita créditos de infraestructura cloud y de modelos de IA, y servicios en especie de empresas líderes en IA. Sigue tu saldo y tu consumo, con cada movimiento registrado y verificable.</p>
+    <span class="pf-eyebrow">Plataforma AlianzaIA · Módulo c</span>
+    <h1>Créditos cloud y de IA, y servicios de los socios tecnológicos</h1>
+    <p>Créditos de computación en la nube y de modelos de IA, y servicios en especie (mentoría, consultoría, formación, pruebas de concepto) que aportan las empresas líderes en IA de la Alianza.</p>
   </div></section>
-  <main class="pf-wrap pf-section">
-    <div class="pf-aviso pf-cr-aviso"><strong>Datos de demostración.</strong> <span id="cr-aviso-texto">En esta versión todo se guarda solo en tu navegador; no se envía nada a ningún servidor ni se activa ningún crédito real.</span> <button class="pf-enlace" type="button" id="cr-reiniciar">Restablecer la demo</button></div>
-    <p class="pf-aviso" id="cr-estado" role="status" aria-live="polite" hidden></p>
-    <div class="pf-tabs" role="tablist" id="cr-tabs" aria-label="Secciones del hub de créditos"></div>
-    <div id="cr-paneles"></div>
+  <main class="pf-wrap pf-alta">
+    <div id="msg" class="pf-aviso" role="status" hidden></div>
+    <section id="v-sin-sesion" hidden>
+      <div class="pf-tarjeta"><h2>Entra con tu empresa</h2><p>Para ver el catálogo y solicitar créditos o servicios, entra o da de alta tu empresa.</p><a class="pf-btn" href="/plataforma/alta/">Entrar o dar de alta mi empresa</a></div>
+    </section>
+    <section id="v-main" hidden>
+      <p class="pf-paso"><strong id="u-empresa"></strong> · <span id="u-estado"></span></p>
+      <h2>Catálogo</h2>
+      <p class="pf-ayuda">Los créditos y servicios se muestran sin marca hasta que el acuerdo con cada socio lo permita. Su valor puede constituir una ayuda de minimis: se te pedirá la declaración antes de asignártelos.</p>
+      <div id="catalogo" class="pf-modulos"></div>
+      <form id="f-sol" class="pf-form pf-tarjeta" hidden novalidate>
+        <h2 id="s-titulo"></h2>
+        <label class="pf-campo">Para qué lo necesitas<textarea id="s-necesidad" rows="4" required></textarea><span class="pf-ayuda">El caso de uso o el proyecto en el que lo vas a usar.</span></label>
+        <label class="pf-campo" id="s-consumo-l">Consumo estimado (€ a tarifa pública)<input id="s-consumo" type="number" min="0" step="100"></label>
+        <div class="pf-acciones"><button class="pf-btn" type="submit" id="s-btn">Enviar solicitud</button> <button class="pf-btn pf-sec" type="button" id="s-cancelar">Cancelar</button></div>
+      </form>
+      <h2>Mis solicitudes</h2>
+      <div id="mis-sol"></div>
+    </section>
   </main>
-  <dialog class="pf-ficha" id="cr-dialogo" aria-labelledby="cr-dialogo-titulo"><div class="pf-ficha-cab"><button class="pf-cerrar" type="button" aria-label="Cerrar">×</button></div><div class="pf-ficha-in" id="cr-dialogo-in"></div></dialog>
-  <footer class="pf-pie"><div class="pf-wrap">Plataforma AlianzaIA · Titularidad de la Asociación Española de Startups (AES), coordinadora de la agrupación · Datos alojados en la Unión Europea · <a href="/privacidad.html">Privacidad</a></div></footer>
-  <script src="/plataforma/creditos/creditos.js" defer></script>
+  <footer class="pf-pie"><div class="pf-wrap">Plataforma AlianzaIA · Titularidad de la Asociación Española de Startups (AES), coordinadora de la agrupación · Datos alojados en la Unión Europea · <a href="/plataforma/legal/privacidad.html">Privacidad</a> · <a href="/plataforma/legal/condiciones.html">Condiciones</a></div></footer>
+  <script src="/plataforma/js/sb.js"></script>
+  <script src="/plataforma/creditos/creditos-real.js"></script>
 </body>
 </html>

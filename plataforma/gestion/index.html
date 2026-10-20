@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link href="/fonts/roboto.css" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/plataforma/plataforma.css">
+  <style>.brand{display:inline-flex;align-items:center;gap:.55rem;text-decoration:none;white-space:nowrap}.brand-word{font-weight:800;font-size:1.05rem;letter-spacing:.12em;text-transform:uppercase;line-height:1}.brand-ring{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;background:url(/img/isotipo-oficial.png) center/contain no-repeat;font-weight:800;font-size:.72rem}</style>
+  <title>Gestión · Plataforma AlianzaIA</title>
+</head>
+<body class="pf-body">
+  <header class="pf-top">
+    <a class="brand" href="/plataforma/"><span class="brand-word">Alianza</span><span class="brand-ring" aria-hidden="true">IA</span></a>
+    <nav><a href="/plataforma/">Plataforma</a><a href="/plataforma/gestion/" aria-current="page">Gestión</a></nav>
+  </header>
+  <section class="pf-hero"><div class="pf-wrap">
+    <span class="pf-eyebrow">Plataforma AlianzaIA · Personal de AES</span>
+    <h1>Panel de gestión</h1>
+    <p>Validación de empresas, revisión de solicitudes y catálogo de créditos y servicios de los socios tecnológicos.</p>
+  </div></section>
+  <main class="pf-wrap pf-gestion">
+    <div id="msg" class="pf-aviso" role="status" hidden></div>
+    <form id="f-login" class="pf-form" hidden novalidate>
+      <label class="pf-campo">Correo<input id="l-email" type="email" autocomplete="username" required></label>
+      <label class="pf-campo">Contraseña<input id="l-clave" type="password" autocomplete="current-password" required></label>
+      <button class="pf-btn" type="submit">Entrar</button>
+    </form>
+    <section id="v-panel" hidden>
+      <p class="pf-paso">Has entrado como <strong id="g-usuario"></strong> (gestor). <button type="button" class="pf-enlace" id="salir">Salir</button></p>
+      <div class="pf-tabs" role="tablist">
+        <button type="button" role="tab" data-tab="empresas" aria-selected="true">Empresas</button>
+        <button type="button" role="tab" data-tab="solicitudes" aria-selected="false">Solicitudes</button>
+        <button type="button" role="tab" data-tab="catalogo" aria-selected="false">Catálogo de socios</button>
+      </div>
+      <section data-panel="empresas"><div id="t-empresas"></div></section>
+      <section data-panel="solicitudes" hidden><div id="t-solicitudes"></div></section>
+      <section data-panel="catalogo" hidden>
+        <h2>Servicios en especie (mentoría, consultoría, formación…)</h2>
+        <div id="t-servicios"></div>
+        <form id="f-servicio" class="pf-form pf-tarjeta" novalidate>
+          <h3>Añadir servicio de un socio</h3>
+          <div class="pf-fila2">
+            <label class="pf-campo">Socio (marca real, solo la ve AES)<input id="sv-interno" required></label>
+            <label class="pf-campo">Nombre público<input id="sv-publico" placeholder="Empresa líder en IA A" required></label>
+          </div>
+          <div class="pf-fila2">
+            <label class="pf-campo">Tipo<select id="sv-tipo"><option value="mentoria">Mentoría</option><option value="consultoria">Consultoría</option><option value="formacion">Formación</option><option value="prueba_concepto">Prueba de concepto</option><option value="diagnostico">Diagnóstico</option><option value="otro">Otro</option></select></label>
+            <label class="pf-campo">Concepto<input id="sv-concepto" placeholder="Sesión de arquitectura de IA (4 h)" required></label>
+          </div>
+          <label class="pf-campo">Descripción<textarea id="sv-desc" rows="3"></textarea></label>
+          <div class="pf-fila2">
+            <label class="pf-campo">Valor por empresa (€, documentado)<input id="sv-importe" type="number" min="1" step="1" required></label>
+            <label class="pf-campo">Plazas<input id="sv-plazas" type="number" min="0" step="1" required></label>
+          </div>
+          <div class="pf-fila2">
+            <label class="pf-campo">Modalidad<input id="sv-modalidad" placeholder="Online / presencial en Madrid"></label>
+            <label class="pf-check" style="align-self:end"><input id="sv-publicado" type="checkbox"> <span>Publicar ya en el catálogo de las empresas</span></label>
+          </div>
+          <button class="pf-btn" type="submit">Guardar servicio</button>
+        </form>
+        <h2>Programas de créditos cloud y de IA</h2>
+        <div id="t-programas"></div>
+        <form id="f-programa" class="pf-form pf-tarjeta" novalidate>
+          <h3>Añadir programa de créditos</h3>
+          <div class="pf-fila2">
+            <label class="pf-campo">Proveedor (marca real, solo la ve AES)<input id="pr-interno" required></label>
+            <label class="pf-campo">Nombre público del proveedor<input id="pr-publico" placeholder="Proveedor cloud A" required></label>
+          </div>
+          <div class="pf-fila2">
+            <label class="pf-campo">Tipo<select id="pr-tipo"><option value="cloud">Créditos cloud</option><option value="tokens">Créditos de modelos de IA (tokens)</option></select></label>
+            <label class="pf-campo">Cómo se activa<select id="pr-modo"><option value="codigo">Código promocional</option><option value="enlace_alta">Enlace de alta</option><option value="cuenta_facturacion">Cuenta de facturación</option><option value="clave_api">Clave API con tope</option></select></label>
+          </div>
+          <label class="pf-campo">Nombre público del programa<input id="pr-nombre" placeholder="Créditos cloud para startups" required></label>
+          <label class="pf-campo">Elegibilidad<textarea id="pr-eleg" rows="2"></textarea></label>
+          <div class="pf-fila2">
+            <label class="pf-campo">Importe máximo por empresa (€)<input id="pr-max" type="number" min="0" step="100"></label>
+            <label class="pf-campo">Caducidad (meses)<input id="pr-cad" type="number" min="1" step="1"></label>
+          </div>
+          <div class="pf-fila2">
+            <label class="pf-campo">Fuente de la información<input id="pr-fuente" placeholder="Web del programa / acuerdo de cesión"></label>
+            <label class="pf-check" style="align-self:end"><input id="pr-verif" type="checkbox"> <span>Condiciones verificadas con el socio</span></label>
+          </div>
+          <button class="pf-btn" type="submit">Guardar programa</button>
+        </form>
+      </section>
+    </section>
+  </main>
+  <footer class="pf-pie"><div class="pf-wrap">Plataforma AlianzaIA · Uso exclusivo del personal de AES · Todas las acciones quedan en el registro de auditoría</div></footer>
+  <script src="/plataforma/js/sb.js"></script>
+  <script src="/plataforma/gestion/gestion.js"></script>
+</body>
+</html>
