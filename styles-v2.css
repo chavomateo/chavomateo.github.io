@@ -240,5 +240,5 @@ textarea.wz-input{resize:vertical;min-height:76px}
 .wz-check{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#031FFF,#1CDFDD);color:#fff;font-size:2rem;display:flex;align-items:center;justify-content:center;margin:0 auto 18px}
 .wz-gracias .wz-nav{justify-content:center}
 .wz-gracias .wz-nav .wz-next{margin-left:0}
-.wz-foot{text-align:center;font-size:.85rem;color:rgba(255,255,255,.75);margin:16px 0 0}
-.wz-foot a{color:#fff;text-decoration:underline}
+.wz-foot{text-align:center;font-size:.85rem;color:#5c6072;margin:16px 0 0}
+.wz-foot a{color:#0026e9;text-decoration:underline}
