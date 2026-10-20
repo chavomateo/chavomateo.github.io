@@ -471,3 +471,4 @@ fieldset.pf-falta::after{content:"Falta responder esta pregunta";display:block;m
 .pf-quien-card p{margin:0;line-height:1.5}
 @media (max-width:640px){.pf-quien-grid{grid-template-columns:1fr}}
 .pf-quien-logo{display:block;height:48px;width:auto;margin:0 0 12px}
+.pf-logo-aes{display:flex;align-items:center;gap:10px;height:48px;margin:0 0 12px}.pf-logo-aes img{height:44px;width:44px}.pf-logo-aes span{font-weight:800;color:var(--a-navy);font-size:1.05rem;line-height:1.15;max-width:200px}
