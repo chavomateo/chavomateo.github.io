@@ -3,7 +3,7 @@
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const CCAA = ['Andalucía', 'Aragón', 'Asturias', 'Illes Balears', 'Canarias', 'Cantabria', 'Castilla-La Mancha', 'Castilla y León', 'Cataluña', 'Comunitat Valenciana', 'Extremadura', 'Galicia', 'La Rioja', 'Comunidad de Madrid', 'Región de Murcia', 'Navarra', 'País Vasco', 'Ceuta', 'Melilla'];
-  const VERSION = '1.0';
+  const VERSION = { condiciones: '1.0', privacidad: '1.1', comercial: '1.0' };
   const ESTADOS = {
     pendiente: ['Pendiente de validación', 'AES revisará los datos de tu empresa y te escribirá. Mientras tanto ya puedes hacer el autodiagnóstico y ver los casos de uso.'],
     validada: ['Validada', 'Tu empresa ya puede solicitar créditos y servicios.'],
@@ -100,9 +100,9 @@
     const b = $('e-btn'), t = b.textContent; ocupado(b, true, 'Dando de alta…');
     try {
       await SB.rpc('alta_empresa', { p_nif: v('e-nif'), p_razon_social: v('e-razon'), p_tipo: v('e-tipo'), p_tamano: v('e-tamano'), p_cnae: v('e-cnae'), p_ccaa: v('e-ccaa'), p_provincia: v('e-provincia'), p_nombre: v('e-nombre'), p_cargo: v('e-cargo') });
-      await SB.rpc('registrar_aceptacion', { p_documento: 'condiciones', p_version: VERSION, p_aceptado: true });
-      await SB.rpc('registrar_aceptacion', { p_documento: 'privacidad', p_version: VERSION, p_aceptado: true });
-      await SB.rpc('registrar_aceptacion', { p_documento: 'comercial', p_version: VERSION, p_aceptado: $('e-comercial').checked });
+      await SB.rpc('registrar_aceptacion', { p_documento: 'condiciones', p_version: VERSION.condiciones, p_aceptado: true });
+      await SB.rpc('registrar_aceptacion', { p_documento: 'privacidad', p_version: VERSION.privacidad, p_aceptado: true });
+      await SB.rpc('registrar_aceptacion', { p_documento: 'comercial', p_version: VERSION.comercial, p_aceptado: $('e-comercial').checked });
       aviso('Empresa dada de alta. AES la revisará y te escribirá.');
       await pintar();
     } catch (e) { aviso(e.message, true); }

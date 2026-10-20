@@ -463,3 +463,10 @@ fieldset.pf-falta::after{content:"Falta responder esta pregunta";display:block;m
 
 /* El atributo hidden siempre oculta, aunque la clase fije display */
 [hidden]{display:none!important}
+/* ===== Portada · quién forma parte ===== */
+.pf-quien-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.pf-quien-card{border:1px solid var(--line);border-radius:16px;padding:20px 24px;background:#fff}
+.pf-quien-card .pf-etq{font-size:.74rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--a-gris)}
+.pf-quien-card h3{margin:4px 0 8px;color:var(--a-navy);font-size:1.2rem;line-height:1.3}
+.pf-quien-card p{margin:0;line-height:1.5}
+@media (max-width:640px){.pf-quien-grid{grid-template-columns:1fr}}
