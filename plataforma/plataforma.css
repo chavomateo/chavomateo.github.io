@@ -86,7 +86,7 @@ dialog.pf-ficha::backdrop{background:rgba(0,16,64,.6)}
 .pf-top{position:absolute;top:0;left:0;right:0;padding:20px 24px;display:flex;justify-content:space-between;align-items:center}
 .pf-top .brand{color:#fff}
 .pf-top nav a{color:#fff;text-decoration:none;font-weight:600;margin-left:20px;font-size:.95rem}
-@media (max-width:640px){.pf-top nav{display:none}.pf-hero{padding-top:110px}}
+@media (max-width:640px){.pf-top{flex-wrap:wrap;row-gap:10px}.pf-top nav{display:flex;width:100%;overflow-x:auto;white-space:nowrap;scrollbar-width:none;padding-bottom:4px}.pf-top nav a{margin:0 18px 0 0;font-size:.9rem}.pf-hero{padding-top:150px}}
 
 /* Módulo b · autodiagnóstico */
 .pf-progreso{height:6px;background:var(--a-pista);border-radius:999px;overflow:hidden;margin-bottom:10px}
@@ -199,7 +199,7 @@ fieldset.pf-falta::after{content:"Falta responder esta pregunta";display:block;m
 .pf-tabs{display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid var(--line);margin:8px 0 28px}
 .pf-tabs button{font:inherit;font-weight:700;font-size:1rem;background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-1px;padding:12px 16px;color:var(--a-gris);cursor:pointer;min-height:48px}
 .pf-tabs button:hover{color:var(--a-navy)}
-.pf-tabs button[aria-selected="true"]{color:var(--a-navy);border-bottom-color:var(--a-blue)}
+.pf-tabs button[aria-selected="true"]{color:var(--a-navy);border-bottom-color:var(--a-blue);background:none}
 .pf-cr-h2{color:var(--a-navy);margin:0 0 8px}
 .pf-cr-h3{color:var(--a-navy);margin:40px 0 12px;font-size:1.2rem}
 .pf-cr-intro{max-width:760px;margin:0 0 20px;line-height:1.5}
