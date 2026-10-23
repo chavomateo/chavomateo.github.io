@@ -8,12 +8,11 @@ const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const db=new PGlite({extensions:{pgcrypto}});
 const reject=async(label,sql)=>{try{await db.exec(sql);throw new Error(`${label}: no rechazo`);}catch(e){if(e.message.endsWith(': no rechazo'))throw e;}};
 
-await db.exec(`create schema auth; create table auth.users(id uuid primary key);
+await db.exec(`create role anon; create role authenticated; create schema auth; create table auth.users(id uuid primary key);
 create or replace function auth.uid() returns uuid language sql stable as
 $$ select nullif(current_setting('test.uid',true),'')::uuid $$;`);
 for(const file of ['schema.sql','dataspaces-v0.8.sql','dataspaces-v0.9.sql'])
   await db.exec(fs.readFileSync(path.join(root,'db',file),'utf8'));
-await db.exec('create role anon; create role authenticated;');
 for(const file of ['dataspaces-v1.0-hardening.sql','dataspaces-v1.1-ecosystem-onboarding.sql'])
   await db.exec(fs.readFileSync(path.join(root,'db',file),'utf8'));
 
