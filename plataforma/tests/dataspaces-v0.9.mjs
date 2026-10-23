@@ -6,7 +6,7 @@ let cryptoExtension; try { cryptoExtension=await import('@electric-sql/pglite/co
 const {PGlite}=pglite; const {pgcrypto}=cryptoExtension;
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const db=new PGlite({extensions:{pgcrypto}});
-await db.exec(`create schema auth; create table auth.users(id uuid primary key); create or replace function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('test.uid',true),'')::uuid $$;`);
+await db.exec(`create role authenticated; create schema auth; create table auth.users(id uuid primary key); create or replace function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('test.uid',true),'')::uuid $$;`);
 for(const file of ['schema.sql','dataspaces-v0.8.sql','dataspaces-v0.9.sql']) await db.exec(fs.readFileSync(path.join(root,'db',file),'utf8'));
 const tables=await db.query(`select table_name from information_schema.tables where table_schema='public' and table_name in ('casos_uso_datos','productos_caso_uso','matches_caso_candidato','solicitudes_acceso_datos','eventos_flujo_datos')`);
 if(tables.rows.length!==5) throw new Error('faltan tablas v0.9');
