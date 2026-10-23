@@ -1,8 +1,8 @@
 # AlianzaIA preparada para espacios de datos
 
-Versión técnica: **v0.9**. La v0.8 estableció el plano de control; la v0.9 añade la capa de producto derivada del análisis de 63 espacios inscritos y de la revisión conjunta con Arte.
+Versión técnica: **v1.1**. La v0.8 estableció el plano de control; la v0.9 añadió la capa de producto; la v1.0 endureció el aislamiento y la autorización; la v1.1 incorpora alta multiactor y publicación federada revisable.
 
-Estado: implementación local en la rama `feat/plataforma-mvp-v2`. No aplicada a producción.
+Estado: migraciones versionadas en la rama `feat/plataforma-mvp-v2`. Cada entorno debe registrar por separado qué versiones están aplicadas.
 
 ## Alcance implementado
 
@@ -21,18 +21,22 @@ La plataforma actúa como **plano de control**. Los conjuntos de datos permanece
 - solicitudes con estado, responsable, motivo, siguiente acción y plazo;
 - timeline append-only encadenado por flujo para reconstruir adhesión, publicación, política, contrato, operación y evidencia;
 - catálogo público de demostración, ficha normalizada y sandbox inequívocamente etiquetado como simulado.
+- alta revisable de espacios de datos, proveedores IA, startups, pymes, tractoras, investigadores y administraciones públicas;
+- catálogos federados DCAT-AP/JSON-LD y productos de tipo dataset, API, servicio IA, modelo o algoritmo;
+- publicación con declaración de derechos, calidad y condiciones, siempre sometida a revisión independiente;
+- vista pública de distribuciones que oculta URLs de acceso y descarga cuando el producto es restringido o confidencial.
 
 La función `solicitar_transaccion()` es el punto de control previo al intercambio. Rechaza operaciones si el contrato, la autorización, la distribución, el producto o alguno de los participantes no están activos. La transferencia material la ejecuta el conector en origen; su resultado debe quedar como una nueva traza inmutable.
 
 ## Despliegue seguro
 
 1. Crear una copia de la base y aplicar primero `schema.sql` v0.7.
-2. Aplicar `dataspaces-v0.8.sql` y después `dataspaces-v0.9.sql`, cada uno en una única transacción.
-3. Ejecutar `tests/dataspaces-v0.8.mjs` y `tests/dataspaces-v0.9.mjs` contra PGlite.
+2. Aplicar, en orden, `dataspaces-v0.8.sql`, `dataspaces-v0.9.sql`, `dataspaces-v1.0-hardening.sql` y `dataspaces-v1.1-ecosystem-onboarding.sql`; cada fichero ya delimita su transacción.
+3. Ejecutar `tests/dataspaces-v0.8.mjs`, `tests/dataspaces-v0.9.mjs` y `tests/dataspaces-v1.1.mjs` contra PGlite.
 4. Generar el seed de candidatos con `node plataforma/tools/import-kit-candidates.mjs` y revisar las filas marcadas `requiere_revision`.
 5. Aplicar el seed solo en el entorno interno. Ser candidato no concede membresía, credenciales ni acceso.
 6. Crear dos participantes piloto reales, un producto, una distribución y un contrato; ejecutar una transacción completa y conservar evidencias.
-7. Publicar la interfaz y abrir el onboarding únicamente después de QA, textos de gobernanza y aprobación de producción.
+7. Abrir el onboarding real únicamente después de QA, identidad OIDC, textos de gobernanza y validación del entorno productivo. La portada pública no recoge datos personales.
 
 ## Campaña Kit Espacios de Datos
 
