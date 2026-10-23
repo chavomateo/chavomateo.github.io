@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: AlianzaIA Data Space Control Plane
-  version: 0.8.0
+  version: 0.9.0
   description: API de control; los datos permanecen en origen.
 servers:
   - url: https://plataforma.alianzaia.org/api/v1
@@ -66,6 +66,81 @@ paths:
       security: [{ oidc: [] }]
       responses:
         '200': { description: Matriz de conformidad y evidencias }
+  /use-cases:
+    get:
+      summary: Lista casos públicos y pilotos autorizados
+      parameters:
+        - in: query
+          name: status
+          schema: { enum: [piloto, completado] }
+      responses:
+        '200': { description: Casos con reto, productos, KPI y evidencia }
+    post:
+      summary: Crea un caso en borrador, sin autorizar ningún acceso
+      security: [{ oidc: [] }]
+      responses:
+        '201': { description: Caso creado como borrador }
+  /use-cases/{id}/matches:
+    get:
+      summary: Devuelve sugerencias explicadas de productos y candidatas
+      security: [{ oidc: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: Coincidencias; no conceden membresía ni acceso }
+  /access-requests:
+    post:
+      summary: Inicia una solicitud de acceso en borrador
+      security: [{ oidc: [] }]
+      responses:
+        '201': { description: Solicitud creada; pendiente de envío }
+  /access-requests/{id}:
+    get:
+      summary: Estado, responsable, bloqueo y siguiente acción
+      security: [{ oidc: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: Cronología completa de la solicitud }
+  /flows/{flowId}/evidence:
+    get:
+      summary: Exporta un expediente reproducible por flujo
+      security: [{ oidc: [] }]
+      parameters:
+        - in: path
+          name: flowId
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Eventos, decisiones, hashes y referencias asociadas
+          content:
+            application/json:
+              schema: { type: object }
+  /connector-adapters:
+    get:
+      summary: Capacidades de adaptadores disponibles
+      security: [{ oidc: [] }]
+      responses:
+        '200': { description: Adaptadores y operaciones capabilities/initiate/status/cancel }
+  /connector-adapters/{id}/initiate:
+    post:
+      summary: Inicia una operación previamente autorizada
+      security: [{ oidc: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '202': { description: Operación aceptada por el adaptador }
+        '403': { description: No existe autorización vigente }
 components:
   securitySchemes:
     oidc:

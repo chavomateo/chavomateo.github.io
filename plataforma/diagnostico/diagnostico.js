@@ -73,8 +73,19 @@
         else if (!falta) falta = $('form').querySelector(`[data-id="${p.id}"]`);
       });
     }
-    $('form').querySelectorAll('.pf-falta').forEach((x) => x.classList.remove('pf-falta'));
-    if (falta) { falta.classList.add('pf-falta'); falta.scrollIntoView({ behavior: 'smooth', block: 'center' }); return false; }
+    $('form').querySelectorAll('.pf-falta').forEach((x) => { x.classList.remove('pf-falta'); x.removeAttribute('aria-invalid'); });
+    if (falta) {
+      falta.classList.add('pf-falta');
+      falta.setAttribute('aria-invalid', 'true');
+      const summary = $('resumen-errores');
+      summary.textContent = 'Hay una respuesta pendiente. Revisa el campo señalado.';
+      summary.hidden = false;
+      summary.focus();
+      const control = falta.matches('fieldset') ? falta.querySelector('input') : falta;
+      if (control) control.focus();
+      return false;
+    }
+    $('resumen-errores').hidden = true;
     return true;
   }
 
@@ -163,7 +174,10 @@
       ${conoceCreditos === 'Sí' ? '<p class="pf-nota-pie">Ya habéis usado un programa de créditos: algunos solo se conceden una vez. Lo revisaremos al tramitar vuestra solicitud.</p>' : ''}
       <div class="pf-acciones"><button class="pf-btn" type="button" id="repetir">Repetir el diagnóstico</button><a class="pf-btn pf-sec" href="/plataforma/casos/">Ver todos los casos</a><button class="pf-btn pf-sec" type="button" data-borrar>Borrar mis resultados</button></div>`;
     $('repetir').addEventListener('click', () => { paso = 0; $('form').hidden = false; document.querySelector('.pf-nav').hidden = false; $('paso').hidden = false; $('resultado').hidden = true; pintar(); });
-    window.scrollTo({ top: $('resultado').offsetTop - 24, behavior: 'smooth' });
+    const tituloResultado = $('resultado').querySelector('h2');
+    tituloResultado.setAttribute('tabindex', '-1');
+    tituloResultado.focus({ preventScroll: true });
+    window.scrollTo({ top: $('resultado').offsetTop - 24, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   }
 
   // Borra los diagnósticos guardados en este navegador (incluido el punto de partida).
