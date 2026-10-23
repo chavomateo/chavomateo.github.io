@@ -1,0 +1,85 @@
+openapi: 3.1.0
+info:
+  title: AlianzaIA Data Space Control Plane
+  version: 0.8.0
+  description: API de control; los datos permanecen en origen.
+servers:
+  - url: https://plataforma.alianzaia.org/api/v1
+paths:
+  /catalog/datasets:
+    get:
+      summary: Descubre productos publicados
+      parameters:
+        - in: query
+          name: q
+          schema: { type: string }
+        - in: query
+          name: theme
+          schema: { type: string }
+      responses:
+        '200':
+          description: Catálogo DCAT-AP
+          content:
+            application/ld+json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Dataset' }
+  /catalog/datasets/{id}:
+    get:
+      summary: Consulta un producto y sus distribuciones visibles
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: Producto encontrado }
+        '404': { description: No existe o no es visible }
+  /participants/applications:
+    post:
+      summary: Inicia una adhesión sin conceder acceso
+      security: [{ oidc: [] }]
+      responses:
+        '202': { description: Solicitud en revisión }
+  /transactions:
+    post:
+      summary: Solicita una transacción sujeta a política y contrato
+      security: [{ oidc: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [authorization_id, type, correlation]
+              properties:
+                authorization_id: { type: string, format: uuid }
+                type: { enum: [transferencia, descarga, consulta, ejecucion_algoritmo, servicio] }
+                correlation: { type: string }
+                detail: { type: object }
+      responses:
+        '202': { description: Autorizada y registrada; el conector puede ejecutarla }
+        '403': { description: Política, contrato o membresía no válidos }
+  /compliance/cred:
+    get:
+      summary: Devuelve el estado binario de los 23 criterios
+      security: [{ oidc: [] }]
+      responses:
+        '200': { description: Matriz de conformidad y evidencias }
+components:
+  securitySchemes:
+    oidc:
+      type: openIdConnect
+      openIdConnectUrl: https://plataforma.alianzaia.org/.well-known/openid-configuration
+  schemas:
+    Dataset:
+      type: object
+      required: ['@id', 'dct:title', 'dct:description']
+      properties:
+        '@context': { type: string }
+        '@type': { const: 'dcat:Dataset' }
+        '@id': { type: string, format: uri }
+        'dct:title': { type: string }
+        'dct:description': { type: string }
+        'dct:license': { type: [string, 'null'], format: uri }
+        'dct:conformsTo': { type: array, items: { type: string } }
