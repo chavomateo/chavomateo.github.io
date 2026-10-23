@@ -29,6 +29,9 @@ create or replace function auth.uid() returns uuid language sql stable as
 $$ select nullif(current_setting('test.uid', true),'')::uuid $$;`);
 await db.exec(fs.readFileSync(path.join(root, 'db/schema.sql'), 'utf8'));
 await db.exec(fs.readFileSync(path.join(root, 'db/dataspaces-v0.8.sql'), 'utf8'));
+await db.exec(fs.readFileSync(path.join(root, 'db/dataspaces-v0.9.sql'), 'utf8'));
+await db.exec(`create role anon; create role authenticated;`);
+await db.exec(fs.readFileSync(path.join(root, 'db/dataspaces-v1.0-hardening.sql'), 'utf8'));
 
 const G='00000000-0000-0000-0000-000000000001';
 const E1='00000000-0000-0000-0000-000000000011';
@@ -42,11 +45,18 @@ const DI='00000000-0000-0000-0000-000000000061';
 const PO='00000000-0000-0000-0000-000000000071';
 const C='00000000-0000-0000-0000-000000000081';
 const A='00000000-0000-0000-0000-000000000091';
+const U2='00000000-0000-0000-0000-000000000022';
+const U3='00000000-0000-0000-0000-000000000023';
+const E3='00000000-0000-0000-0000-000000000013';
+const S2='00000000-0000-0000-0000-000000000024';
+const P3='00000000-0000-0000-0000-000000000025';
 
-await db.exec(`insert into auth.users values ('${G}');
+await db.exec(`insert into auth.users values ('${G}'),('${U2}'),('${U3}');
 insert into empresas(id,nif,razon_social,tipo) values
- ('${E1}','B00000011','Proveedor piloto','startup'),('${E2}','B00000012','Consumidor piloto','pyme');
-insert into perfiles(id,rol) values ('${G}','gestor'); set test.uid='${G}';
+ ('${E1}','B00000011','Proveedor piloto','startup'),('${E2}','B00000012','Consumidor piloto','pyme'),
+ ('${E3}','B00000013','Tercero no autorizado','pyme');
+insert into perfiles(id,empresa_id,rol) values
+ ('${G}',null,'gestor'),('${U2}','${E2}','empresa'),('${U3}','${E3}','empresa'); set test.uid='${G}';
 insert into espacios_datos(id,codigo,nombre,descripcion,sector,estado)
  values('${S}','PILOTO-01','Piloto AlianzaIA','Piloto cerrado','multisectorial','piloto');
 insert into participantes_espacio(id,espacio_id,empresa_id,nombre_legal,identificador_legal,estado,validado_por,validado_en)
@@ -79,8 +89,22 @@ if (chain.rows[0].hash_prev !== 'GENESIS' || chain.rows[0].hash_len !== 64)
   throw new Error('cadena de integridad inválida');
 await expectReject('inmutabilidad', `delete from transacciones_datos`);
 
+await db.exec(`set test.uid='${U2}'`);
+const participantTx = await db.query(`select solicitar_transaccion('${A}','consulta','pilot-002','{}') id`);
+if (!participantTx.rows[0].id) throw new Error('la parte autenticada no pudo solicitar la transacción');
+await db.exec(`set test.uid='${U3}'`);
+await expectReject('actor ajeno', `select solicitar_transaccion('${A}','consulta','pilot-003','{}')`);
+await db.exec(`set test.uid='${G}';
+insert into espacios_datos(id,codigo,nombre,descripcion,sector,estado)
+ values('${S2}','PILOTO-02','Otro espacio','Aislamiento','multisectorial','piloto');
+insert into participantes_espacio(id,espacio_id,empresa_id,nombre_legal,identificador_legal,estado,validado_por,validado_en)
+ values('${P3}','${S2}','${E3}','Tercero no autorizado','B00000013','activo','${G}',now())`);
+await expectReject('producto entre espacios', `insert into productos_datos(
+  espacio_id,proveedor_id,identificador_uri,titulo,descripcion,version,derechos_titular,procedencia)
+  values('${S}','${P3}','https://example.test/cross','Cruce','No permitido','1.0','Tercero','Prueba')`);
+
 await db.exec(`update autorizaciones_datos set revocada_en=now() where id='${A}'`);
-await expectReject('autorización revocada', `select solicitar_transaccion('${A}','consulta','pilot-002','{}')`);
+await expectReject('autorización revocada', `select solicitar_transaccion('${A}','consulta','pilot-004','{}')`);
 
 await db.exec(`insert into evaluaciones_cred(espacio_id,criterio_codigo,cumple,justificacion,evaluada_por)
  values('${S}','Neg.1',false,'Sin evidencia suficiente','${G}')`);
