@@ -32,7 +32,7 @@ dialog.addEventListener('click',(event)=>{if(event.target===dialog)dialog.close(
 
 const toast=document.querySelector('#ds-toast');
 function showToast(text){toast.textContent=text;toast.hidden=false;clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>{toast.hidden=true;},4200);}
-document.addEventListener('click',(event)=>{const action=event.target.closest('[data-demo-action]');if(!action)return;const messages={pilot:'Piloto de ejemplo preparado: falta seleccionar organizaciones y validar derechos.',join:'Recorrido simulado: organización → rol → verificación → reglas → acuerdo → credencial.',publish:'Publicación simulada: borrador → validación → revisión → publicación.',request:'Solicitud simulada: no se ha enviado información.',jsonld:'La API v0.9 incluye exportación DCAT-AP/JSON-LD.'};showToast(messages[action.dataset.demoAction]);});
+document.addEventListener('click',(event)=>{const action=event.target.closest('[data-demo-action]');if(!action)return;const messages={pilot:'Piloto de ejemplo preparado: falta seleccionar organizaciones y validar derechos.',join:'Alta controlada: identidad → tipologías → capacidades → verificación → reglas → credencial.',federate:'Alta de espacio: titular → gobernanza → catálogo DCAT-AP → validación → federación.',publish:'Publicación controlada: borrador → derechos y calidad → revisión independiente → publicación o subsanación.',request:'Solicitud simulada: no se ha enviado información.',jsonld:'La API v1.1 incluye catálogo DCAT-AP/JSON-LD y catálogos federados.'};showToast(messages[action.dataset.demoAction]);});
 
 const run=document.querySelector('#ds-run');
 const timeline=[...document.querySelectorAll('#ds-timeline li')];

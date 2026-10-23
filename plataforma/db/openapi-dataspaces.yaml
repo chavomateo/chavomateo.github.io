@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: AlianzaIA Data Space Control Plane
-  version: 0.9.0
+  version: 1.1.0
   description: API de control; los datos permanecen en origen.
 servers:
   - url: https://plataforma.alianzaia.org/api/v1
@@ -24,6 +24,24 @@ paths:
               schema:
                 type: array
                 items: { $ref: '#/components/schemas/Dataset' }
+    post:
+      summary: Crea un producto en borrador para un proveedor activo
+      security: [{ oidc: [catalog:write] }]
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema: { type: string, minLength: 16, maxLength: 128 }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/DatasetDraft' }
+      responses:
+        '201': { description: Borrador creado }
+        '403': { description: Participante inactivo o sin rol productor/proveedor }
+        '409': { description: Identificador o clave de idempotencia duplicados }
+        '422': { description: Metadatos, derechos o procedencia incompletos }
   /catalog/datasets/{id}:
     get:
       summary: Consulta un producto y sus distribuciones visibles
@@ -35,6 +53,71 @@ paths:
       responses:
         '200': { description: Producto encontrado }
         '404': { description: No existe o no es visible }
+    patch:
+      summary: Edita un producto propio que aún no está publicado
+      security: [{ oidc: [catalog:write] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: Borrador actualizado }
+        '403': { description: No es el proveedor o el producto ya está publicado }
+  /catalog/datasets/{id}/submit:
+    post:
+      summary: Envía un producto a revisión; nunca lo autopublica
+      security: [{ oidc: [catalog:write] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PublicationDeclaration' }
+      responses:
+        '202': { description: Publicación en revisión }
+        '403': { description: Solicitante no autorizado }
+        '422': { description: Faltan derechos, calidad, condiciones o distribución }
+  /onboarding/applications:
+    post:
+      summary: Solicita el alta de una organización o investigador
+      security: [{ oidc: [onboarding:write] }]
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema: { type: string, minLength: 16, maxLength: 128 }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/OnboardingApplication' }
+      responses:
+        '202': { description: Solicitud enviada a revisión }
+        '401': { description: Identidad no autenticada }
+        '409': { description: Ya existe una solicitud abierta }
+    get:
+      summary: Consulta las solicitudes propias y su siguiente acción
+      security: [{ oidc: [onboarding:read] }]
+      responses:
+        '200': { description: Solicitudes del actor autenticado }
+  /federated-catalogs:
+    post:
+      summary: Registra el catálogo de un espacio de datos verificado
+      security: [{ oidc: [catalog:write] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/FederatedCatalog' }
+      responses:
+        '202': { description: Catálogo pendiente de validación y sincronización }
+        '403': { description: El actor no es un espacio de datos verificado }
+        '422': { description: Endpoint o protocolo no válido }
   /participants/applications:
     post:
       summary: Inicia una adhesión sin conceder acceso
@@ -147,6 +230,56 @@ components:
       type: openIdConnect
       openIdConnectUrl: https://plataforma.alianzaia.org/.well-known/openid-configuration
   schemas:
+    ActorType:
+      type: string
+      enum: [espacio_datos, proveedor_servicios_ia, startup, pyme, empresa_tractora, investigador, administracion_publica]
+    OnboardingApplication:
+      type: object
+      required: [type, name, legalIdentifier, description, capabilities]
+      properties:
+        type: { $ref: '#/components/schemas/ActorType' }
+        name: { type: string, minLength: 2, maxLength: 200 }
+        legalIdentifier: { type: string, minLength: 3, maxLength: 80 }
+        country: { type: string, minLength: 2, maxLength: 2, default: ES }
+        website: { type: string, format: uri }
+        description: { type: string, minLength: 20, maxLength: 2000 }
+        capabilities:
+          type: array
+          uniqueItems: true
+          items: { enum: [consumir_datos, publicar_datasets, publicar_apis, publicar_servicios_ia, proponer_retos, investigar, operar_espacio] }
+        dcatCatalogUrl: { type: string, format: uri }
+    FederatedCatalog:
+      type: object
+      required: [dataSpaceId, title, endpoint, protocol]
+      properties:
+        dataSpaceId: { type: string, format: uuid }
+        title: { type: string, minLength: 2, maxLength: 200 }
+        endpoint: { type: string, format: uri }
+        protocol: { enum: [dcat_ap, json_ld, ckan, openapi, manual] }
+        mode: { enum: [enlazado, harvest, manual], default: enlazado }
+        metadataLicense: { type: string, format: uri }
+    DatasetDraft:
+      type: object
+      required: [dataSpaceId, providerId, identifier, title, description, version, rightsHolder, provenance]
+      properties:
+        dataSpaceId: { type: string, format: uuid }
+        providerId: { type: string, format: uuid }
+        sourceCatalogId: { type: [string, 'null'], format: uuid }
+        productType: { enum: [dataset, api, servicio_ia, modelo_ia, algoritmo], default: dataset }
+        identifier: { type: string, format: uri }
+        title: { type: string, minLength: 2, maxLength: 300 }
+        description: { type: string, minLength: 20 }
+        version: { type: string }
+        rightsHolder: { type: string }
+        provenance: { type: string }
+        accessLevel: { enum: [publico, registrado, restringido, confidencial] }
+    PublicationDeclaration:
+      type: object
+      required: [rightsConfirmed, qualityConfirmed, usageTermsConfirmed]
+      properties:
+        rightsConfirmed: { const: true }
+        qualityConfirmed: { const: true }
+        usageTermsConfirmed: { const: true }
     Dataset:
       type: object
       required: ['@id', 'dct:title', 'dct:description']
