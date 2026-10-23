@@ -25,10 +25,12 @@ rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
 
 // 1. La plataforma, sin el esquema de base de datos, las herramientas ni la propia salida.
-const fuera = new Set(['db', 'tools', 'dist']);
+const fuera = new Set(['db', 'tools', 'tests', 'dist']);
 for (const n of readdirSync(join(raiz, 'plataforma'))) {
   if (!fuera.has(n) && !n.startsWith('dist') && join(raiz, 'plataforma', n) !== out) cpSync(join(raiz, 'plataforma', n), join(out, n), { recursive: true });
 }
+// El inventario de candidatos es interno aunque esté minimizado: nunca se publica en dist.
+rmSync(join(out, 'data', 'kit-espacios-datos-candidatos.json'), { force: true });
 // 2. Recursos compartidos con la web de la Alianza (los alojamos nosotros, sin CDN de terceros).
 for (const r of ['styles.css', 'favicon.png', 'fonts', 'img/isotipo-oficial.png', 'img/cursor-arrow.png']) {
   cpSync(join(raiz, r), join(out, r), { recursive: true });
