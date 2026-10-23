@@ -8,40 +8,57 @@
   <link href="/fonts/roboto.css" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/plataforma/plataforma.css">
-  <style>.brand{display:inline-flex;align-items:center;gap:.55rem;text-decoration:none;white-space:nowrap}.brand-word{font-weight:800;font-size:1.05rem;letter-spacing:.12em;text-transform:uppercase;line-height:1}.brand-ring{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;background:url(/img/isotipo-oficial.png) center/contain no-repeat;font-weight:800;font-size:.72rem}.pf-step{counter-increment:step}.pf-step h3:before{content:counter(step) ". ";color:#7655ff}.pf-steps{counter-reset:step}</style>
   <title>Espacios de datos · Plataforma AlianzaIA</title>
 </head>
-<body class="pf-body">
+<body class="pf-body pf-ds-body">
+  <a class="pf-skip" href="#contenido">Saltar al contenido</a>
   <header class="pf-top">
-    <a class="brand" href="/plataforma/"><span class="brand-word">Alianza</span><span class="brand-ring" aria-hidden="true">IA</span></a>
-    <nav><a href="/plataforma/">Plataforma</a><a href="/plataforma/casos/">Casos de uso</a><a href="/plataforma/diagnostico/">Autodiagnóstico</a><a href="/plataforma/espacios-datos/" aria-current="page">Espacios de datos</a><a href="/proyecto-alianzaia/">El proyecto</a></nav>
+    <a class="brand" href="/plataforma/" aria-label="AlianzaIA, inicio de la plataforma"><span class="brand-word">Alianza</span><span class="brand-ring" aria-hidden="true">IA</span></a>
+    <nav aria-label="Navegación principal"><a href="/plataforma/">Plataforma</a><a href="/plataforma/casos/">Casos de uso</a><a href="/plataforma/diagnostico/">Autodiagnóstico</a><a href="/plataforma/espacios-datos/" aria-current="page">Espacios de datos</a><a href="/proyecto-alianzaia/">El proyecto</a></nav>
   </header>
-  <section class="pf-hero"><div class="pf-wrap">
-    <span class="pf-eyebrow">Módulo f · piloto en preparación</span>
-    <h1>Comparte valor, no el control de tus datos</h1>
-    <p>AlianzaIA prepara un plano de control para descubrir productos de datos, acordar sus condiciones y registrar intercambios verificables. Los datos permanecen en los sistemas de cada participante.</p>
+  <section class="pf-hero pf-ds-hero"><div class="pf-wrap">
+    <span class="pf-eyebrow">Piloto local · preparación para conformidad CRED</span>
+    <h1>Convierte una necesidad en un piloto de datos verificable</h1>
+    <p>Descubre productos, acuerda finalidades y condiciones, ejecuta un acceso o cálculo y conserva la evidencia. El dato permanece en origen: AlianzaIA coordina permisos, contratos y trazabilidad.</p>
+    <div class="pf-hero-cta"><a class="pf-btn" href="#catalogo">Descubrir productos</a><a class="pf-enlace-blanco" href="#casos">Proponer un caso →</a><a class="pf-enlace-blanco" href="#participar">Unirse al ecosistema →</a></div>
+    <ul class="pf-trust-strip" aria-label="Principios del piloto"><li>Datos en origen</li><li>Condiciones por producto</li><li>Decisiones trazables</li><li>23 criterios con evidencia</li></ul>
   </div></section>
-  <main class="pf-wrap">
-    <div class="pf-aviso">Este módulo aún no admite altas ni transacciones reales. La primera fase será un piloto cerrado con participantes y datos validados.</div>
-    <section class="pf-section">
-      <h2>Qué controlará la plataforma</h2>
-      <div class="pf-modulos">
-        <article class="pf-mod"><span class="pf-etq">Gobernanza</span><h3>Participantes y roles</h3><p>Adhesión, identidad, credenciales, permanencia, salida e incidencias.</p></article>
-        <article class="pf-mod"><span class="pf-etq">Catálogo</span><h3>Productos de datos</h3><p>Metadatos DCAT-AP, calidad, procedencia, licencias, APIs y conectores.</p></article>
-        <article class="pf-mod"><span class="pf-etq">Soberanía</span><h3>Políticas y contratos</h3><p>Finalidades, obligaciones, prohibiciones, autorizaciones y vigencias.</p></article>
-        <article class="pf-mod"><span class="pf-etq">Confianza</span><h3>Trazabilidad</h3><p>Registro inmutable de accesos, denegaciones y transacciones con evidencias.</p></article>
-      </div>
+  <main id="contenido">
+    <div class="pf-wrap"><div class="pf-aviso pf-aviso-estado" role="status"><strong>Estado: demostración local.</strong> No admite altas, contratos ni intercambios reales. Todo elemento de ejemplo aparece marcado como <b>Simulado</b>; AlianzaIA no está inscrita aún en la Lista de Confianza.</div></div>
+    <section class="pf-section pf-wrap" aria-labelledby="flujo-title">
+      <div class="pf-section-head"><div><span class="pf-kicker">Cómo funciona</span><h2 id="flujo-title">La confianza se demuestra en cada paso</h2></div><p>Qué se comparte, con quién, para qué, durante cuánto tiempo y qué prueba queda.</p></div>
+      <ol class="pf-flow">
+        <li><span>1</span><strong>Dato en origen</strong><small>El proveedor conserva el control.</small></li><li><span>2</span><strong>Permiso y contrato</strong><small>Finalidad, plazo y obligaciones.</small></li><li><span>3</span><strong>Acceso o cómputo</strong><small>API, servicio o cálculo seguro.</small></li><li><span>4</span><strong>Uso trazado</strong><small>Eventos, denegaciones e incidencias.</small></li><li><span>5</span><strong>Evidencia</strong><small>Expediente verificable y exportable.</small></li>
+      </ol>
     </section>
-    <section class="pf-section">
-      <h2>Cómo será el primer piloto</h2>
-      <div class="pf-modulos pf-steps">
-        <article class="pf-mod pf-step"><h3>Validar</h3><p>Dos organizaciones, derechos claros y un caso de uso medible.</p></article>
-        <article class="pf-mod pf-step"><h3>Publicar</h3><p>Uno o dos productos con metadatos, política y distribución interoperable.</p></article>
-        <article class="pf-mod pf-step"><h3>Intercambiar</h3><p>Una transacción real autorizada, íntegra y verificable de extremo a extremo.</p></article>
-        <article class="pf-mod pf-step"><h3>Acreditar</h3><p>Evidencias binarias para los 23 criterios de la guía CRED.</p></article>
-      </div>
+    <section id="catalogo" class="pf-section pf-ds-panel" aria-labelledby="catalogo-title"><div class="pf-wrap">
+      <div class="pf-section-head"><div><span class="pf-kicker">Catálogo público</span><h2 id="catalogo-title">Productos listos para explorar</h2></div><p>Ejemplos sintéticos con el perfil mínimo que deberá cumplir cualquier publicación.</p></div>
+      <form class="pf-filtros pf-ds-filtros" id="ds-filtros" role="search">
+        <label class="pf-search"><span>Buscar</span><input id="ds-q" type="search" placeholder="Producto, sector o proveedor"></label><label><span>Modalidad</span><select id="ds-modalidad"><option value="">Todas</option><option value="aprobacion">Con aprobación</option><option value="restringido">Restringido</option><option value="compute">Cómputo seguro</option></select></label><label><span>Fuente</span><select id="ds-fuente"><option value="">Todas</option><option value="propio">AlianzaIA</option><option value="federado">Federado</option></select></label>
+      </form>
+      <p id="ds-resultados" class="pf-results" aria-live="polite"></p><div id="ds-grid" class="pf-grid pf-ds-grid"></div><noscript><p class="pf-aviso">Activa JavaScript para filtrar el catálogo de demostración.</p></noscript>
+    </div></section>
+    <section id="casos" class="pf-section pf-wrap" aria-labelledby="casos-title">
+      <div class="pf-section-head"><div><span class="pf-kicker">Diferencial AlianzaIA</span><h2 id="casos-title">Del reto al piloto medible</h2></div><p>El matching sugiere coincidencias explicables; nunca concede acceso ni sustituye la decisión de las partes.</p></div>
+      <div class="pf-match-layout"><article class="pf-case-card"><span class="pf-status pf-status-sim">Simulado</span><h3>Reducir paradas no planificadas en una pyme industrial</h3><dl><div><dt>Reto</dt><dd>Anticipar fallos con señales de máquina no identificativas.</dd></div><div><dt>KPI</dt><dd>–15 % de horas de parada en 12 semanas.</dd></div><div><dt>Necesita</dt><dd>Telemetría, histórico de mantenimiento y algoritmo aprobado.</dd></div></dl></article><div class="pf-match-arrow" aria-hidden="true">→</div><article class="pf-match-card"><span class="pf-kicker">Coincidencia explicada</span><h3>2 productos + 3 candidatas</h3><ul><li>Sector y vocabulario compatibles</li><li>Modalidad de cómputo sin extraer datos</li><li>Cobertura y actualización suficientes</li></ul><button class="pf-btn pf-sec" type="button" data-demo-action="pilot">Preparar piloto</button></article></div>
+      <p class="pf-note">Las 86 conexiones de la campaña Kit Espacios de Datos permanecen en un embudo interno: candidata → validada → invitada → participante. Ninguna se publica o activa automáticamente.</p>
     </section>
+    <section id="participar" class="pf-section pf-ds-panel" aria-labelledby="participar-title"><div class="pf-wrap">
+      <div class="pf-section-head"><div><span class="pf-kicker">Participación verificable</span><h2 id="participar-title">Dos recorridos, una identidad organizativa</h2></div><p>Cada estado muestra responsable, bloqueo, siguiente acción y evidencia.</p></div>
+      <div class="pf-role-grid"><article class="pf-role"><h3>Participar y consumir</h3><p>Para organizaciones que buscan productos o proponen retos.</p><ol><li>Organización y rol</li><li>Verificación y reglas</li><li>Acuerdo y credencial</li><li>Primera solicitud</li></ol><button class="pf-btn" type="button" data-demo-action="join">Ver recorrido simulado</button></article><article class="pf-role"><h3>Publicar y proveer</h3><p>Para titulares que ofrecen datos, APIs, servicios o algoritmos.</p><ol><li>Derechos y procedencia</li><li>Calidad y vocabulario</li><li>Política y modalidad</li><li>Revisión y publicación</li></ol><button class="pf-btn" type="button" data-demo-action="publish">Ver publicación guiada</button></article></div>
+    </div></section>
+    <section id="sandbox" class="pf-section pf-wrap" aria-labelledby="sandbox-title">
+      <div class="pf-section-head"><div><span class="pf-kicker">Sandbox CRED</span><h2 id="sandbox-title">Una transacción que se puede reconstruir</h2></div><p>Datos sintéticos, política evaluada y cadena de evidencias. Nada de esta demostración representa actividad real.</p></div>
+      <div class="pf-sandbox"><div class="pf-sandbox-head"><span class="pf-status pf-status-sim">Simulado</span><strong>Flujo DEMO-0001</strong><button class="pf-btn pf-sec" type="button" id="ds-run">Ejecutar demostración</button></div><ol class="pf-timeline" id="ds-timeline"><li><span></span><div><strong>Identidad activa</strong><small>Proveedor y consumidor de prueba.</small></div><b>Pendiente</b></li><li><span></span><div><strong>Política evaluada</strong><small>Finalidad, vigencia y alcance compatibles.</small></div><b>Pendiente</b></li><li><span></span><div><strong>Contrato vigente</strong><small>Versión 1.0 aceptada por ambas partes.</small></div><b>Pendiente</b></li><li><span></span><div><strong>Servicio ejecutado</strong><small>Solo sale el resultado autorizado.</small></div><b>Pendiente</b></li><li><span></span><div><strong>Evidencia encadenada</strong><small>Hash SHA-256 y correlación conservados.</small></div><b>Pendiente</b></li></ol><div id="ds-evidence" class="pf-evidence" hidden tabindex="-1"><strong>Expediente de demostración preparado</strong><span>5/5 eventos · integridad verificada · etiqueta SIMULADO</span><button type="button" class="pf-enlace" id="ds-export">Exportar JSON de prueba</button></div></div>
+    </section>
+    <section id="gobernanza" class="pf-section pf-ds-panel" aria-labelledby="gov-title"><div class="pf-wrap">
+      <div class="pf-section-head"><div><span class="pf-kicker">Gobernanza y transparencia</span><h2 id="gov-title">Reglas visibles, estados inequívocos</h2></div><p>La plataforma puede versionar y evidenciar las decisiones; la autoridad de gobierno debe aprobarlas.</p></div>
+      <div class="pf-governance-grid"><article><h3>Libro de reglas</h3><p>Borradores, versiones vigentes, aceptaciones y cambios recuperables por fecha.</p><span class="pf-status">Pendiente de aprobación</span></article><article><h3>Decisiones y disputas</h3><p>Responsables, motivos, plazos, recurso, suspensión y revocación sin estados ambiguos.</p><span class="pf-status">Diseñado</span></article><article><h3>Matriz CRED</h3><p>23 criterios binarios. No se marca “cumple” sin una evidencia enlazada y verificable.</p><span class="pf-status">Probado localmente</span></article></div>
+    </div></section>
   </main>
-  <footer class="pf-pie"><div class="pf-wrap">Plataforma AlianzaIA · Titularidad de la Asociación Española de Startups (AES), coordinadora de la agrupación · Datos alojados en la Unión Europea · <a href="/privacidad.html">Privacidad</a></div></footer>
+  <dialog class="pf-ficha" id="ds-dialog" aria-labelledby="ds-dialog-title"><div class="pf-ficha-cab"><button class="pf-cerrar" type="button" aria-label="Cerrar">×</button></div><div class="pf-ficha-in" id="ds-dialog-body"></div></dialog>
+  <div class="pf-toast" id="ds-toast" role="status" aria-live="polite" hidden></div>
+  <footer class="pf-pie"><div class="pf-wrap">Plataforma AlianzaIA · Titularidad de la Asociación Española de Startups (AES), coordinadora de la agrupación · Piloto local, no acreditado · <a href="/privacidad.html">Privacidad</a></div></footer>
+  <script src="/plataforma/espacios-datos/espacios-datos.js" defer></script>
 </body>
 </html>

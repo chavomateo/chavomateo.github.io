@@ -1,5 +1,7 @@
 # AlianzaIA preparada para espacios de datos
 
+Versión técnica: **v0.9**. La v0.8 estableció el plano de control; la v0.9 añade la capa de producto derivada del análisis de 63 espacios inscritos y de la revisión conjunta con Arte.
+
 Estado: implementación local en la rama `feat/plataforma-mvp-v2`. No aplicada a producción.
 
 ## Alcance implementado
@@ -14,14 +16,19 @@ La plataforma actúa como **plano de control**. Los conjuntos de datos permanece
 - contratos bilaterales, autorizaciones y vigencias;
 - transacciones autorizadas con cadena SHA-256 por espacio;
 - incidencias, evidencias y evaluación binaria de los 23 criterios CRED.
+- casos de uso con reto, resultado, KPI y productos asociados;
+- matching explicable entre caso y candidatas, sin decisiones automáticas de membresía o acceso;
+- solicitudes con estado, responsable, motivo, siguiente acción y plazo;
+- timeline append-only encadenado por flujo para reconstruir adhesión, publicación, política, contrato, operación y evidencia;
+- catálogo público de demostración, ficha normalizada y sandbox inequívocamente etiquetado como simulado.
 
 La función `solicitar_transaccion()` es el punto de control previo al intercambio. Rechaza operaciones si el contrato, la autorización, la distribución, el producto o alguno de los participantes no están activos. La transferencia material la ejecuta el conector en origen; su resultado debe quedar como una nueva traza inmutable.
 
 ## Despliegue seguro
 
 1. Crear una copia de la base y aplicar primero `schema.sql` v0.7.
-2. Aplicar `dataspaces-v0.8.sql` en una única transacción.
-3. Ejecutar las pruebas de `tests/dataspaces-v0.8.mjs` contra PGlite.
+2. Aplicar `dataspaces-v0.8.sql` y después `dataspaces-v0.9.sql`, cada uno en una única transacción.
+3. Ejecutar `tests/dataspaces-v0.8.mjs` y `tests/dataspaces-v0.9.mjs` contra PGlite.
 4. Generar el seed de candidatos con `node plataforma/tools/import-kit-candidates.mjs` y revisar las filas marcadas `requiere_revision`.
 5. Aplicar el seed solo en el entorno interno. Ser candidato no concede membresía, credenciales ni acceso.
 6. Crear dos participantes piloto reales, un producto, una distribución y un contrato; ejecutar una transacción completa y conservar evidencias.
