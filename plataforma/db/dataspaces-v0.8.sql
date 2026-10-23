@@ -3,6 +3,8 @@
 -- Se ejecuta DESPUÉS de schema.sql v0.7. Los datos permanecen en origen: esta
 -- capa gobierna participantes, catálogo, políticas, contratos y evidencias.
 
+begin;
+
 -- ---------------------------------------------------------------------------
 -- Espacio, participantes, roles y ciclo de adhesión
 -- ---------------------------------------------------------------------------
@@ -60,6 +62,9 @@ create table candidatos_participante (
   nombre_declarado text,
   dominio text,
   web text,
+  resumen_caso_uso text,
+  tema_propuesto text,
+  encaje_preliminar text check (encaje_preliminar in ('alto','medio','bajo','sin_evaluar')),
   sistema_origen text not null,
   referencia_origen text not null,
   estado_revision text not null default 'pendiente'
@@ -520,3 +525,5 @@ create policy gestor_inserta_transaccion on transacciones_datos for insert with 
 
 comment on table productos_datos is 'Catálogo DCAT-AP: metadatos y condiciones; los datos permanecen en el sistema de origen.';
 comment on function solicitar_transaccion is 'Policy enforcement point: no deja iniciar una transferencia sin contrato, autorización, miembros y distribución vigentes.';
+
+commit;
