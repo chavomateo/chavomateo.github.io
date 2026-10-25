@@ -400,7 +400,7 @@
   function renderContinue(nav,enabled){
     nav.innerHTML="";
     var btn=el('<button type="button" class="btn btn-primary btn-lg wz-next"'+(enabled?"":" disabled")+'>'+esc(t('cont'))+'</button>');
-    btn.addEventListener("click",function(){ if(S.type&&(S.type!=="ecosistema"||S.subtype)){ S.step=1; render(); } });
+    btn.addEventListener("click",function(){ if(S.type&&(S.type!=="ecosistema"||S.subtype)){ if(window.aiTrack)window.aiTrack("form_start","alianzaia_adhesion"); S.step=1; render(); } });
     nav.appendChild(btn);
   }
 
@@ -468,9 +468,10 @@
     S.step=5; render();
     var st=document.getElementById("wz-status"); if(st) st.textContent=t('registering');
     fetch(ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(data)})
-      .then(function(r){return r.json().catch(function(){return {};});})
-      .then(function(){ if(st) st.textContent=t('registered'); })
+      .then(function(r){if(!r.ok)throw new Error("http_"+r.status);return r.json().catch(function(){return {};});})
+      .then(function(){ if(window.aiTrack)window.aiTrack("form_success","alianzaia_adhesion"); if(st) st.textContent=t('registered'); })
       .catch(function(){
+        if(window.aiTrack)window.aiTrack("form_error","alianzaia_adhesion_network");
         if(st){ st.innerHTML=t('send_error'); }
       });
   }
