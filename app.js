@@ -280,16 +280,16 @@
     if(document.getElementById('ai-analytics-choice'))return;
     var box=document.createElement('section');box.id='ai-analytics-choice';box.setAttribute('aria-label','Preferencias de medición');
     box.style.cssText='position:fixed;bottom:14px;left:14px;right:14px;max-width:680px;margin:auto;z-index:9999;background:#fff;color:#17233b;padding:18px;border:1px solid #ccd3dd;border-radius:14px;box-shadow:0 4px 25px #0003;font:15px/1.5 sans-serif';
-    box.innerHTML='<p style="margin:0 0 12px">¿Nos permites medir de forma anónima el uso de la web y saber qué campañas funcionan? Es opcional. <a href="/cookies.html">Más información</a></p><div style="display:flex;gap:10px;flex-wrap:wrap"><button type="button" data-choice="yes">Aceptar medición</button><button type="button" data-choice="no">Rechazar</button></div>';
+    box.innerHTML='<p style="margin:0 0 12px">¿Nos permites medir el uso de la web mediante un identificador aleatorio de sesión y saber qué campañas funcionan? Es opcional. <a href="/cookies.html">Más información</a></p><div style="display:flex;gap:10px;flex-wrap:wrap"><button type="button" style="padding:9px 14px;border:1px solid #031fff;border-radius:8px;background:#031fff;color:#fff;font-weight:700" data-choice="yes">Aceptar medición</button><button type="button" style="padding:9px 14px;border:1px solid #031fff;border-radius:8px;background:#031fff;color:#fff;font-weight:700" data-choice="no">Rechazar medición</button></div>';
     box.addEventListener('click',function(e){var c=e.target.getAttribute('data-choice');if(c!=='yes'&&c!=='no')return;put('ai_analytics_consent',c);put('ai_consent_exp',String(Date.now()+365*24*60*60*1000));if(c==='yes'){collect();window.aiTrack('consent_update','granted');page()}else del();box.remove()});document.body.appendChild(box);
   }
   document.addEventListener('click',function(ev){
     var a=ev.target&&ev.target.closest&&ev.target.closest('a,button');if(!a)return;
     var label=a.getAttribute('data-ai-cta')||a.getAttribute('data-aes-cta')||((a.textContent||'').trim().slice(0,80));
     if(a.hasAttribute('data-ai-cta')||a.hasAttribute('data-aes-cta'))window.aiTrack('cta_click',label);
-    if(a.tagName==='A'&&(/\.(pdf|docx?|xlsx?|pptx?|zip)$/i).test((a.getAttribute('href')||'').split('?')[0]))window.aiTrack('file_download',a.getAttribute('data-analytics-id')||((a.getAttribute('href')||'').split('/').pop().split('?')[0]).slice(0,100));
+    if(a.tagName==='A'&&a.hasAttribute('data-analytics-id')&&(/\.(pdf|docx?|xlsx?|pptx?|zip)$/i).test((a.getAttribute('href')||'').split('?')[0]))window.aiTrack('file_download',a.getAttribute('data-analytics-id'));
     if(a.tagName==='A'&&/^https?:/i.test(a.href)){try{var u=new URL(a.href);if(u.origin!==location.origin)window.aiTrack('outbound_click',u.hostname)}catch(_){}}
   },true);
-  var pref=document.createElement('button');pref.type='button';pref.textContent='Preferencias de privacidad';pref.style.cssText='background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;padding:0;font:inherit';pref.addEventListener('click',banner);var footer=document.querySelector('footer .footer-legal-links')||document.querySelector('footer');if(footer)footer.appendChild(pref);
+  var pref=document.createElement('button');pref.type='button';pref.textContent='Configurar cookies';pref.style.cssText='background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;padding:0;font:inherit';pref.addEventListener('click',banner);var footer=document.querySelector('footer .footer-legal-links')||document.querySelector('footer');if(footer)footer.appendChild(pref);
   collect();if(consent())page();else if(Number(get('ai_consent_exp'))<=Date.now())banner();
 })();
