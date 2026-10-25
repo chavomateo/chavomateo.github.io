@@ -469,9 +469,9 @@
     var st=document.getElementById("wz-status"); if(st) st.textContent=t('registering');
     fetch(ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(data)})
       .then(function(r){if(!r.ok)throw new Error("http_"+r.status);return r.json().catch(function(){return {};});})
-      .then(function(){ if(window.aiTrack)window.aiTrack("form_success","alianzaia_adhesion"); if(st) st.textContent=t('registered'); })
+      .then(function(){ if(window.aiTrack)window.aiTrack("form_submit_success","alianzaia_adhesion"); if(st) st.textContent=t('registered'); })
       .catch(function(){
-        if(window.aiTrack)window.aiTrack("form_error","alianzaia_adhesion_network");
+        if(window.aiTrack)window.aiTrack("form_submit_error","alianzaia_adhesion_network");
         if(st){ st.innerHTML=t('send_error'); }
       });
   }

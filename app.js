@@ -265,12 +265,12 @@
     var now=Date.now();if(Number(get('ai_exp'))<=now){del();put('ai_sid',uuid());put('ai_exp',String(now+TTL))}
     if(!get('ai_sid')){put('ai_sid',uuid());put('ai_exp',String(now+TTL))}
     var p=new URLSearchParams(location.search),out=new URLSearchParams();
-    ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','link_id'].forEach(function(k){var v=p.get(k);if(v&&!/@|%40/i.test(v))out.set(k,v.slice(0,100))});
+    ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','utm_id','link_id'].forEach(function(k){var v=p.get(k);if(v&&!/@|%40/i.test(v))out.set(k,v.slice(0,100))});
     var tagged=out.toString().slice(0,500);if(tagged){if(!get('ai_utm'))put('ai_utm',tagged);put('ai_utm_last',tagged)}
   }
   function device(){var w=Math.min(screen.width||innerWidth,innerWidth||screen.width);return w<768?'mobile':w<1024?'tablet':'desktop'}
   window.aiTrack=function(evento,detalle){
-    if(!consent()||!(/^(page_view|cta_click|form_start|form_step|form_success|form_error|outbound_click)$/).test(evento))return;
+    if(!consent()||!(/^(consent_update|page_view|cta_click|form_start|form_step|form_submit_success|form_submit_error|outbound_click|file_download)$/).test(evento))return;
     var key=evento+'|'+(detalle||'');if(sent[key])return;sent[key]=1;collect();
     var body=JSON.stringify({tipo:'evento',evento:evento,detalle:detalle||'',analyticsConsent:true,site:'alianzaia',utm:get('ai_utm'),utmLast:get('ai_utm_last'),sid:get('ai_sid'),opKey:uuid(),event_id:uuid(),ruta:location.pathname,referrer:document.referrer||'',device:device(),is_qa:new URLSearchParams(location.search).get('qa')==='1'});
     fetch(ENDPOINT,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json'},body:body,keepalive:true}).catch(function(){});
@@ -281,12 +281,13 @@
     var box=document.createElement('section');box.id='ai-analytics-choice';box.setAttribute('aria-label','Preferencias de medición');
     box.style.cssText='position:fixed;bottom:14px;left:14px;right:14px;max-width:680px;margin:auto;z-index:9999;background:#fff;color:#17233b;padding:18px;border:1px solid #ccd3dd;border-radius:14px;box-shadow:0 4px 25px #0003;font:15px/1.5 sans-serif';
     box.innerHTML='<p style="margin:0 0 12px">¿Nos permites medir de forma anónima el uso de la web y saber qué campañas funcionan? Es opcional. <a href="/cookies.html">Más información</a></p><div style="display:flex;gap:10px;flex-wrap:wrap"><button type="button" data-choice="yes">Aceptar medición</button><button type="button" data-choice="no">Rechazar</button></div>';
-    box.addEventListener('click',function(e){var c=e.target.getAttribute('data-choice');if(c!=='yes'&&c!=='no')return;put('ai_analytics_consent',c);put('ai_consent_exp',String(Date.now()+365*24*60*60*1000));if(c==='yes'){collect();page()}else del();box.remove()});document.body.appendChild(box);
+    box.addEventListener('click',function(e){var c=e.target.getAttribute('data-choice');if(c!=='yes'&&c!=='no')return;put('ai_analytics_consent',c);put('ai_consent_exp',String(Date.now()+365*24*60*60*1000));if(c==='yes'){collect();window.aiTrack('consent_update','granted');page()}else del();box.remove()});document.body.appendChild(box);
   }
   document.addEventListener('click',function(ev){
     var a=ev.target&&ev.target.closest&&ev.target.closest('a,button');if(!a)return;
     var label=a.getAttribute('data-ai-cta')||a.getAttribute('data-aes-cta')||((a.textContent||'').trim().slice(0,80));
     if(a.hasAttribute('data-ai-cta')||a.hasAttribute('data-aes-cta'))window.aiTrack('cta_click',label);
+    if(a.tagName==='A'&&(/\.(pdf|docx?|xlsx?|pptx?|zip)$/i).test((a.getAttribute('href')||'').split('?')[0]))window.aiTrack('file_download',a.getAttribute('data-analytics-id')||((a.getAttribute('href')||'').split('/').pop().split('?')[0]).slice(0,100));
     if(a.tagName==='A'&&/^https?:/i.test(a.href)){try{var u=new URL(a.href);if(u.origin!==location.origin)window.aiTrack('outbound_click',u.hostname)}catch(_){}}
   },true);
   var pref=document.createElement('button');pref.type='button';pref.textContent='Preferencias de privacidad';pref.style.cssText='background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;padding:0;font:inherit';pref.addEventListener('click',banner);var footer=document.querySelector('footer .footer-legal-links')||document.querySelector('footer');if(footer)footer.appendChild(pref);
