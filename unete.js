@@ -180,8 +180,9 @@
         },
         eco_asociacion:{
           paso2:[
-            {n:"org",l:"Nombre de la asociación/clúster/cámara",t:"text",req:true,ph:"Ej.: Asociación de Startups de Eslovaquia"},
-            {n:"tipo",l:"Tipo",t:"select",req:true,opts:["Asociación de startups y emprendimiento","Asociación tecnológica o digital","Asociación empresarial","Clúster","Cámara de comercio","Federación / Confederación","Colegio profesional"]},
+            {n:"razon_social",l:"Nombre legal completo de la entidad",t:"text",req:true,ph:"Ej.: Asociación Española de Startups"},
+            {n:"id_fiscal",l:"Identificador fiscal o de registro (NIF, VAT, CIF, RUT…)",t:"text",req:true,ph:"Ej.: G87461075 / SK2020123456"},
+            {n:"tipo",l:"Tipo de entidad (marca todas las que apliquen)",t:"multi",req:true,opts:["Asociación de startups y emprendimiento","Asociación tecnológica o digital","Asociación empresarial o patronal","Clúster","Cámara de comercio","Federación / Confederación","Colegio profesional","Fundación","Hub o ecosistema de innovación","Entidad pública o semipública","Otra"]},
             {n:"web",l:"Web",t:"url",req:true,ph:"https://"},
             {n:"descripcion",l:"Descripción breve de la entidad",t:"textarea",req:true,ph:"Quiénes sois, qué hacéis y en qué ámbito (máx. 500 car.)."},
             {n:"num_representadas",l:"¿A cuántas entidades representáis?",t:"radio",req:true,opts:["Menos de 50","50–250","250–1.000","1.000–5.000","Más de 5.000"]},
@@ -189,10 +190,11 @@
             {n:"representadas_tipo",l:"¿Qué tipo de entidades representáis?",t:"multi",req:true,opts:["Startups","Scaleups","Pymes","Grandes empresas","Proyectos de I+D+i","Universidades y centros de investigación","Centros tecnológicos","Inversores / VC","Aceleradoras e incubadoras","Administraciones públicas","Profesionales y autónomos","Otras"]},
             {n:"paises_ambito",l:"Países o regiones en los que tenéis asociados",t:"text",req:false,ph:"Ej.: Eslovaquia, Europa Central"},
             {n:"cargo",l:"Cargo del solicitante",t:"text",req:true,ph:"Ej.: Secretario General"},
+            {n:"representante",l:"Representante legal de la entidad (nombre y cargo)",t:"text",req:true,ph:"Ej.: Ana Pérez, Presidenta"},
             {n:"representacion",l:"Capacidad de representación",t:"radio",req:true,opts:["Represento oficialmente","Soy enlace"]}
           ],
           paso3:[
-            {n:"busca",l:"¿Qué buscas en la Alianza?",t:"multi",req:true,opts:["Acuerdo marco para asociados","Co-organización de eventos","Policy colectivo","Formación para socios","Visibilidad","Networking regional"]},
+            {n:"busca",l:"¿En qué os interesa la Alianza? (marca todas las que apliquen)",t:"multi",req:true,opts:["Regulación de la IA","Fiscalidad","Políticas públicas","Proyectos público-privados de impulso de la IA","Buscar partners para proyectos propios","Promocionar proyectos en nuestro país","Convocatorias y financiación europea e internacional","Internacionalización de startups y pymes","Acceso a créditos de nube y servicios de IA","Formación y talento en IA","Co-organización de eventos","Acuerdo marco para nuestros asociados","Visibilidad y networking"]},
             {n:"adhesion",l:"Nivel de adhesión",t:"radio",req:true,opts:["Convenio de colaboración (acuerdo marco)","Adhesión a la comunidad","Explorar"]},
             {n:"propuesta",l:"Descripción / propuesta",t:"textarea",req:false,ph:"Máx. 500 car."}
           ]
@@ -324,8 +326,9 @@
         },
         eco_asociacion:{
           paso2:[
-            {n:"org",l:"Name of the association/cluster/chamber",t:"text",req:true,ph:"E.g.: Slovak Startup Association"},
-            {n:"tipo",l:"Type",t:"select",req:true,opts:["Startup and entrepreneurship association","Technology or digital association","Business association","Cluster","Chamber of commerce","Federation / Confederation","Professional body"]},
+            {n:"razon_social",l:"Full legal name of the organisation",t:"text",req:true,ph:"E.g.: Slovak Alliance for Innovation Economy"},
+            {n:"id_fiscal",l:"Tax or registration ID (VAT, company or association number…)",t:"text",req:true,ph:"E.g.: SK2020123456"},
+            {n:"tipo",l:"Type of organisation (tick all that apply)",t:"multi",req:true,opts:["Startup and entrepreneurship association","Technology or digital association","Business or employers' association","Cluster","Chamber of commerce","Federation / Confederation","Professional body","Foundation","Innovation hub or ecosystem","Public or semi-public body","Other"]},
             {n:"web",l:"Website",t:"url",req:true,ph:"https://"},
             {n:"descripcion",l:"Short description of your organisation",t:"textarea",req:true,ph:"Who you are, what you do and where (max. 500 characters)."},
             {n:"num_representadas",l:"How many organisations do you represent?",t:"radio",req:true,opts:["Fewer than 50","50–250","250–1,000","1,000–5,000","More than 5,000"]},
@@ -333,10 +336,11 @@
             {n:"representadas_tipo",l:"What kind of organisations do you represent?",t:"multi",req:true,opts:["Startups","Scaleups","SMEs","Large companies","R&D&I projects","Universities and research centres","Technology centres","Investors / VCs","Accelerators and incubators","Public administrations","Professionals and freelancers","Others"]},
             {n:"paises_ambito",l:"Countries or regions where your members are based",t:"text",req:false,ph:"E.g.: Slovakia, Central Europe"},
             {n:"cargo",l:"Applicant’s position",t:"text",req:true,ph:"E.g.: Secretary-General"},
+            {n:"representante",l:"Legal representative of the organisation (name and position)",t:"text",req:true,ph:"E.g.: Jana Novak, President"},
             {n:"representacion",l:"Authority to represent",t:"radio",req:true,opts:["I officially represent the organisation","I am a contact person"]}
           ],
           paso3:[
-            {n:"busca",l:"What are you looking for in the Alliance?",t:"multi",req:true,opts:["Framework agreement for members","Co-organising events","Collective policy voice","Training for members","Visibility","Regional networking"]},
+            {n:"busca",l:"What interests you about the Alliance? (tick all that apply)",t:"multi",req:true,opts:["AI regulation","Taxation","Public policy","Public-private projects to boost AI","Finding partners for our own projects","Promoting projects in our country","European and international calls and funding","Internationalisation of startups and SMEs","Access to cloud credits and AI services","AI training and talent","Co-organising events","Framework agreement for our members","Visibility and networking"]},
             {n:"adhesion",l:"Level of membership",t:"radio",req:true,opts:["Collaboration agreement (framework agreement)","Join the community","Explore"]},
             {n:"propuesta",l:"Description / proposal",t:"textarea",req:false,ph:"Max. 500 characters."}
           ]
