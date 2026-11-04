@@ -3,7 +3,7 @@
    Diseño: CMO-DISENO-FORMULARIOS-ALTA-UNETE-2026-09-22
    Motor data-driven: Paso 0 (perfil) → 1 (captura) → 2 (entidad)
    → 3 (encaje) → 4 (consentimientos) → gracias.
-   Envío: POST a FormSubmit (info@alianzaia.org) + fallback mailto.
+   Envío: POST a la Lambda alianzaia-unete (AWS) → FormSubmit de respaldo → mailto.
 
    i18n (2026-09-30): el wizard detecta el idioma de <html lang="..">.
    - UI (chrome mecánico: botones, pasos, estados) → ES + EN listos.
@@ -16,7 +16,10 @@
   var root = document.getElementById("wz-body");
   if (!root) return;
 
-  var ENDPOINT = "https://formsubmit.co/ajax/00f103d6fed6b3274c44f13808b914a3";
+  // Recepción propia (AWS Madrid, 4-nov-2026): Lambda alianzaia-unete → aviso a info@ + acuse.
+  // FormSubmit queda de respaldo por si la nuestra fallara.
+  var ENDPOINT = "https://62hcp7upyhlrywx35cmov5isa40rijtx.lambda-url.eu-south-2.on.aws/";
+  var ENDPOINT_RESPALDO = "https://formsubmit.co/ajax/00f103d6fed6b3274c44f13808b914a3";
 
   // ---------------- i18n: detección de idioma ----------------
   function wzLang(){
@@ -617,8 +620,12 @@
     var data=payload();
     S.step=5; render();
     var st=document.getElementById("wz-status"); if(st) st.textContent=t('registering');
-    fetch(ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(data)})
-      .then(function(r){if(!r.ok)throw new Error("http_"+r.status);return r.json().catch(function(){return {};});})
+    function post(url){
+      return fetch(url,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(data)})
+        .then(function(r){if(!r.ok)throw new Error("http_"+r.status);return r.json().catch(function(){return {};});});
+    }
+    post(ENDPOINT)
+      .catch(function(){ return post(ENDPOINT_RESPALDO); })
       .then(function(){ if(window.aiTrack)window.aiTrack("form_submit_success","alianzaia_adhesion"); if(st) st.textContent=t('registered'); })
       .catch(function(){
         if(window.aiTrack)window.aiTrack("form_submit_error","alianzaia_adhesion_network");
