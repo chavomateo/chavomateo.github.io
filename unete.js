@@ -49,6 +49,7 @@
       otro:"Otro",
       gracias_prefix:"Gracias, ",
       org_default:"tu organización",
+      autoresponse:"Gracias por tu solicitud de adhesión a la Alianza Iberoamericana de IA (AI Alliance). La hemos recibido correctamente y el equipo de la Alianza se pondrá en contacto contigo muy pronto. Para cualquier duda, escríbenos a info@alianzaia.org.",
       step:function(n){ return "Paso "+n+" de 4"; }
     },
     en: {
@@ -73,6 +74,7 @@
       otro:"Other",
       gracias_prefix:"Thank you, ",
       org_default:"your organisation",
+      autoresponse:"Thank you for applying to join the AI Alliance (Alianza Iberoamericana de IA). We have received your application and the Alliance team will be in touch with you very soon. If you have any questions, write to us at info@alianzaia.org.",
       step:function(n){ return "Step "+n+" of 4"; }
     }
   };
@@ -105,7 +107,7 @@
         lider_ia:{ t:"Lidera la agenda de la IA en el mercado iberoamericano de 650M de personas.", p:"Como Partner, gana visibilidad de marca en toda la Alianza, participa en el diseño de estándares y policy, y conecta con gobiernos, talento y el ecosistema de startups de la región." },
         eco_startup:{ t:"Forma parte de la mayor red iberoamericana de IA.", p:"Accede a financiación y grants, a compra pública innovadora y licitaciones, y a visibilidad ante corporates y gobiernos de la región." },
         eco_universidad:{ t:"Forma parte de la mayor red iberoamericana de IA.", p:"Súmate a la red académica: convocatorias de I+D, formación de talento, eventos y colaboración transnacional." },
-        eco_asociacion:{ t:"Representa a tus asociados en la agenda iberoamericana de IA.", p:"Acuerdos marco que benefician a toda tu base, co-organización de eventos, canal de policy colectivo y efecto multiplicador." },
+        eco_asociacion:{ t:"Representa a tus asociados en la agenda de la IA entre Iberoamérica y Europa.", p:"Acuerdos marco que benefician a toda tu base, co-organización de eventos, canal de policy colectivo y efecto multiplicador." },
         eco_otros:{ t:"Forma parte del ecosistema iberoamericano de IA.", p:"Dealflow cualificado, partners para programas, proyectos de impacto y voz en la gobernanza de la Alianza." }
       },
 
@@ -178,10 +180,14 @@
         },
         eco_asociacion:{
           paso2:[
-            {n:"org",l:"Nombre de la asociación/clúster/cámara",t:"text",req:true,ph:"Ej.: Cámara de Comercio de Bogotá"},
-            {n:"tipo",l:"Tipo",t:"select",req:true,opts:["Asociación empresarial","Clúster","Cámara de comercio","Federación / Confederación","Colegio profesional"]},
-            {n:"num_asociados",l:"Nº de organizaciones asociadas",t:"select",req:true,opts:["<50","50–250","250–1.000","1.000+"]},
+            {n:"org",l:"Nombre de la asociación/clúster/cámara",t:"text",req:true,ph:"Ej.: Asociación de Startups de Eslovaquia"},
+            {n:"tipo",l:"Tipo",t:"select",req:true,opts:["Asociación de startups y emprendimiento","Asociación tecnológica o digital","Asociación empresarial","Clúster","Cámara de comercio","Federación / Confederación","Colegio profesional"]},
             {n:"web",l:"Web",t:"url",req:true,ph:"https://"},
+            {n:"descripcion",l:"Descripción breve de la entidad",t:"textarea",req:true,ph:"Quiénes sois, qué hacéis y en qué ámbito (máx. 500 car.)."},
+            {n:"num_representadas",l:"¿A cuántas entidades representáis?",t:"radio",req:true,opts:["Menos de 50","50–250","250–1.000","1.000–5.000","Más de 5.000"]},
+            {n:"num_exacto",l:"Número aproximado de entidades representadas",t:"text",req:false,ph:"Ej.: 1.200"},
+            {n:"representadas_tipo",l:"¿Qué tipo de entidades representáis?",t:"multi",req:true,opts:["Startups","Scaleups","Pymes","Grandes empresas","Proyectos de I+D+i","Universidades y centros de investigación","Centros tecnológicos","Inversores / VC","Aceleradoras e incubadoras","Administraciones públicas","Profesionales y autónomos","Otras"]},
+            {n:"paises_ambito",l:"Países o regiones en los que tenéis asociados",t:"text",req:false,ph:"Ej.: Eslovaquia, Europa Central"},
             {n:"cargo",l:"Cargo del solicitante",t:"text",req:true,ph:"Ej.: Secretario General"},
             {n:"representacion",l:"Capacidad de representación",t:"radio",req:true,opts:["Represento oficialmente","Soy enlace"]}
           ],
@@ -232,7 +238,142 @@
     },
 
     // ▼▼▼ CMO/Legal: transcreación EN aquí (misma forma que CONTENT.es). ▼▼▼
-    en: null
+    en: {
+      PERFILES: [
+        { key:"gobierno", icon:"🏛️", titulo:"Governments and Public Sector", sub:"Ministries, agencies, cities and multilateral bodies." },
+        { key:"lider_ia", icon:"🌐", titulo:"Global AI Leaders", sub:"Big tech, hyperscalers, compute, foundation models and large adopters." },
+        { key:"ecosistema", icon:"🚀", titulo:"Local Ecosystems", sub:"Startups, universities, associations and more.",
+          subopts:[
+            { key:"startup", label:"AI Startups and Scaleups" },
+            { key:"universidad", label:"Universities and Research Centres" },
+            { key:"asociacion", label:"Associations, Clusters and Chambers" },
+            { key:"otros", label:"Others (Investors/VCs, Accelerators, Foundations)" }
+          ] }
+      ],
+      VALOR: {
+        gobierno:{ t:"Put your country at the centre of the AI agenda between Ibero-America and Europe.", p:"Take part in the Alliance’s governance, access regional benchmarking and balanced regulatory proposals, and open a direct channel for public-private collaboration with the Alliance’s technology leaders." },
+        lider_ia:{ t:"Lead the AI agenda across Ibero-America and Europe.", p:"As a Partner, gain brand visibility across the Alliance, help shape standards and policy, and connect with governments, talent and the startup ecosystems on both sides of the Atlantic." },
+        eco_startup:{ t:"Join the AI network that bridges Ibero-America and Europe.", p:"Access funding and grants, innovative public procurement and tenders, and visibility before corporates and governments." },
+        eco_universidad:{ t:"Join the AI network that bridges Ibero-America and Europe.", p:"Join the academic network: R&D calls, talent development, events and cross-border collaboration." },
+        eco_asociacion:{ t:"Represent your members in the AI agenda between Ibero-America and Europe.", p:"Framework agreements that benefit all your members, co-organised events, a collective policy voice and a multiplier effect." },
+        eco_otros:{ t:"Join the AI ecosystem that bridges Ibero-America and Europe.", p:"Qualified dealflow, partners for programmes, impact projects and a voice in the Alliance’s governance." }
+      },
+      CAPTURA: [
+        {n:"nombre",l:"Full name",t:"text",req:true,ph:"E.g.: Maria Fernandes",help:"Contact person for this application."},
+        {n:"email",l:"Corporate/institutional email",t:"email",req:true,ph:"name@organisation.org",help:"Please use your work email rather than a personal Gmail/Hotmail address."},
+        {n:"org",l:"Organisation",t:"text",req:true,ph:"E.g.: Ministry of Science / Acme AI",help:"Official name of your organisation."},
+        {n:"pais",l:"Country",t:"select",req:true,pais:true,help:"Country where your organisation operates."}
+      ],
+      SCHEMA: {
+        gobierno:{
+          paso2:[
+            {n:"org_oficial",l:"Official name of the body",t:"text",req:true,ph:"E.g.: Ministry of Digital Transformation"},
+            {n:"tipo_entidad",l:"Type of body",t:"select",req:true,opts:["National government","Regional or state government","Local government or city","Agency or autonomous body","Regulator","Multilateral organisation"]},
+            {n:"ambito",l:"Geographical scope",t:"select",req:true,opts:["National","Sub-national","Municipal","Regional / Multilateral"]},
+            {n:"cargo",l:"Applicant’s position",t:"text",req:true,ph:"E.g.: Director-General for AI"},
+            {n:"representacion",l:"Do you have authority to represent/sign?",t:"radio",req:true,opts:["Yes","No, I am a technical contact"]},
+            {n:"web",l:"Official website",t:"url",req:false,ph:"https://"}
+          ],
+          paso3:[
+            {n:"intereses",l:"Priority areas of interest",t:"multi",req:true,opts:["Regulation and governance","National AI strategy","Public-private collaboration","Talent and training","Funding and R&D","Innovative public procurement","Ethics and digital rights","Cross-border cooperation"]},
+            {n:"estrategia_ia",l:"Does your country/body have a national AI strategy?",t:"select",req:false,opts:["Yes, in force","Being drafted","No","I don’t know"]},
+            {n:"adhesion",l:"Desired level of membership",t:"radio",req:true,opts:["Signing an institutional MoU","Observer (participation without initial signature)","Explore — I’d like a meeting first"]},
+            {n:"objetivo",l:"Your goal with the Alliance",t:"textarea",req:false,ph:"Max. 500 characters."}
+          ]
+        },
+        lider_ia:{
+          paso2:[
+            {n:"empresa",l:"Company name",t:"text",req:true,ph:"E.g.: Acme AI Corp."},
+            {n:"tipo_org",l:"Type of organisation",t:"select",req:true,opts:["Hyperscaler / Cloud & Compute","Foundation model provider","Big tech / Platform","Large AI-adopting company","Infrastructure / chip provider","Global consultancy / Integrator"]},
+            {n:"hq",l:"Headquarters",t:"text",req:true,ph:"City, Country"},
+            {n:"presencia",l:"Presence in Ibero-America",t:"select",req:true,opts:["Yes, with offices","Yes, commercial","Expanding","Not yet"]},
+            {n:"cargo",l:"Applicant’s position",t:"text",req:true,ph:"E.g.: VP Public Affairs LATAM"},
+            {n:"web",l:"Corporate website",t:"url",req:true,ph:"https://"}
+          ],
+          paso3:[
+            {n:"nivel_partnership",l:"Partnership level of interest",t:"radio",req:true,opts:["Founding Partner","Strategic Partner","Corporate Member","Explore — I’d like to discuss it"]},
+            {n:"contribucion",l:"Areas where you want to contribute",t:"multi",req:true,opts:["Compute / infrastructure","Models and technology","Funding / sponsorship","Policy and standards","Talent programmes","Market access for startups","Sector use cases"]},
+            {n:"propuesta",l:"Context / proposal",t:"textarea",req:false,ph:"Your interest and possible contributions (max. 700 characters)."}
+          ]
+        },
+        eco_startup:{
+          paso2:[
+            {n:"startup",l:"Startup name",t:"text",req:true,ph:"E.g.: NeuronLab"},
+            {n:"web",l:"Website",t:"url",req:true,ph:"https://"},
+            {n:"etapa",l:"Stage",t:"select",req:true,opts:["Idea / Pre-seed","Seed","Series A","Series B+","Scaleup"]},
+            {n:"vertical",l:"AI vertical / sector",t:"text",req:false,ph:"E.g.: health, fintech, industry"},
+            {n:"cargo",l:"Your role",t:"text",req:true,ph:"E.g.: CEO / Founder"}
+          ],
+          paso3:[
+            {n:"busca",l:"What are you looking for in the Alliance?",t:"multi",req:true,opts:["Funding / grants","Tenders and public procurement","Visibility before corporates and governments","Mentoring and talent","Regional networking","Market access"]},
+            {n:"propuesta",l:"Tell us about your startup",t:"textarea",req:false,ph:"Max. 500 characters."}
+          ]
+        },
+        eco_universidad:{
+          paso2:[
+            {n:"institucion",l:"Name of the institution",t:"text",req:true,ph:"E.g.: University of Lisbon"},
+            {n:"tipo",l:"Type",t:"select",req:true,opts:["University","Research centre","Business school","Technology institute"]},
+            {n:"web",l:"Website",t:"url",req:true,ph:"https://"},
+            {n:"cargo",l:"Applicant’s position",t:"text",req:true,ph:"E.g.: Vice-Rector for Research"}
+          ],
+          paso3:[
+            {n:"busca",l:"What are you looking for in the Alliance?",t:"multi",req:true,opts:["R&D calls","Training and talent","Collaboration agreements","Events and outreach","Regional networking"]},
+            {n:"convenio",l:"Level of membership",t:"radio",req:true,opts:["Join the community","Collaboration agreement","Explore"]},
+            {n:"propuesta",l:"Description / proposal",t:"textarea",req:false,ph:"Max. 500 characters."}
+          ]
+        },
+        eco_asociacion:{
+          paso2:[
+            {n:"org",l:"Name of the association/cluster/chamber",t:"text",req:true,ph:"E.g.: Slovak Startup Association"},
+            {n:"tipo",l:"Type",t:"select",req:true,opts:["Startup and entrepreneurship association","Technology or digital association","Business association","Cluster","Chamber of commerce","Federation / Confederation","Professional body"]},
+            {n:"web",l:"Website",t:"url",req:true,ph:"https://"},
+            {n:"descripcion",l:"Short description of your organisation",t:"textarea",req:true,ph:"Who you are, what you do and where (max. 500 characters)."},
+            {n:"num_representadas",l:"How many organisations do you represent?",t:"radio",req:true,opts:["Fewer than 50","50–250","250–1,000","1,000–5,000","More than 5,000"]},
+            {n:"num_exacto",l:"Approximate number of organisations represented",t:"text",req:false,ph:"E.g.: 1,200"},
+            {n:"representadas_tipo",l:"What kind of organisations do you represent?",t:"multi",req:true,opts:["Startups","Scaleups","SMEs","Large companies","R&D&I projects","Universities and research centres","Technology centres","Investors / VCs","Accelerators and incubators","Public administrations","Professionals and freelancers","Others"]},
+            {n:"paises_ambito",l:"Countries or regions where your members are based",t:"text",req:false,ph:"E.g.: Slovakia, Central Europe"},
+            {n:"cargo",l:"Applicant’s position",t:"text",req:true,ph:"E.g.: Secretary-General"},
+            {n:"representacion",l:"Authority to represent",t:"radio",req:true,opts:["I officially represent the organisation","I am a contact person"]}
+          ],
+          paso3:[
+            {n:"busca",l:"What are you looking for in the Alliance?",t:"multi",req:true,opts:["Framework agreement for members","Co-organising events","Collective policy voice","Training for members","Visibility","Regional networking"]},
+            {n:"adhesion",l:"Level of membership",t:"radio",req:true,opts:["Collaboration agreement (framework agreement)","Join the community","Explore"]},
+            {n:"propuesta",l:"Description / proposal",t:"textarea",req:false,ph:"Max. 500 characters."}
+          ]
+        },
+        eco_otros:{
+          paso2:[
+            {n:"org",l:"Name of the organisation",t:"text",req:true,ph:"E.g.: Andean Ventures Fund"},
+            {n:"tipo_otros",l:"Type of organisation",t:"select",req:true,opts:["Investor / VC / Family Office","Accelerator / Incubator / Hub","Foundation / NGO","Civil society / Think tank","Other"]},
+            {n:"web",l:"Website",t:"url",req:true,ph:"https://"},
+            {n:"cargo",l:"Applicant’s position",t:"text",req:true,ph:"E.g.: Managing Partner / Director"}
+          ],
+          paso3:[
+            {n:"busca",l:"What are you looking for in the Alliance?",t:"multi",req:true,opts:["Dealflow / co-investment","Partners for programmes","Impact projects","Policy / advocacy","Visibility","Community"]},
+            {n:"propuesta",l:"Description / proposal",t:"textarea",req:false,ph:"Max. 500 characters."}
+          ]
+        }
+      },
+      ESQUEMA_TIT: { paso2:"About your organisation", paso3:"Fit and type of membership" },
+      GRACIAS: function(org){
+        return {
+          gobierno:"We have received the application from "+org+". Given its institutional nature, a member of the Alliance’s Institutional Relations team will contact you to coordinate the next steps and, where appropriate, the signing of the Memorandum of Understanding.",
+          lider_ia:"We have received the interest of "+org+". A member of the Alliance’s Partnerships team will contact you to explore the fit and share the Founding/Strategic Partners dossier.",
+          eco_startup:org+" is now part of the Alliance ecosystem. We will send you the welcome kit and the opportunities (funding, tenders, markets) that best match your profile.",
+          eco_universidad:org+" joins the Alliance’s academic network. We will send you the welcome kit and upcoming R&D calls.",
+          eco_asociacion:"We are delighted to welcome "+org+" and its members. A member of the Alliances team will contact you to agree the framework for collaboration.",
+          eco_otros:org+" is now part of the Alliance ecosystem. We will send you the welcome kit and the opportunities that best match your profile."
+        };
+      },
+      CONSENT: {
+        tel_l:"Contact phone", tel_ph:"+44 …", tel_help:"Optional; it speeds up coordination.",
+        como_l:"How did you hear about us?", como_opts:["Event","Referral","Social media / LinkedIn","Press","Search","Other"],
+        contacto:'I agree that the Alliance may contact me about my membership application. <a href="privacidad.html" target="_blank" rel="noopener">Privacy Policy</a>.',
+        principios:'I accept the Alliance’s Principles: ethical, inclusive and competitive AI.',
+        rgpd:'I have read and accept the <a href="privacidad.html" target="_blank" rel="noopener">Privacy Policy</a> and the processing of my data (GDPR/LGPD).',
+        newsletter:'I would like to receive the Alliance’s newsletter and communications.'
+      }
+    }
     // ▲▲▲ Hasta rellenarlo, el EN usa el contenido ES (fallback por sección). ▲▲▲
   };
   function C(k){ return (CONTENT[LANG] && CONTENT[LANG][k] != null) ? CONTENT[LANG][k] : CONTENT.es[k]; }
@@ -242,7 +383,12 @@
   var PAISES_PUENTE = ["España","Portugal","Andorra"];
   var PAISES_IBERO = ["Argentina","Bolivia","Brasil","Chile","Colombia","Costa Rica","Cuba","Ecuador","El Salvador","Guatemala","Honduras","México","Nicaragua","Panamá","Paraguay","Perú","República Dominicana","Uruguay","Venezuela"];
   var PAISES_EUROPA = ["Alemania","Austria","Bélgica","Bulgaria","Chequia","Chipre","Croacia","Dinamarca","Eslovaquia","Eslovenia","Estonia","Finlandia","Francia","Grecia","Hungría","Irlanda","Islandia","Italia","Letonia","Liechtenstein","Lituania","Luxemburgo","Malta","Noruega","Países Bajos","Polonia","Reino Unido","Rumanía","Suecia","Suiza"];
+  var PAISES_IBERO_EN = ["Argentina","Bolivia","Brazil","Chile","Colombia","Costa Rica","Cuba","Dominican Republic","Ecuador","El Salvador","Guatemala","Honduras","Mexico","Nicaragua","Panama","Paraguay","Peru","Uruguay","Venezuela"];
+  var PAISES_EUROPA_EN = ["Austria","Belgium","Bulgaria","Croatia","Cyprus","Czechia","Denmark","Estonia","Finland","France","Germany","Greece","Hungary","Iceland","Ireland","Italy","Latvia","Liechtenstein","Lithuania","Luxembourg","Malta","Netherlands","Norway","Poland","Romania","Slovakia","Slovenia","Sweden","Switzerland","United Kingdom"];
   function paisField(){
+    if(LANG==="en"){
+      return { head:["Spain","Portugal","Andorra"], groups:[ {label:t('grp_ibero'), opts:PAISES_IBERO_EN}, {label:t('grp_europa'), opts:PAISES_EUROPA_EN} ], tail:[t('otro')] };
+    }
     return { head:PAISES_PUENTE, groups:[ {label:t('grp_ibero'), opts:PAISES_IBERO}, {label:t('grp_europa'), opts:PAISES_EUROPA} ], tail:[t('otro')] };
   }
 
@@ -458,7 +604,7 @@
 
   // ---------------- Envío ----------------
   function payload(){
-    var p={ _subject:"Nueva solicitud de adhesión — "+ (S.data.org||"") +" ("+branch()+") ["+LANG.toUpperCase()+"]", member_type:S.type||"", member_subtype:S.subtype||"", rama:branch(), idioma:LANG };
+    var p={ _subject:"Nueva solicitud de adhesión — "+ (S.data.org||"") +" ("+branch()+") ["+LANG.toUpperCase()+"]", member_type:S.type||"", member_subtype:S.subtype||"", rama:branch(), idioma:LANG, _autoresponse:t('autoresponse') };
     Object.keys(S.data).forEach(function(k){ var v=S.data[k]; p[k]=Array.isArray(v)?v.join(", "):(v===true?"Sí":v===false?"":v); });
     return p;
   }
