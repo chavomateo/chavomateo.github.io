@@ -196,7 +196,11 @@ for (const lang of ['es', 'en']) {
 
   <main class="section news-main">
     <div class="wrap">
-      <ul class="auth-list news-list">
+${data.destacado ? `      <aside class="news-faq" aria-labelledby="news-faq-q">
+        <h2 id="news-faq-q">${esc(data.destacado[lang].pregunta)}</h2>
+        <p>${esc(data.destacado[lang].respuesta)}</p>
+      </aside>
+` : ''}      <ul class="auth-list news-list">
 ${news.map((n) => card(n, lang, `${n[lang].slug}/`)).join('\n')}
       </ul>
     </div>
