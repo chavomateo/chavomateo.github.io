@@ -1,0 +1,79 @@
+{
+  "_leeme": "Fuente única de la sección Actualidad / News. Para publicar una noticia, añade una entrada y ejecuta: node tools/actualidad.mjs. Genera /actualidad/, /en/news/, una página por noticia y el bloque de la portada (3 últimas). Candados: ni «soberanía/soberano/sovereign» ni «toda Iberoamérica»; a lo de los gobiernos se le llama «el mecanismo intergubernamental de IA acordado en la Cumbre»; ninguna cifra que no esté en la fuente oficial.",
+  "noticias": [
+    {
+      "fecha": "2026-11-05",
+      "es": {
+        "slug": "cumbre-de-madrid-cooperacion-ia",
+        "etiqueta": "Cumbre Iberoamericana",
+        "titulo": "La Cumbre de Madrid impulsa la cooperación iberoamericana en inteligencia artificial",
+        "resumen": "La XXX Cumbre Iberoamericana ha adoptado un mecanismo intergubernamental de cooperación en IA basado en datos, modelos en las lenguas de la región y capacidad de cómputo.",
+        "entradilla": "La XXX Cumbre Iberoamericana, celebrada en Madrid, ha adoptado un mecanismo intergubernamental de cooperación en inteligencia artificial apoyado en tres ejes: datos, modelos en las lenguas de la región y capacidad de cómputo. La Alianza Iberoamericana de IA lo valora como una base sólida para que la IA llegue a startups y pymes.",
+        "parrafos": [
+          "La primera Reunión Ministerial Iberoamericana de Transformación Digital e Inteligencia Artificial acordó el 3 de noviembre en Madrid un mecanismo de cooperación regional en IA. Los días 4 y 5 de noviembre, la XXX Cumbre Iberoamericana de Jefas y Jefes de Estado y de Gobierno lo adoptó en su declaración final y encomendó su puesta en marcha a la Secretaría General Iberoamericana (SEGIB). La adhesión de cada país es voluntaria.",
+          "El mecanismo intergubernamental de IA acordado en la Cumbre se articula en tres ejes. El primero es un Espacio Iberoamericano de Datos con un planteamiento federado, en el que cada país decide qué información comparte y en qué condiciones. El segundo, el desarrollo colaborativo de modelos de lenguaje y sistemas de IA en español, portugués, otras lenguas oficiales y lenguas indígenas, a partir de iniciativas que ya existen en la región. El tercero, la cooperación en capacidad de cómputo: ordenar los recursos disponibles y conectar la oferta con la demanda de los proyectos, sin crear una nueva infraestructura regional.",
+          "La Alianza Iberoamericana de IA considera que el acuerdo pone los cimientos que la región necesita. Esa infraestructura genera valor cuando llega a las empresas, y ahí se sitúa la aportación de la Alianza, una iniciativa público-privada complementaria de la labor de los gobiernos: acercar la IA a startups y pymes con casos de uso replicables, formación y acompañamiento. Los gobiernos ponen los cimientos; la Alianza trabaja para llevar la IA a las empresas.",
+          "Para que el nuevo marco se traduzca en adopción, la Alianza plantea tres prioridades: que el espacio de datos federado se apoye en la interoperabilidad y la portabilidad; que el acceso a capacidad de cómputo alcance también a startups y pymes, con criterios neutrales que permitan combinar infraestructura pública y nubes comerciales; y que los modelos en las lenguas de la región se acompañen de casos de uso reales desarrollados por el ecosistema emprendedor."
+        ],
+        "cierre": "La Alianza Iberoamericana de IA (AI Alliance) es una iniciativa público-privada independiente del mecanismo intergubernamental acordado por los gobiernos en la Cumbre. Su aportación se centra en la adopción de la IA por startups y pymes.",
+        "fuentes": [
+          { "texto": "Cumbre Iberoamericana 2026: «Los países iberoamericanos acuerdan en Madrid la Alianza Iberoamericana de Inteligencia Artificial» (4-nov-2026)", "url": "https://www.30cumbreiberoamericana.gob.es/es/actualidad/noticias/paises-iberoamericanos-acuerdan-alianza-iberoamericana-inteligencia-artificial" },
+          { "texto": "Cumbre Iberoamericana 2026: Declaración de la Cumbre de Madrid (5-nov-2026)", "url": "https://www.30cumbreiberoamericana.gob.es/es/actualidad/noticias/iberoamerica-acuerda-avances-tangibles-en-inteligencia-artificial-educacion-y" }
+        ]
+      },
+      "en": {
+        "slug": "madrid-summit-ai-cooperation",
+        "etiqueta": "Ibero-American Summit",
+        "titulo": "The Madrid Summit boosts Ibero-American cooperation on artificial intelligence",
+        "resumen": "The 30th Ibero-American Summit has adopted an intergovernmental AI cooperation mechanism built on data, models in the region's languages and computing capacity.",
+        "entradilla": "The 30th Ibero-American Summit, held in Madrid, has adopted an intergovernmental cooperation mechanism on artificial intelligence built on three pillars: data, models in the region's languages and computing capacity. The Ibero-American AI Alliance sees it as a solid foundation for bringing AI to startups and SMEs.",
+        "parrafos": [
+          "The first Ibero-American Ministerial Meeting on Digital Transformation and Artificial Intelligence agreed on a regional AI cooperation mechanism in Madrid on 3 November. On 4 and 5 November, the 30th Ibero-American Summit of Heads of State and Government adopted it in its final declaration and entrusted its implementation to the Ibero-American General Secretariat (SEGIB). Each country's participation is voluntary.",
+          "The intergovernmental AI mechanism agreed at the Summit is organised around three pillars. The first is an Ibero-American Data Space with a federated approach, in which each country decides what information it shares and on what terms. The second is the collaborative development of language models and AI systems in Spanish, Portuguese, other official languages and indigenous languages, building on initiatives that already exist in the region. The third is cooperation on computing capacity: organising available resources and matching supply with project demand, without building new regional infrastructure.",
+          "The Ibero-American AI Alliance believes the agreement lays the foundations the region needs. That infrastructure creates value when it reaches businesses, and this is where the Alliance contributes as a public-private initiative that complements the work of governments: bringing AI to startups and SMEs through replicable use cases, training and support. Governments lay the foundations; the Alliance works to bring AI to businesses.",
+          "For the new framework to translate into adoption, the Alliance puts forward three priorities: that the federated data space be built on interoperability and portability; that access to computing capacity also reach startups and SMEs, under neutral criteria that allow public infrastructure and commercial clouds to be combined; and that models in the region's languages come with real use cases developed by the entrepreneurial ecosystem."
+        ],
+        "cierre": "The Ibero-American AI Alliance (AI Alliance) is a public-private initiative independent of the intergovernmental mechanism agreed by governments at the Summit. Its contribution focuses on AI adoption by startups and SMEs.",
+        "fuentes": [
+          { "texto": "Ibero-American Summit 2026: «Los países iberoamericanos acuerdan en Madrid la Alianza Iberoamericana de Inteligencia Artificial» (4 Nov 2026, in Spanish)", "url": "https://www.30cumbreiberoamericana.gob.es/es/actualidad/noticias/paises-iberoamericanos-acuerdan-alianza-iberoamericana-inteligencia-artificial" },
+          { "texto": "Ibero-American Summit 2026: declaration of the Madrid Summit (5 Nov 2026, in Spanish)", "url": "https://www.30cumbreiberoamericana.gob.es/es/actualidad/noticias/iberoamerica-acuerda-avances-tangibles-en-inteligencia-artificial-educacion-y" }
+        ]
+      }
+    },
+    {
+      "fecha": "2026-11-05",
+      "es": {
+        "slug": "declaracion-de-madrid-derechos-innovacion",
+        "etiqueta": "Regulación",
+        "titulo": "Derechos e innovación, complementarios: la Declaración de Madrid",
+        "resumen": "La Declaración de Madrid afirma que la innovación y la protección de los derechos no son objetivos contrapuestos, sino complementarios.",
+        "entradilla": "La Declaración de Madrid, aprobada por los ministros iberoamericanos de Transformación Digital e Inteligencia Artificial, afirma que la innovación y la protección efectiva de los derechos no son objetivos contrapuestos, sino complementarios. La Alianza Iberoamericana de IA comparte ese enfoque desde su origen.",
+        "parrafos": [
+          "La primera Reunión Ministerial Iberoamericana de Transformación Digital e Inteligencia Artificial, celebrada en Madrid el 3 de noviembre en el marco de la XXX Cumbre Iberoamericana, aprobó la Declaración de Madrid. El texto sostiene que la innovación, la libertad, la seguridad y la protección efectiva de los derechos «no son objetivos contrapuestos, sino condiciones complementarias para generar confianza, favorecer la adopción de la IA y ampliar sus beneficios económicos y sociales».",
+          "Los ministros acordaron también promover el emprendimiento, la inversión, la competencia y la adopción responsable de la IA, con políticas públicas y marcos normativos orientados a la claridad, la proporcionalidad y la neutralidad tecnológica, de acuerdo con las prioridades de cada país.",
+          "Que gobiernos de las dos orillas del Atlántico suscriban este principio refuerza el enfoque que defiende la Alianza Iberoamericana de IA: reglas claras y proporcionadas que protejan a las personas sin frenar la innovación ni la competitividad de startups y pymes.",
+          "Para que ese principio se note en la práctica, la Alianza propone marcos interoperables entre Iberoamérica y Europa, entornos de prueba accesibles para startups, neutralidad tecnológica y libertad para elegir proveedor. Es el camino hacia una autonomía estratégica abierta, que se construye con capacidad propia, competencia e interoperabilidad, sin cerrar mercados."
+        ],
+        "fuentes": [
+          { "texto": "Cumbre Iberoamericana 2026: «Los países iberoamericanos acuerdan en Madrid la Alianza Iberoamericana de Inteligencia Artificial» (4-nov-2026)", "url": "https://www.30cumbreiberoamericana.gob.es/es/actualidad/noticias/paises-iberoamericanos-acuerdan-alianza-iberoamericana-inteligencia-artificial" }
+        ]
+      },
+      "en": {
+        "slug": "madrid-declaration-rights-innovation",
+        "etiqueta": "Regulation",
+        "titulo": "Rights and innovation go hand in hand: the Madrid Declaration",
+        "resumen": "The Madrid Declaration states that innovation and the protection of rights are not opposing goals, but complementary ones.",
+        "entradilla": "The Madrid Declaration, adopted by the Ibero-American ministers for Digital Transformation and Artificial Intelligence, states that innovation and the effective protection of rights are not opposing goals, but complementary ones. The Ibero-American AI Alliance has shared this approach since it began.",
+        "parrafos": [
+          "The first Ibero-American Ministerial Meeting on Digital Transformation and Artificial Intelligence, held in Madrid on 3 November as part of the 30th Ibero-American Summit, adopted the Madrid Declaration. The text holds that innovation, freedom, security and the effective protection of rights are not opposing goals, but complementary conditions for building trust, encouraging the adoption of AI and extending its economic and social benefits.",
+          "The ministers also agreed to promote entrepreneurship, investment, competition and the responsible adoption of AI, with public policies and regulatory frameworks geared towards clarity, proportionality and technological neutrality, in line with each country's priorities.",
+          "Having governments on both sides of the Atlantic endorse this principle strengthens the approach the Ibero-American AI Alliance stands for: clear and proportionate rules that protect people without holding back innovation or the competitiveness of startups and SMEs.",
+          "To make this principle real in practice, the Alliance proposes interoperable frameworks between Ibero-America and Europe, testing environments that startups can access, technological neutrality and freedom to choose a provider. This is the path to open strategic autonomy, built on the region's own capabilities, competition and interoperability, without closing markets."
+        ],
+        "fuentes": [
+          { "texto": "Ibero-American Summit 2026: «Los países iberoamericanos acuerdan en Madrid la Alianza Iberoamericana de Inteligencia Artificial» (4 Nov 2026, in Spanish)", "url": "https://www.30cumbreiberoamericana.gob.es/es/actualidad/noticias/paises-iberoamericanos-acuerdan-alianza-iberoamericana-inteligencia-artificial" }
+        ]
+      }
+    }
+  ]
+}
