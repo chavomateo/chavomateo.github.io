@@ -5,6 +5,11 @@ grant select on all tables in schema public to authenticated;
 grant insert, update on all tables in schema public to authenticated;
 grant execute on all functions in schema public to authenticated;
 revoke execute on all functions in schema public from anon, public;
+-- clave_minimis() devuelve la clave de cifrado de minimis (Vault): nunca por la API. Solo la usan
+-- funciones SECURITY DEFINER (declarar_minimis), que se ejecutan como owner. Ver supabase-seguridad-20261108.sql
+revoke execute on function clave_minimis() from public, anon, authenticated;
+-- auditar() es función de trigger: no necesita EXECUTE para dispararse
+revoke execute on function auditar() from public, anon, authenticated;
 -- Lectura pública sin sesión solo de lo publicado (filtrado por las políticas RLS)
 grant select on casos, preguntas, programas_credito, recursos, itinerarios, textos_legales, parametros_legales to anon;
 -- Las vistas respetan RLS del usuario que consulta
