@@ -18,23 +18,35 @@
         ],
         "fuentes": [
           {
-            "texto": "Cumbre Iberoamericana 2026 (web oficial): «Iberoamérica acuerda avances tangibles en inteligencia artificial, educación y preparación ante grandes catástrofes»",
-            "url": "https://www.30cumbreiberoamericana.gob.es/es/actualidad/noticias/iberoamerica-acuerda-avances-tangibles-en-inteligencia-artificial-educacion-y"
+            "texto": "«Los países iberoamericanos acuerdan en Madrid la Alianza Iberoamericana de Inteligencia Artificial» · SEGIB (oficial) · 3-nov-2026",
+            "url": "https://segib.org/es/los-paises-iberoamericanos-acuerdan-en-madrid-la-alianza-iberoamericana-de-inteligencia-artificial/"
           },
           {
-            "texto": "Ministerio para la Transformación Digital y de la Función Pública: «Declaración de la Reunión Ministerial de Transformación Digital e IA» (PDF)",
+            "texto": "«Los países iberoamericanos acuerdan en Madrid la Alianza Iberoamericana de Inteligencia Artificial» · La Moncloa (oficial) · 3-nov-2026",
+            "url": "https://www.lamoncloa.gob.es/serviciosdeprensa/notasprensa/transformacion-digital-y-funcion-publica/Paginas/2026/031126-alianza-iberoamericana-ia.aspx"
+          },
+          {
+            "texto": "«Declaración de la Reunión Ministerial de Transformación Digital e IA» · Ministerio para la Transformación Digital y de la Función Pública (oficial) · 3-nov-2026 (PDF)",
             "url": "https://digital.gob.es/content/dam/portal-mtdfp/comunicacion/comunicacion_ministro/2026/11/03-11-2026/Declaraci%C3%B3n%20de%20la%20Reuni%C3%B3n%20Ministerial%20de%20Transformaci%C3%B3n%20Digital%20e%20IA.pdf"
           },
           {
-            "texto": "El País: «Cumbre Iberoamericana: 22 países a la búsqueda de un acuerdo de regulación sobre la inteligencia artificial»",
-            "url": "https://elpais.com/expres/2026-11-05/cumbre-iberoamericana-22-paises-a-la-busqueda-de-un-acuerdo-de-regulacion-sobre-la-inteligencia-artificial.html"
+            "texto": "«Los países iberoamericanos celebrarán el 3 de noviembre en Madrid la primera reunión ministerial de transformación digital con el objetivo de sellar una alianza por la IA» · Ministerio para la Transformación Digital y de la Función Pública (oficial) · 1-nov-2026",
+            "url": "https://digital.gob.es/comunicacion/notas-prensa/mtdfp/2026/11/los-paises-iberoamericanos-celebraran-el-3-de-noviembre-en-madri"
           },
           {
-            "texto": "Infobae: «La Cumbre Iberoamericana de Madrid cierra una declaración final y acuerdos sobre inteligencia artificial y protección civil»",
-            "url": "https://www.infobae.com/espana/2026/11/05/la-xxx-cumbre-iberoamericana-cierra-una-declaracion-final-y-acuerdos-sobre-inteligencia-artificial-y-proteccion-civil/"
+            "texto": "«Iberoamérica acuerda avances tangibles en inteligencia artificial, educación y preparación ante grandes catástrofes» · XXX Cumbre Iberoamericana, web oficial · 5-nov-2026",
+            "url": "https://www.30cumbreiberoamericana.gob.es/es/actualidad/noticias/iberoamerica-acuerda-avances-tangibles-en-inteligencia-artificial-educacion-y"
           },
           {
-            "texto": "La Ecuación Digital: «Iberoamérica acuerda una alianza de IA con datos y cómputo»",
+            "texto": "«Los países iberoamericanos acuerdan crear una alianza de IA para reforzar su soberanía digital y cultural» · Europa Press · 3-nov-2026",
+            "url": "https://www.europapress.es/economia/noticia-paises-iberoamericanos-acuerdan-crear-alianza-ia-reforzar-soberania-digital-cultural-20261103182448.html"
+          },
+          {
+            "texto": "«Los países iberoamericanos acuerdan crear una alianza de IA para reforzar su soberanía digital y cultural» · Infobae · 3-nov-2026",
+            "url": "https://www.infobae.com/america/agencias/2026/11/03/los-paises-iberoamericanos-acuerdan-crear-una-alianza-de-ia-para-reforzar-su-soberania-digital-y-cultural/"
+          },
+          {
+            "texto": "«Iberoamérica acuerda una alianza de IA con datos y cómputo» · La Ecuación Digital · 4-nov-2026",
             "url": "https://www.laecuaciondigital.com/empresas/acuerdos/alianza-iberoamericana-inteligencia-artificial/"
           }
         ]
@@ -54,23 +66,35 @@
         ],
         "fuentes": [
           {
-            "texto": "Ibero-American Summit 2026 (official website): «Iberoamérica acuerda avances tangibles en inteligencia artificial, educación y preparación ante grandes catástrofes» (in Spanish)",
-            "url": "https://www.30cumbreiberoamericana.gob.es/es/actualidad/noticias/iberoamerica-acuerda-avances-tangibles-en-inteligencia-artificial-educacion-y"
+            "texto": "«Los países iberoamericanos acuerdan en Madrid la Alianza Iberoamericana de Inteligencia Artificial» · SEGIB (official) · 3 Nov 2026 (in Spanish)",
+            "url": "https://segib.org/es/los-paises-iberoamericanos-acuerdan-en-madrid-la-alianza-iberoamericana-de-inteligencia-artificial/"
           },
           {
-            "texto": "Spanish Ministry for Digital Transformation and the Civil Service: «Declaración de la Reunión Ministerial de Transformación Digital e IA» (PDF, in Spanish)",
+            "texto": "«Los países iberoamericanos acuerdan en Madrid la Alianza Iberoamericana de Inteligencia Artificial» · La Moncloa, Spanish Government (official) · 3 Nov 2026 (in Spanish)",
+            "url": "https://www.lamoncloa.gob.es/serviciosdeprensa/notasprensa/transformacion-digital-y-funcion-publica/Paginas/2026/031126-alianza-iberoamericana-ia.aspx"
+          },
+          {
+            "texto": "«Declaración de la Reunión Ministerial de Transformación Digital e IA» · Spanish Ministry for Digital Transformation and the Civil Service (official) · 3 Nov 2026 (PDF, in Spanish)",
             "url": "https://digital.gob.es/content/dam/portal-mtdfp/comunicacion/comunicacion_ministro/2026/11/03-11-2026/Declaraci%C3%B3n%20de%20la%20Reuni%C3%B3n%20Ministerial%20de%20Transformaci%C3%B3n%20Digital%20e%20IA.pdf"
           },
           {
-            "texto": "El País: «Cumbre Iberoamericana: 22 países a la búsqueda de un acuerdo de regulación sobre la inteligencia artificial» (in Spanish)",
-            "url": "https://elpais.com/expres/2026-11-05/cumbre-iberoamericana-22-paises-a-la-busqueda-de-un-acuerdo-de-regulacion-sobre-la-inteligencia-artificial.html"
+            "texto": "«Los países iberoamericanos celebrarán el 3 de noviembre en Madrid la primera reunión ministerial de transformación digital con el objetivo de sellar una alianza por la IA» · Spanish Ministry for Digital Transformation and the Civil Service (official) · 1 Nov 2026 (in Spanish)",
+            "url": "https://digital.gob.es/comunicacion/notas-prensa/mtdfp/2026/11/los-paises-iberoamericanos-celebraran-el-3-de-noviembre-en-madri"
           },
           {
-            "texto": "Infobae: «La Cumbre Iberoamericana de Madrid cierra una declaración final y acuerdos sobre inteligencia artificial y protección civil» (in Spanish)",
-            "url": "https://www.infobae.com/espana/2026/11/05/la-xxx-cumbre-iberoamericana-cierra-una-declaracion-final-y-acuerdos-sobre-inteligencia-artificial-y-proteccion-civil/"
+            "texto": "«Iberoamérica acuerda avances tangibles en inteligencia artificial, educación y preparación ante grandes catástrofes» · XXX Ibero-American Summit, official website · 5 Nov 2026 (in Spanish)",
+            "url": "https://www.30cumbreiberoamericana.gob.es/es/actualidad/noticias/iberoamerica-acuerda-avances-tangibles-en-inteligencia-artificial-educacion-y"
           },
           {
-            "texto": "La Ecuación Digital: «Iberoamérica acuerda una alianza de IA con datos y cómputo» (in Spanish)",
+            "texto": "«Los países iberoamericanos acuerdan crear una alianza de IA para reforzar su soberanía digital y cultural» · Europa Press · 3 Nov 2026 (in Spanish)",
+            "url": "https://www.europapress.es/economia/noticia-paises-iberoamericanos-acuerdan-crear-alianza-ia-reforzar-soberania-digital-cultural-20261103182448.html"
+          },
+          {
+            "texto": "«Los países iberoamericanos acuerdan crear una alianza de IA para reforzar su soberanía digital y cultural» · Infobae · 3 Nov 2026 (in Spanish)",
+            "url": "https://www.infobae.com/america/agencias/2026/11/03/los-paises-iberoamericanos-acuerdan-crear-una-alianza-de-ia-para-reforzar-su-soberania-digital-y-cultural/"
+          },
+          {
+            "texto": "«Iberoamérica acuerda una alianza de IA con datos y cómputo» · La Ecuación Digital · 4 Nov 2026 (in Spanish)",
             "url": "https://www.laecuaciondigital.com/empresas/acuerdos/alianza-iberoamericana-inteligencia-artificial/"
           }
         ]
@@ -92,20 +116,24 @@
         ],
         "fuentes": [
           {
-            "texto": "Cumbre Iberoamericana 2026 (web oficial): «Iberoamérica acuerda avances tangibles en inteligencia artificial, educación y preparación ante grandes catástrofes»",
+            "texto": "«Declaración de la Cumbre de Madrid» · SEGIB (oficial) · 5-nov-2026 (PDF)",
+            "url": "https://segib.org/wp-content/uploads/2026/11/Declaracion_de_la_Cumbre_de_Madrid-2026.pdf"
+          },
+          {
+            "texto": "«XXX Cumbre Iberoamericana: 22 países renuevan en Madrid su agenda de cooperación» · SEGIB (oficial) · 5-nov-2026",
+            "url": "https://segib.org/es/la-xxx-cumbre-iberoamericana-reafirma-en-madrid-la-vigencia-de-la-comunidad-y-renueva-sus-prioridades-de-cooperacion/"
+          },
+          {
+            "texto": "«Iberoamérica acuerda avances tangibles en inteligencia artificial, educación y preparación ante grandes catástrofes» · XXX Cumbre Iberoamericana, web oficial · 5-nov-2026",
             "url": "https://www.30cumbreiberoamericana.gob.es/es/actualidad/noticias/iberoamerica-acuerda-avances-tangibles-en-inteligencia-artificial-educacion-y"
           },
           {
-            "texto": "Ministerio para la Transformación Digital y de la Función Pública: «Declaración de la Reunión Ministerial de Transformación Digital e IA» (PDF)",
-            "url": "https://digital.gob.es/content/dam/portal-mtdfp/comunicacion/comunicacion_ministro/2026/11/03-11-2026/Declaraci%C3%B3n%20de%20la%20Reuni%C3%B3n%20Ministerial%20de%20Transformaci%C3%B3n%20Digital%20e%20IA.pdf"
-          },
-          {
-            "texto": "El País: «Cumbre Iberoamericana: 22 países a la búsqueda de un acuerdo de regulación sobre la inteligencia artificial»",
-            "url": "https://elpais.com/expres/2026-11-05/cumbre-iberoamericana-22-paises-a-la-busqueda-de-un-acuerdo-de-regulacion-sobre-la-inteligencia-artificial.html"
-          },
-          {
-            "texto": "Infobae: «La Cumbre Iberoamericana de Madrid cierra una declaración final y acuerdos sobre inteligencia artificial y protección civil»",
+            "texto": "«La Cumbre Iberoamericana de Madrid cierra una declaración final y acuerdos sobre inteligencia artificial y protección civil» · Infobae · 5-nov-2026",
             "url": "https://www.infobae.com/espana/2026/11/05/la-xxx-cumbre-iberoamericana-cierra-una-declaracion-final-y-acuerdos-sobre-inteligencia-artificial-y-proteccion-civil/"
+          },
+          {
+            "texto": "«La XXX Cumbre Iberoamericana, una cita marcada por las ausencias, los desencuentros y una visita sorpresa» · Euronews · 5-nov-2026",
+            "url": "https://es.euronews.com/2026/11/05/la-xxx-cumbre-iberoamericana-ausencias-desencuentros-visita-sorpresa"
           }
         ]
       },
@@ -123,20 +151,24 @@
         ],
         "fuentes": [
           {
-            "texto": "Ibero-American Summit 2026 (official website): «Iberoamérica acuerda avances tangibles en inteligencia artificial, educación y preparación ante grandes catástrofes» (in Spanish)",
+            "texto": "«Declaración de la Cumbre de Madrid» · SEGIB (official) · 5 Nov 2026 (PDF, in Spanish)",
+            "url": "https://segib.org/wp-content/uploads/2026/11/Declaracion_de_la_Cumbre_de_Madrid-2026.pdf"
+          },
+          {
+            "texto": "«XXX Cumbre Iberoamericana: 22 países renuevan en Madrid su agenda de cooperación» · SEGIB (official) · 5 Nov 2026 (in Spanish)",
+            "url": "https://segib.org/es/la-xxx-cumbre-iberoamericana-reafirma-en-madrid-la-vigencia-de-la-comunidad-y-renueva-sus-prioridades-de-cooperacion/"
+          },
+          {
+            "texto": "«Iberoamérica acuerda avances tangibles en inteligencia artificial, educación y preparación ante grandes catástrofes» · XXX Ibero-American Summit, official website · 5 Nov 2026 (in Spanish)",
             "url": "https://www.30cumbreiberoamericana.gob.es/es/actualidad/noticias/iberoamerica-acuerda-avances-tangibles-en-inteligencia-artificial-educacion-y"
           },
           {
-            "texto": "Spanish Ministry for Digital Transformation and the Civil Service: «Declaración de la Reunión Ministerial de Transformación Digital e IA» (PDF, in Spanish)",
-            "url": "https://digital.gob.es/content/dam/portal-mtdfp/comunicacion/comunicacion_ministro/2026/11/03-11-2026/Declaraci%C3%B3n%20de%20la%20Reuni%C3%B3n%20Ministerial%20de%20Transformaci%C3%B3n%20Digital%20e%20IA.pdf"
-          },
-          {
-            "texto": "El País: «Cumbre Iberoamericana: 22 países a la búsqueda de un acuerdo de regulación sobre la inteligencia artificial» (in Spanish)",
-            "url": "https://elpais.com/expres/2026-11-05/cumbre-iberoamericana-22-paises-a-la-busqueda-de-un-acuerdo-de-regulacion-sobre-la-inteligencia-artificial.html"
-          },
-          {
-            "texto": "Infobae: «La Cumbre Iberoamericana de Madrid cierra una declaración final y acuerdos sobre inteligencia artificial y protección civil» (in Spanish)",
+            "texto": "«La Cumbre Iberoamericana de Madrid cierra una declaración final y acuerdos sobre inteligencia artificial y protección civil» · Infobae · 5 Nov 2026 (in Spanish)",
             "url": "https://www.infobae.com/espana/2026/11/05/la-xxx-cumbre-iberoamericana-cierra-una-declaracion-final-y-acuerdos-sobre-inteligencia-artificial-y-proteccion-civil/"
+          },
+          {
+            "texto": "«La XXX Cumbre Iberoamericana, una cita marcada por las ausencias, los desencuentros y una visita sorpresa» · Euronews · 5 Nov 2026 (in Spanish)",
+            "url": "https://es.euronews.com/2026/11/05/la-xxx-cumbre-iberoamericana-ausencias-desencuentros-visita-sorpresa"
           }
         ]
       }
